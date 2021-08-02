@@ -3,45 +3,46 @@
 #include "op_code.hpp"
 
 #include <bia/error/exception.hpp>
+#include <bia/util/finally.hpp>
 #include <bia/util/portable/stream.hpp>
 #include <cstdint>
 #include <iomanip>
 #include <type_traits>
 
-enum class A : bia::bytecode::Address
-{
-};
-
-inline std::ostream& operator<<(std::ostream& out, A a)
-{
-	out << "%" << std::hex << static_cast<bia::bytecode::Address>(a);
-	return out;
-}
-
 using namespace bia;
 
-inline std::ostream& out(std::ostream& output, bytecode::Size size, const char* name)
+template<typename Type>
+inline void constant(std::ostream& output, Type value)
 {
-	const char* str = "<err>";
+	output << std::dec << std::left << std::setw(13) << std::setfill(' ') << value;
+}
+
+inline void address(std::ostream& output, bytecode::Address address)
+{
+	output << "%(0x" << std::hex << std::right << std::setw(8) << std::setfill('0') << address << ")";
+}
+
+inline void location(std::ostream& output, std::streamoff offset)
+{
+	output << "0x" << std::hex << std::right << std::setfill('0') << std::setw(8) << offset;
+}
+
+inline void out(std::ostream& output, bytecode::Size size, const char* name)
+{
+	const char* str = "<00>";
 	switch (size) {
 	case bytecode::Size::bit_8: str = "<8>"; break;
 	case bytecode::Size::bit_16: str = "<16>"; break;
 	case bytecode::Size::bit_32: str = "<32>"; break;
 	case bytecode::Size::bit_64: str = "<64>"; break;
 	}
-	output << str << " " << std::left << std::setw(14) << name;
-	return output;
+	output << std::left << std::setfill(' ') << std::setw(5) << str << std::setw(14) << std::setfill(' ')
+	       << name;
 }
 
-inline std::ostream& out(std::ostream& output, const char* name)
+inline void out(std::ostream& output, const char* name)
 {
-	output << std::setw(5) << "" << std::left << std::setw(14) << name;
-	return output;
-}
-
-inline std::ostream& operator<<(std::ostream& out, std::ostream&) noexcept
-{
-	return out;
+	output << "     " << std::left << std::setw(14) << std::setfill(' ') << name;
 }
 
 struct Operation
@@ -61,8 +62,25 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 	using namespace bytecode;
 	using namespace util::portable;
 
+	std::ios old_state{ nullptr };
+	old_state.copyfmt(output);
+	const auto final_action = util::finallay([&] { output.copyfmt(old_state); });
+	const auto start        = input.tellg();
+
 	while (input) {
-		const auto op = fetch_and_decode(input);
+		location(output, input.tellg() - start);
+		output << ": ";
+
+		const auto op                = fetch_and_decode(input);
+		const auto address_operation = [&](const char* name) {
+			const auto arg0 = read<Address>(input);
+			const auto arg1 = read<Address>(input);
+			out(output, op.size, name);
+			address(output, arg0);
+			output << ", ";
+			address(output, arg1);
+		};
+
 		switch (op.op_code) {
 		case Op_code::store: {
 			const auto destination = read<Address>(input);
@@ -74,87 +92,67 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 			case Size::bit_64: value = read<std::uint64_t>(input); break;
 			}
 			out(output, op.size, "store");
+			constant(output, value);
+			output << ", ";
+			address(output, destination);
 			break;
 		}
 		case Op_code::load_resource: {
-			// const auto destination = ip.read<Address>();
-			// const auto index       = ip.read<std::uint32_t>();
-			// const auto& resource   = resources.at(index);
-			// if (resource.is_type<memory::gc::GC_able<memory::gc::String*>>()) {
-			// 	frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::String*>>());
-			// } else if (resource.is_type<memory::gc::GC_able<memory::gc::Regex*>>()) {
-			// 	frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::Regex*>>());
-			// } else {
-			// 	// TODO
-			// 	BIA_ASSERT(false);
-			// }
-			break;
-		}
-		case Op_code::load_from_namespace: {
-			// const auto destination = ip.read<Address>();
-			// const auto source      = ip.read<Address>();
-			// switch (op.size) {
-			// case Size::bit_8: frame.store(destination, namespaces[0].load<std::uint8_t>(source)); break;
-			// case Size::bit_16: frame.store(destination, namespaces[0].load<std::uint16_t>(source)); break;
-			// case Size::bit_32: frame.store(destination, namespaces[0].load<std::uint32_t>(source)); break;
-			// case Size::bit_64: frame.store(destination, namespaces[0].load<std::uint64_t>(source)); break;
-			// }
-			// break;
-		}
-		case Op_code::copy: {
 			const auto destination = read<Address>(input);
-			const auto source      = read<Address>(input);
-			// switch (op.size) {
-			// case Size::bit_8: frame.store(destination, frame.load<std::uint8_t>(source)); break;
-			// case Size::bit_16: frame.store(destination, frame.load<std::uint16_t>(source)); break;
-			// case Size::bit_32: frame.store(destination, frame.load<std::uint32_t>(source)); break;
-			// case Size::bit_64: frame.store(destination, frame.load<std::uint64_t>(source)); break;
-			// }
-			output << "copy "
-			       << "%" << source << ", %" << destination;
+			const auto index       = read<std::uint32_t>(input);
+			out(output, op.size, "load");
+			constant(output, index);
+			output << ", ";
+			address(output, destination);
 			break;
 		}
-		// case Op_code::add: native_integral_operation<Addition, false>(op, ip, frame); break;
-		// case Op_code::fadd: native_floating_operation<Addition>(op, ip, frame); break;
-		// case Op_code::sub: native_integral_operation<Subtraction, false>(op, ip, frame); break;
-		// case Op_code::fsub: native_floating_operation<Subtraction>(op, ip, frame); break;
-		// case Op_code::mul: native_integral_operation<Multiplication, false>(op, ip, frame); break;
-		// case Op_code::fmul: native_floating_operation<Multiplication>(op, ip, frame); break;
-		// case Op_code::sdiv: native_integral_operation<Division, true>(op, ip, frame); break;
-		// case Op_code::udiv: native_integral_operation<Division, false>(op, ip, frame); break;
-		// case Op_code::fdiv: native_floating_operation<Division>(op, ip, frame); break;
-		// case Op_code::srem: native_integral_operation<Remainder, true>(op, ip, frame); break;
-		// case Op_code::urem: native_integral_operation<Remainder, false>(op, ip, frame); break;
-		// case Op_code::frem: native_floating_operation<Remainder>(op, ip, frame); break;
-		// case Op_code::bitwise_and: native_integral_operation<Bitwise_and, false>(op, ip, frame); break;
-		// case Op_code::bitwise_or: native_integral_operation<Bitwise_or, false>(op, ip, frame); break;
-		// case Op_code::bitwise_xor: native_integral_operation<Bitwise_xor, false>(op, ip, frame); break;
-		// case Op_code::equal: test_register = native_integral_test<Equality, false>(op, ip, frame); break;
-		// case Op_code::not_equal: test_register = !native_integral_test<Equality, false>(op, ip, frame); break;
+		case Op_code::load_from_namespace: address_operation("load_ns"); break;
+		case Op_code::copy: address_operation("copy"); break;
+		case Op_code::add: address_operation("add"); break;
+		case Op_code::fadd: address_operation("fadd"); break;
+		case Op_code::sub: address_operation("sub"); break;
+		case Op_code::fsub: address_operation("fsub"); break;
+		case Op_code::mul: address_operation("mul"); break;
+		case Op_code::fmul: address_operation("fmul"); break;
+		case Op_code::sdiv: address_operation("sdiv"); break;
+		case Op_code::udiv: address_operation("udiv"); break;
+		case Op_code::fdiv: address_operation("fdiv"); break;
+		case Op_code::srem: address_operation("srem"); break;
+		case Op_code::urem: address_operation("urem"); break;
+		case Op_code::frem: address_operation("frem"); break;
+		case Op_code::bitwise_and: address_operation("bitwise_and"); break;
+		case Op_code::bitwise_or: address_operation("bitwise_or"); break;
+		case Op_code::bitwise_xor: address_operation("bitwise_xor"); break;
+		case Op_code::equal: address_operation("equal"); break;
+		case Op_code::not_equal: address_operation("not_equal"); break;
 		case Op_code::invoke: {
 			const auto function_address = read<Address>(input);
-			output << "invoke "
-			       << "%" << function_address;
+			out(output, "invoke");
+			address(output, function_address);
 			break;
 		}
 		case Op_code::test: {
 			const auto source = read<Address>(input);
 			out(output, "test");
+			address(output, source);
 			break;
 		}
 		case Op_code::jump: {
 			const auto offset = read<std::int32_t>(input);
-			output << "jump " << offset;
+			out(output, "jump");
+			location(output, offset + input.tellg());
 			break;
 		}
 		case Op_code::jump_true: {
 			const auto offset = read<std::int32_t>(input);
-			output << "jump_true " << offset;
+			out(output, "jump_true");
+			location(output, offset + input.tellg());
 			break;
 		}
 		case Op_code::jump_false: {
 			const auto offset = read<std::int32_t>(input);
-			output << "jump_false " << offset;
+			out(output, "jump_false");
+			location(output, offset + input.tellg());
 			break;
 		}
 		default: BIA_THROW(error::Code::bad_opcode);
