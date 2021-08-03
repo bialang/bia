@@ -92,18 +92,18 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 			case Size::bit_64: value = read<std::uint64_t>(input); break;
 			}
 			out(output, op.size, "store");
-			constant(output, value);
-			output << ", ";
 			address(output, destination);
+			output << ", ";
+			constant(output, value);
 			break;
 		}
 		case Op_code::load_resource: {
 			const auto destination = read<Address>(input);
 			const auto index       = read<std::uint32_t>(input);
 			out(output, op.size, "load");
-			constant(output, index);
-			output << ", ";
 			address(output, destination);
+			output << ", ";
+			constant(output, index);
 			break;
 		}
 		case Op_code::load_from_namespace: address_operation("load_ns"); break;

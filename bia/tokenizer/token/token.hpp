@@ -138,8 +138,13 @@ struct Token
 		while_,
 	};
 
+	enum class Statement_type
+	{
+		assign_statement,
+	};
+
 	typedef util::Variant<Number, Array_dimension, Batch, Control, Keyword, String, Regex, Identifier, Operator,
-	                      Array_dimension>
+	                      Statement_type>
 	  Value;
 
 	Value value;

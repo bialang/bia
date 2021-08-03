@@ -31,6 +31,7 @@ Error_info flow_control_stmt(Parameter& param);
 Error_info defer_stmt(Parameter& param);
 
 Error_info decl_stmt(Parameter& param);
+Error_info assign_stmt(Parameter& param);
 Error_info drop_stmt(Parameter& param);
 
 Error_info if_stmt(Parameter& param);

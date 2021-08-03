@@ -70,7 +70,7 @@ try {
 	// define user defined types
 	context.global_namespace().put_invokable(util::from_cstring("hello_world"), [](int a) {
 		printf("Hello, World! %d\n", a);
-		return false;
+		return 5;
 	});
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
@@ -117,9 +117,9 @@ try {
 	// print stack
 	std::cout << "\n==========STACK==========\n";
 	for (int i = 0; i < 5; ++i) {
-		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::dec << i * sizeof(std::size_t) << ": 0x"
+		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
 		          << std::setw(16) << std::setfill('0') << std::hex
-		          << base_frame.load<std::size_t>(i * sizeof(std::size_t)) << std::endl;
+		          << base_frame.load<std::size_t>(i * 2 * sizeof(std::size_t)) << std::endl;
 	}
 	std::cout << "==========STACK==========\n";
 } catch (const bia::error::Exception& e) {

@@ -17,6 +17,11 @@ elve::Tokens elve::root(Parameter& param, Tokens tokens)
 		case Token::Keyword::continue_: tokens = flow_control_stmt(param, tokens); break;
 		default: BIA_THROW(error::Code::bad_switch_value);
 		}
+	} else if (tokens.front().value.is_type<Token::Statement_type>()) {
+		switch (tokens.front().value.get<Token::Statement_type>()) {
+		case Token::Statement_type::assign_statement: tokens = assign_stmt(param, tokens); break;
+		default: BIA_THROW(error::Code::bad_switch_value);
+		}
 	} else {
 		util::Optional<symbol::Variable> variable;
 		std::tie(tokens, variable) = single_expression(param, tokens);

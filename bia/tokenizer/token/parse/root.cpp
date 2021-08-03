@@ -5,9 +5,10 @@ using namespace bia::tokenizer::token;
 
 inline Error_info small_stmt(Parameter& param)
 {
-	if (const auto err = parse::any_of(param, parse::drop_stmt, parse::decl_stmt, parse::return_stmt,
-	                                   parse::yield_stmt, parse::flow_control_stmt, parse::defer_stmt,
-	                                   parse::import_stmt, parse::type_stmt, parse::single_expression)) {
+	if (const auto err =
+	      parse::any_of(param, parse::drop_stmt, parse::decl_stmt, parse::assign_stmt, parse::return_stmt,
+	                    parse::yield_stmt, parse::flow_control_stmt, parse::defer_stmt, parse::import_stmt,
+	                    parse::type_stmt, parse::single_expression)) {
 		return err;
 	}
 	const auto old = param.backup();
