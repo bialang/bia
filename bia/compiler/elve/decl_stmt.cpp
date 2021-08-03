@@ -10,6 +10,12 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 {
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Keyword::let);
 
+	int flags = 0;
+	if (tokens.at(1).value == Token::Keyword::mut) {
+		flags |= symbol::Variable::flag_mutable;
+		tokens = tokens.subspan(1);
+	}
+
 	const auto variable_token                      = tokens.at(1);
 	tokens                                         = tokens.subspan(2);
 	const internal::type::Definition* desired_type = nullptr;
@@ -22,6 +28,8 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 
 	auto expr = single_expression(param, tokens.subspan(1));
 	if (expr.second) {
+		expr.second->flags = flags;
+
 		if (desired_type && !desired_type->is_assignable(expr.second->definition)) {
 			param.errors.add_error(error::Code::type_mismatch,
 			                       tokens.subspan(1, tokens.size() - expr.first.size() - 1));

@@ -15,6 +15,8 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
 	} else if (!destination.is_type<symbol::Variable>()) {
 		param.errors.add_error(error::Code::symbol_not_a_value, tokens.subspan(1, 1));
+	} else if (!(destination.get<symbol::Variable>().flags & symbol::Variable::flag_mutable)) {
+		param.errors.add_error(error::Code::symbol_immutable, tokens.subspan(1, 1));
 	}
 
 	// TODO process multiple identifiers

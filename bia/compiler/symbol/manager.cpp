@@ -41,6 +41,7 @@ Variable Manager::create_temporary(util::Not_null<const internal::type::Definiti
 	Variable variable{};
 	variable.definition      = type;
 	variable.location.offset = _stack;
+	variable.flags           = Variable::flag_mutable;
 	_stack += util::aligned(type->size(), alignof(std::max_align_t));
 	return variable;
 }

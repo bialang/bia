@@ -29,8 +29,14 @@ struct Location
 
 struct Variable
 {
+	enum Flag
+	{
+		flag_mutable = 0x1
+	};
+
 	Location location;
 	const internal::type::Definition* definition;
+	int flags;
 };
 
 /// A symbol is either a variable or a type.
