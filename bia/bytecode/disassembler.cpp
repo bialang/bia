@@ -100,7 +100,7 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 		case Op_code::load_resource: {
 			const auto destination = read<Address>(input);
 			const auto index       = read<std::uint32_t>(input);
-			out(output, op.size, "load");
+			out(output, "load");
 			address(output, destination);
 			output << ", ";
 			constant(output, index);

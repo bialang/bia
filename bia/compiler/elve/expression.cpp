@@ -84,6 +84,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 
 	while (has_right_hand_size(tokens)) {
 		const auto optor           = tokens.front().value.get<Operator>();
+		const auto optor_tokens    = tokens.subspan(+0, 1);
 		const int optor_precedence = precedence_of(optor);
 
 		// only if we have higher precedence
@@ -160,7 +161,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 			case Operator::plus:
 				param.instructor.write<Op_code::add>(Size::bit_32, lhs->location.offset, rhs->location.offset);
 				break;
-			default: BIA_ASSERT(false);
+			default: param.errors.add_error(error::Code::unsupported_operator, optor_tokens); break;
 			}
 
 			if (is_test) {

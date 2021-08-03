@@ -5,6 +5,7 @@
 #include <bia/util/algorithm.hpp>
 #include <bia/util/gsl.hpp>
 #include <bia/util/variant.hpp>
+#include <ostream>
 #include <string>
 
 namespace bia {
@@ -55,6 +56,23 @@ struct String_comparator
 		return compare(left, right) < 0;
 	}
 };
+
+inline std::ostream& operator<<(std::ostream& output, const String_key& key)
+{
+	if (key.is_type<std::string>()) {
+		output << key.get<std::string>();
+	} else if (key.is_type<util::Span<const char*>>()) {
+		const auto span = key.get<util::Span<const char*>>();
+		output.write(span.data(), span.size() - 1);
+	} else if (key.is_type<resource::View>()) {
+		for (const auto byte : key.get<resource::View>()) {
+			output.put(static_cast<char>(byte));
+		}
+	} else {
+		output << "(null)";
+	}
+	return output;
+}
 
 } // namespace internal
 } // namespace bia

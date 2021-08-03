@@ -58,12 +58,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		case Op_code::load_from_namespace: {
 			const auto destination = ip.read<Address>();
 			const auto source      = ip.read<Address>();
-			switch (op.size) {
-			case Size::bit_8: frame.store(destination, namespaces[0].load<std::uint8_t>(source)); break;
-			case Size::bit_16: frame.store(destination, namespaces[0].load<std::uint16_t>(source)); break;
-			case Size::bit_32: frame.store(destination, namespaces[0].load<std::uint32_t>(source)); break;
-			case Size::bit_64: frame.store(destination, namespaces[0].load<std::uint64_t>(source)); break;
-			}
+			frame.store(destination, namespaces[0].load<std::intptr_t>(source));
 			break;
 		}
 		case Op_code::copy: {
@@ -102,7 +97,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		}
 		case Op_code::test: {
 			const auto source = ip.read<Address>();
-			test_register = static_cast<bool>(frame.load<std::uint8_t>(source));
+			test_register     = static_cast<bool>(frame.load<std::uint8_t>(source));
 			break;
 		}
 		case Op_code::jump: {

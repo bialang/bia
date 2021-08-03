@@ -39,8 +39,23 @@ public:
 	}
 	int compare(util::Not_null<const Definition*> other) const noexcept override
 	{
-		const int n = util::compare(ordinal(), other->ordinal());
-		return n == 0 ? _return_type->compare(static_cast<const Function*>(other.get())->_return_type) : n;
+		int n = util::compare(ordinal(), other->ordinal());
+		if (n == 0) {
+			const auto ptr = static_cast<const Function*>(other.get());
+			n              = _return_type->compare(ptr->_return_type);
+			// compare arguments
+			if (n == 0) {
+				if (_arguments.size() < ptr->_arguments.size()) {
+					return -1;
+				} else if (_arguments.size() > ptr->_arguments.size()) {
+					return 0;
+				}
+				for (std::size_t i = 0; i < _arguments.size() && n == 0; ++i) {
+					n = _arguments[i].definition->compare(ptr->_arguments[i].definition);
+				}
+			}
+		}
+		return n;
 	}
 	unsigned int ordinal() const noexcept override
 	{

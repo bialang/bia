@@ -41,7 +41,8 @@ struct Framer<Type, typename std::enable_if<std::is_trivial<Type>::value>::type>
 };
 
 template<typename Type>
-struct Framer<Type, typename std::enable_if<std::is_same<Type, std::string>::value>::type>
+struct Framer<
+  Type, typename std::enable_if<std::is_same<typename std::decay<Type>::type, std::string>::value>::type>
 {
 	constexpr static std::size_t size() noexcept
 	{

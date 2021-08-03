@@ -51,7 +51,7 @@ struct formatter<std::chrono::duration<Rep, Period>>
 #endif
 
 #define BIA_LOG_ERROR(level, error)                                                                          \
-	BIA_LOG(level, "exception caught ({}, {}:{}): {}", error.name(), error.filename(), error.line(),           \
+	BIA_LOG(level, "Exception caught ({}, {}:{}): {}", error.name(), error.filename(), error.line(),           \
 	        error.what())
 
 namespace spdlog {
@@ -63,11 +63,7 @@ class logger;
 namespace bia {
 namespace log {
 
-/**
- * Returns the Bia's default logger.
- *
- * @returns the default logger is logging is enabled, otherwise `nullptr`
- */
+/// Returns Bia's default logger if enabled otherwise `nullptr`.
 std::shared_ptr<spdlog::logger> get_default_logger() noexcept;
 
 } // namespace log

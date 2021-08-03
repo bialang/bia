@@ -38,6 +38,7 @@ public:
 		_definitions_of(definitions, types);
 		return definitions;
 	}
+	/// Returns the definition of the given C++ type or `nullptr` if the linking does not exist.
 	const Definition* definition_of(const std::type_info& type) const;
 	template<typename Type, typename... Arguments>
 	typename std::enable_if<std::is_base_of<Definition, Type>::value, const Type*>::type
@@ -53,10 +54,16 @@ public:
 		_type_index.insert(std::make_pair(ptr, ++_id_counter));
 		return ptr;
 	}
+	/**
+	 * Links the specified type with the given definition so that the definition can be found by C++ type.
+	 *
+	 * @tparam Type The C++ type. The alignment may not larger than
+	 * @param definition The internal type.
+	 */
 	template<typename Type>
 	void link(util::Not_null<const Definition*> definition)
 	{
-		static_assert(alignof(Type) <= sizeof(std::max_align_t), "over-aligned types are not supported");
+		static_assert(alignof(Type) <= alignof(std::max_align_t), "Over-aligned types are not supported.");
 		_real_types[{ typeid(Type) }] = definition;
 	}
 	System& operator=(const System& copy) = delete;

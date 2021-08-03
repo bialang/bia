@@ -68,6 +68,7 @@ enum class Code
 	bad_operator,
 
 	type_mismatch = 150,
+	not_boolean,
 	symbol_already_declared,
 	symbol_not_a_type,
 	symbol_not_a_value,
@@ -79,6 +80,7 @@ enum class Code
 	too_few_arguments,
 	too_many_arguments,
 	not_an_object,
+	unsupported_operator,
 
 	bad_opcode = 200,
 	bad_offset_option,
@@ -156,6 +158,7 @@ inline const std::error_category& code_category() noexcept
 				// case code::bad_number:
 				// case code::bad_operator:
 			case Code::type_mismatch: return "type mismatch";
+			case Code::not_boolean: return "expression is not boolean";
 			case Code::symbol_already_declared: return "symbol already declared";
 			case Code::symbol_not_a_type: return "symbol not a type";
 			case Code::symbol_not_a_value: return "symbol not a value";
@@ -167,6 +170,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::too_few_arguments: return "too few arguments in function call";
 			case Code::too_many_arguments: return "too many arguments in function call";
 			case Code::not_an_object: return "not an object";
+			case Code::unsupported_operator: return "unsupported operator";
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:

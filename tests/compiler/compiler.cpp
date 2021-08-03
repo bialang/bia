@@ -72,6 +72,10 @@ try {
 		printf("Hello, World! %d\n", a);
 		return 5;
 	});
+	context.global_namespace().put_invokable(util::from_cstring("print"), [](const std::string& v) {
+		puts(v.c_str());
+		return 0;
+	});
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
@@ -90,7 +94,7 @@ try {
 		for (auto err : compiler.errors()) {
 			print_error(str, err);
 		}
-		BIA_LOG(ERROR, "compilation failed");
+		BIA_LOG(ERROR, "Compilation failed with {} errors", compiler.errors().size());
 		return -1;
 	}
 
@@ -110,7 +114,7 @@ try {
 		const auto start = std::chrono::high_resolution_clock::now();
 		bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources,
 		             context);
-		BIA_LOG(INFO, "execution took {}", std::chrono::high_resolution_clock::now() - start);
+		BIA_LOG(INFO, "Execution took {}", std::chrono::high_resolution_clock::now() - start);
 	}
 	gc.run();
 
@@ -123,10 +127,10 @@ try {
 	}
 	std::cout << "==========STACK==========\n";
 } catch (const bia::error::Exception& e) {
-	std::cerr << "exception from main: " << e.code() << "\n\twhat: " << e.what()
+	std::cerr << "Exception from main: " << e.code() << "\n\twhat: " << e.what()
 	          << "\n\tcondition: " << e.code().default_error_condition().message()
 	          << "\n\tfrom: " << e.source_location() << std::endl;
 } catch (const bia::error::Contract_violation& e) {
-	std::cerr << "contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
+	std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
 	          << std::endl;
 }

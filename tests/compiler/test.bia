@@ -1,5 +1,2 @@
-let mut a = 1 + 1
-
-hello_world(a)
-a = 61
-hello_world(a)
+let x = "hi"
+print(x)

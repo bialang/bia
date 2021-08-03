@@ -22,7 +22,7 @@ elve::Tokens elve::if_stmt(Parameter& param, Tokens tokens)
 			if (dynamic_cast<const type::Bool*>(variable->definition)) {
 				param.instructor.write<bytecode::Op_code::test>(variable->location.offset);
 			} else {
-				param.errors.add_error(error::Code::type_mismatch, expression_tokens.left(tokens.begin()));
+				param.errors.add_error(error::Code::not_boolean, expression_tokens.left(tokens.begin()));
 			}
 
 			param.symbols.free_temporary(*variable);
