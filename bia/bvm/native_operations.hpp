@@ -71,7 +71,7 @@ inline void native_floating_operation(bvm::Operation op, Instruction_pointer& ip
 // }
 
 template<typename Operation, bool Signed>
-inline bool native_integral_test(bvm::Operation op, Instruction_pointer& ip, memory::Frame<true>& frame)
+inline void native_integral_test(bvm::Operation op, Instruction_pointer& ip, memory::Frame<true>& frame)
 {
 	using namespace bytecode;
 
@@ -79,17 +79,25 @@ inline bool native_integral_test(bvm::Operation op, Instruction_pointer& ip, mem
 	const auto arg1 = ip.read<Address>();
 	switch (op.size) {
 	case Size::bit_8:
-		return Operation{}(frame.load<Nao_type<std::uint8_t, Signed>>(arg0),
-		                   frame.load<Nao_type<std::uint8_t, Signed>>(arg1));
+		frame.store(arg0,
+		            static_cast<std::int8_t>(Operation{}(frame.load<Nao_type<std::uint8_t, Signed>>(arg0),
+		                                                 frame.load<Nao_type<std::uint8_t, Signed>>(arg1))));
+		break;
 	case Size::bit_16:
-		return Operation{}(frame.load<Nao_type<std::uint16_t, Signed>>(arg0),
-		                   frame.load<Nao_type<std::uint16_t, Signed>>(arg1));
+		frame.store(arg0,
+		            static_cast<std::uint16_t>(Operation{}(frame.load<Nao_type<std::uint16_t, Signed>>(arg0),
+		                                                   frame.load<Nao_type<std::uint16_t, Signed>>(arg1))));
+		break;
 	case Size::bit_32:
-		return Operation{}(frame.load<Nao_type<std::uint32_t, Signed>>(arg0),
-		                   frame.load<Nao_type<std::uint32_t, Signed>>(arg1));
+		frame.store(arg0,
+		            static_cast<std::uint32_t>(Operation{}(frame.load<Nao_type<std::uint32_t, Signed>>(arg0),
+		                                                   frame.load<Nao_type<std::uint32_t, Signed>>(arg1))));
+		break;
 	case Size::bit_64:
-		return Operation{}(frame.load<Nao_type<std::uint64_t, Signed>>(arg0),
-		                   frame.load<Nao_type<std::uint64_t, Signed>>(arg1));
+		frame.store(arg0,
+		            static_cast<std::uint64_t>(Operation{}(frame.load<Nao_type<std::uint64_t, Signed>>(arg0),
+		                                                   frame.load<Nao_type<std::uint64_t, Signed>>(arg1))));
+		break;
 	default: BIA_ASSERT(false);
 	}
 }

@@ -1,2 +1,10 @@
 let x = "hi"
-print(x)
+// print(x)
+// hello_world(1 and 0)
+let n = compare(x, "hi")
+// hello_world(n)
+if n == 0 {
+	print("yes")
+} else {
+	print("no")
+}

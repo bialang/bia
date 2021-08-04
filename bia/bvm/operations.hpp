@@ -119,6 +119,26 @@ struct Equality
 	}
 };
 
+struct Inequality
+{
+	template<typename Type>
+	constexpr bool operator()(Type left, Type right) const noexcept
+	{
+		static_assert(std::is_pod<Type>::value, "Type must be POD");
+		return left != right;
+	}
+	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	{
+		return left->string != right->string;
+	}
+	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
+	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	{
+		return !std::regex_match(right->string, left->pattern);
+	}
+};
+
 struct Inside_of
 {
 	bool operator()(memory::gc::GC_able<memory::gc::String*> left,

@@ -1,6 +1,7 @@
 //#define CATCH_CONFIG_MAIN
 
 #include <bia/bvm/bvm.hpp>
+#include <bia/bytecode/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
@@ -9,7 +10,6 @@
 #include <bia/tokenizer/bia_lexer.hpp>
 #include <bia/util/finally.hpp>
 #include <catch.hpp>
-#include <bia/bytecode/disassembler.hpp>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -76,6 +76,8 @@ try {
 		puts(v.c_str());
 		return 0;
 	});
+	context.global_namespace().put_invokable(
+	  util::from_cstring("compare"), [](const std::string& a, const std::string& b) { return a.compare(b); });
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);

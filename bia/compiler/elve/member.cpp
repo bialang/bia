@@ -62,8 +62,8 @@ std::pair<Tokens, util::Optional<symbol::Variable>>
 	}
 
 	tokens = tokens.subspan(1);
-	for (const auto& arg : pushed) {
-		param.symbols.pop(arg);
+	for (auto i = pushed.rbegin(); i != pushed.rend(); ++i) {
+		param.symbols.pop(*i);
 	}
 
 	// invoke
