@@ -1,10 +1,12 @@
-let x = "hi"
+let mut x = "hi"
 // print(x)
 // hello_world(1 and 0)
-let n = compare(x, "hi")
+// let n = compare(x, "hi")
 // hello_world(n)
-if n == 0 {
-	print("yes")
+x = "no"
+let x = ""
+if compare(x, "no") == 0 {
+	print("is the same")
 } else {
-	print("no")
+	print("not the same")
 }

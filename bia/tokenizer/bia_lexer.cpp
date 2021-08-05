@@ -3,6 +3,7 @@
 #include "token/parse/tokens.hpp"
 
 #include <bia/error/exception.hpp>
+#include <bia/log/log.hpp>
 #include <vector>
 
 namespace bia {
@@ -22,6 +23,12 @@ void Bia_lexer::lex(Reader& reader, token::Receiver& receiver)
 
 		// match single statements
 		if (const auto err = token::parse::root(param)) {
+		}
+
+		// nothing matched
+		if (bundle.empty() && !reader.eof()) {
+			BIA_LOG(ERROR, "Bundle is empty. Nothing could be parsed");
+			return;
 		}
 
 		// give to receiver

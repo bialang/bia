@@ -29,7 +29,7 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 		    !destination.get<symbol::Variable>().definition->is_assignable(expr.second->definition)) {
 			param.errors.add_error(error::Code::type_mismatch,
 			                       tokens.subspan(+0, tokens.size() - expr.first.size()));
-		} else {
+		} else if (destination.is_type<symbol::Variable>()) {
 			// TODO size
 			param.instructor.write<bytecode::Op_code::copy>(bytecode::Size::bit_32,
 			                                                destination.get<symbol::Variable>().location.offset,

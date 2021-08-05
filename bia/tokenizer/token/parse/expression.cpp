@@ -134,6 +134,17 @@ Error_info parse::single_expression(Parameter& param)
 		return err;
 	}
 
+	// member operations
+	while (true) {
+		old = param.backup();
+		spacer(param);
+		const auto result = any_of(param, member_access, member_invocation);
+		if (result) {
+			param.restore(old);
+			break;
+		}
+	}
+
 	// operator chains
 	while (true) {
 		const auto old = param.backup();
@@ -143,19 +154,8 @@ Error_info parse::single_expression(Parameter& param)
 			break;
 		}
 		spacer(param);
-		if (const auto err = expression_value(param)) {
+		if (const auto err = single_expression(param)) {
 			return err;
-		}
-	}
-
-	// member operations
-	while (true) {
-		old = param.backup();
-		spacer(param);
-		const auto result = any_of(param, member_access, member_invocation);
-		if (result) {
-			param.restore(old);
-			break;
 		}
 	}
 

@@ -88,6 +88,7 @@ try {
 	lexer.lex(reader, compiler);
 
 	if (compiler.errors().size() > 0) {
+		code.clear();
 		code.seekg(0, std::ios::end);
 		std::string str;
 		str.resize(code.tellg());

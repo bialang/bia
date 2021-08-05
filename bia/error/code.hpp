@@ -179,7 +179,7 @@ inline const std::error_category& code_category() noexcept
 			// case code::bad_member_destination_option:
 			case Code::module_not_found: return "module was not found";
 			case Code::bad_switch_value: return "a bad switch value";
-			case Code::why_did_this_happen: return "this should not have happened";
+			case Code::why_did_this_happen: return "How could this happen to me, I've made my mistakes";
 			default: return "(unrecognized error code)";
 			}
 		}
