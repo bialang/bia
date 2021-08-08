@@ -25,7 +25,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 	using namespace bytecode;
 	Instruction_pointer ip{ instructions };
 	bool test_register = false;
-	std::vector<memory::Frame<false>> namespaces;
+	std::vector<memory::Frame<true>> namespaces;
 	namespaces.push_back(context.global_namespace().globals());
 
 	while (ip) {
@@ -69,6 +69,17 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			case Size::bit_16: frame.store(destination, frame.load<std::uint16_t>(source)); break;
 			case Size::bit_32: frame.store(destination, frame.load<std::uint32_t>(source)); break;
 			case Size::bit_64: frame.store(destination, frame.load<std::uint64_t>(source)); break;
+			}
+			break;
+		}
+		case Op_code::copy_to_namespace: {
+			const auto destination = ip.read<Address>();
+			const auto source      = ip.read<Address>();
+			switch (op.size) {
+			case Size::bit_8: namespaces[0].store(destination, frame.load<std::uint8_t>(source)); break;
+			case Size::bit_16: namespaces[0].store(destination, frame.load<std::uint16_t>(source)); break;
+			case Size::bit_32: namespaces[0].store(destination, frame.load<std::uint32_t>(source)); break;
+			case Size::bit_64: namespaces[0].store(destination, frame.load<std::uint64_t>(source)); break;
 			}
 			break;
 		}

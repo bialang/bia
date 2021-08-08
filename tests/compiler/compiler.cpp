@@ -17,6 +17,44 @@
 
 using namespace bia;
 
+struct Vector : bia::memory::gc::Base
+{
+	std::vector<std::string> value;
+
+	Vector(std::vector<std::string>&& value) noexcept : value{ std::move(value) }
+	{}
+};
+
+namespace bia {
+namespace internal {
+namespace type {
+
+template<typename Type>
+struct Framer<Type, typename std::enable_if<
+                      std::is_same<typename std::decay<Type>::type, std::vector<std::string>>::value>::type>
+{
+	constexpr static std::size_t size() noexcept
+	{
+		return sizeof(memory::gc::GC_able<Vector*>);
+	}
+	constexpr static std::size_t alignment() noexcept
+	{
+		return alignof(memory::gc::GC_able<Vector*>);
+	}
+	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, std::vector<std::string> value)
+	{
+		*reinterpret_cast<memory::gc::GC_able<Vector*>*>(buffer.data()) = gc.create<Vector>(std::move(value));
+	}
+	static const std::vector<std::string>& unframe(util::Span<const util::Byte*> buffer)
+	{
+		return (*reinterpret_cast<const memory::gc::GC_able<Vector*>*>(buffer.data()))->value;
+	}
+};
+
+} // namespace type
+} // namespace internal
+} // namespace bia
+
 #define IN_FILE "../../tests/compiler/test.bia"
 
 inline void print_error(const std::string& code, const compiler::Error& error)
@@ -68,16 +106,30 @@ try {
 	internal::Context context{ gc };
 
 	// define user defined types
-	context.global_namespace().put_invokable(util::from_cstring("hello_world"), [](int a) {
-		printf("Hello, World! %d\n", a);
-		return 5;
-	});
-	context.global_namespace().put_invokable(util::from_cstring("print"), [](const std::string& v) {
-		puts(v.c_str());
-		return 0;
-	});
+	context.global_namespace().put_invokable(util::from_cstring("hello_world"),
+	                                         static_cast<void (*)()>([] { puts("Hello, world!"); }));
+	context.global_namespace().put_invokable(util::from_cstring("print"),
+	                                         [](const std::string& v) { return puts(v.c_str()); });
 	context.global_namespace().put_invokable(
 	  util::from_cstring("compare"), [](const std::string& a, const std::string& b) { return a.compare(b); });
+	context.global_namespace().put_invokable(
+	  util::from_cstring("print_vector"), +[](const std::vector<std::string>& ss) {
+		  for (const auto& s : ss) {
+			  std::cout << s << " ";
+		  }
+		  std::cout << "\n";
+	  });
+	context.global_namespace().put_invokable(
+	  util::from_cstring("read_three"), +[] {
+		  std::string s;
+		  std::vector<std::string> ss;
+		  for (int i = 0; i < 3; ++i) {
+			  std::getline(std::cin, s);
+			  ss.push_back(s);
+		  }
+		  return ss;
+	  });
+	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
@@ -133,7 +185,7 @@ try {
 	std::cerr << "Exception from main: " << e.code() << "\n\twhat: " << e.what()
 	          << "\n\tcondition: " << e.code().default_error_condition().message()
 	          << "\n\tfrom: " << e.source_location() << std::endl;
-} catch (const bia::error::Contract_violation& e) {
-	std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
-	          << std::endl;
-}
+} /* catch (const bia::error::Contract_violation& e) {
+  std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
+            << std::endl;
+} */

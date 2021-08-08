@@ -1,369 +1,95 @@
-// #include <bia/bia.hpp>
-// #include <bia/bsl/io.hpp>
-// #include <bia/cbia.h>
-// #include <bia/connector/parameters.hpp>
-// #include <bia/creator/creator.hpp>
-// #include <bia/member/native/dict.hpp>
-// #include <bia/member/native/list.hpp>
-// #include <bia/member/native/string.hpp>
-// #include <bia/util/memory_streambuf.hpp>
-// #include <type_traits>
-
-// typedef typename std::remove_reference<bia::parameters>::type parameters_t;
-
-// bia_engine_t bia_engine_new()
-// try {
-// 	return new bia::engine{};
-// } catch (...) {
-// 	return nullptr;
-// }
-
-// void bia_engine_free(bia_engine_t engine)
-// try {
-// 	delete static_cast<bia::engine*>(engine);
-// } catch (...) {
-// }
-
-// int bia_engine_put_function(bia_engine_t engine, const char* name, bia_function_t function, void* custom_arg)
-// try {
-// 	if (!engine || !name || !function) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	static_cast<bia::engine*>(engine)->function(
-// 	    name, [function, custom_arg](bia::parameters params) -> bia::gc::gcable<bia::member::member> {
-// 		    if (auto creation = function(&params, custom_arg)) {
-// 			    bia::gc::gcable<bia::member::member> result{ std::move(
-// 				    *static_cast<bia::gc::gcable<bia::member::member>*>(creation)) };
-
-// 			    bia_creation_free(creation);
-
-// 			    return result;
-// 		    }
-
-// 		    return {};
-// 	    });
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_engine_use_bsl(bia_engine_t engine, const char* const* argv, size_t argc)
-// try {
-// 	if (!engine) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	static_cast<bia::engine*>(engine)->use_bsl({ argv, argc });
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_engine_put(bia_engine_t engine, bia_member_t name, bia_member_t member)
-// try {
-// 	if (!engine || !name) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	if (const auto ptr =
-// 	        dynamic_cast<bia::member::native::string*>(static_cast<bia::member::member*>(name))) {
-// 		static_cast<bia::engine*>(engine)->context().symbols().put(ptr,
-// 		                                                           static_cast<bia::member::member*>(member));
-
-// 		return berr_ok;
-// 	}
-
-// 	return berr_invalid_arguments;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// bia_gc_t bia_engine_get_gc(bia_engine_t engine)
-// {
-// 	return engine ? &static_cast<bia::engine*>(engine)->gc() : nullptr;
-// }
-
-// int bia_run(bia_engine_t engine, const void* code, size_t length)
-// try {
-// 	if (!engine || (!code && length)) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	bia::util::Memory_streambuf buffer({ static_cast<const bia::util::byte_type*>(code), length });
-// 	std::istream istream(&buffer);
-// 	static_cast<bia::engine*>(engine)->execute(istream);
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// bia_gc_t bia_active_gc()
-// {
-// 	return bia::gc::gc::active_gc();
-// }
-
-// int bia_parameters_count(bia_parameters_t params, size_t* out)
-// try {
-// 	if (!params || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = static_cast<parameters_t*>(params)->size();
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_parameters_at(bia_parameters_t params, size_t index, bia_member_t* out)
-// try {
-// 	if (!params || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = static_cast<parameters_t*>(params)->at(index);
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_parameters_positionals_count(bia_parameters_t params, size_t* out)
-// try {
-// 	if (!params || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = static_cast<parameters_t*>(params)->positionals().size();
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_parameters_positionals_at(bia_parameters_t params, size_t index, bia_member_t* out)
-// try {
-// 	if (!params || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = static_cast<parameters_t*>(params)->positionals().at(index);
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_parameters_kwargs_count(bia_parameters_t params, size_t* out)
-// try {
-// 	if (!params || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = static_cast<parameters_t*>(params)->kwargs().size();
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_parameters_kwargs_at(bia_parameters_t params, size_t index, bia_member_t* out)
-// try {
-// 	if (!params || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = static_cast<parameters_t*>(params)->kwargs().at(index);
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_parameters_kwargs_find(bia_parameters_t params, const char* name, bia_member_t* out)
-// try {
-// 	if (!params || !name || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	bool found;
-
-// 	std::tie(*out, found) = (*static_cast<parameters_t*>(params))[name];
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_member_cast_int(bia_member_t member, int* out)
-// try {
-// 	if (!member || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = bia::member::cast::cast<int>(*static_cast<bia::member::member*>(member));
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_member_cast_llong(bia_member_t member, long long* out)
-// try {
-// 	if (!member || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = bia::member::cast::cast<long long>(*static_cast<bia::member::member*>(member));
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_member_cast_double(bia_member_t member, double* out)
-// try {
-// 	if (!member || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = bia::member::cast::cast<double>(*static_cast<bia::member::member*>(member));
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_member_cast_cstring(bia_member_t member, const char** out)
-// try {
-// 	if (!member || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = bia::member::cast::cast<const char*>(*static_cast<bia::member::member*>(member));
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_create_llong(bia_gc_t gc, long long value, bia_creation_t* out)
-// try {
-// 	if (!gc || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(*static_cast<bia::gc::gc*>(gc),
-// 		                                                                  value) };
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_create_double(bia_gc_t gc, double value, bia_creation_t* out)
-// try {
-// 	if (!gc || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(*static_cast<bia::gc::gc*>(gc),
-// 		                                                                  value) };
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_create_cstring(bia_gc_t gc, const char* value, bia_creation_t* out)
-// try {
-// 	if (!gc || !out || !value) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(*static_cast<bia::gc::gc*>(gc),
-// 		                                                                  value) };
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_create_list(bia_gc_t gc, bia_creation_t* out)
-// try {
-// 	if (!gc || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = new bia::gc::gcable<bia::member::member>{ bia::creator::create(
-// 		*static_cast<bia::gc::gc*>(gc), bia::member::native::list::list_type{}) };
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_create_dict(bia_gc_t gc, bia_creation_t* out)
-// try {
-// 	if (!gc || !out) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	*out = new bia::gc::gcable<bia::member::member>{
-// 		static_cast<bia::gc::gc*>(gc)->construct<bia::member::native::dict>()
-// 	};
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_creation_dict_put(bia_creation_t dict, bia_member_t key, bia_member_t value)
-// try {
-// 	if (!dict || !key) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	const auto key_ptr  = dynamic_cast<bia::member::native::string*>(static_cast<bia::member::member*>(key));
-// 	const auto dict_ptr = dynamic_cast<bia::member::native::dict*>(
-// 	    static_cast<bia::gc::gcable<bia::member::member>*>(dict)->peek());
-
-// 	if (key_ptr && dict_ptr) {
-// 		dict_ptr->put(key_ptr, static_cast<bia::member::member*>(value));
-
-// 		return berr_ok;
-// 	}
-
-// 	return berr_invalid_arguments;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// int bia_creation_start_monitoring(bia_creation_t creation)
-// try {
-// 	if (!creation) {
-// 		return berr_invalid_arguments;
-// 	} else if (!static_cast<bia::gc::gcable<bia::member::member>*>(creation)->valid()) {
-// 		return berr_invalid_arguments;
-// 	}
-
-// 	static_cast<bia::gc::gcable<bia::member::member>*>(creation)->start_monitor();
-
-// 	return berr_ok;
-// } catch (...) {
-// 	return berr_invalid_arguments;
-// }
-
-// void bia_creation_free(bia_creation_t creation)
-// {
-// 	delete static_cast<bia::gc::gcable<bia::member::member>*>(creation);
-// }
-
-// bia_member_t bia_creation_peek(bia_creation_t creation)
-// {
-// 	return creation ? static_cast<bia::gc::gcable<bia::member::member>*>(creation)->peek() : nullptr;
-// }
+#include <bia/bvm/bvm.hpp>
+#include <bia/cbia.h>
+#include <bia/compiler/compiler.hpp>
+#include <bia/internal/context.hpp>
+#include <bia/memory/frame.hpp>
+#include <bia/memory/gc/gc.hpp>
+#include <bia/memory/simple_allocator.hpp>
+#include <bia/memory/stack.hpp>
+#include <bia/string/encoding/encoder.hpp>
+#include <bia/tokenizer/bia_lexer.hpp>
+#include <bia/util/finally.hpp>
+#include <bia/util/memory_streambuf.hpp>
+#include <istream>
+#include <sstream>
+
+using namespace bia;
+
+struct Bytecode
+{
+	std::string instructions;
+	std::string resources;
+};
+
+bia_context_t bia_context_new()
+try {
+	return new internal::Context{ *new memory::gc::GC{ std::make_shared<memory::Simple_allocator>() } };
+} catch (...) {
+	return nullptr;
+}
+
+void bia_context_free(bia_context_t context)
+try {
+	const auto ctx = static_cast<internal::Context*>(context);
+	const auto gc  = &ctx->global_namespace().gc();
+	delete ctx;
+	delete gc;
+} catch (...) {
+}
+
+bia_err_t bia_compile(bia_context_t context, bia_bytecode_t* out, const char* code, size_t size)
+try {
+	const auto ctx = static_cast<internal::Context*>(context);
+	std::stringstream instructions;
+	std::stringstream resources;
+	tokenizer::Bia_lexer lexer{ ctx->global_namespace().gc().allocator() };
+	compiler::Compiler compiler{ ctx->global_namespace().gc().allocator(), instructions, resources, *ctx };
+	util::Memory_streambuf code_buffer{ { reinterpret_cast<const util::Byte*>(code), size } };
+	std::istream input{ &code_buffer };
+	auto encoder      = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
+	auto free_encoder = util::finallay([&] { string::encoding::free_encoder(encoder); });
+	tokenizer::Reader reader{ input, *encoder };
+
+	lexer.lex(reader, compiler);
+
+	if (compiler.errors().size()) {
+		return BIA_ERR_UNKNOWN;
+	}
+
+	*out = new Bytecode{ instructions.str(), resources.str() };
+
+	return BIA_OK;
+} catch (...) {
+	return BIA_ERR_UNKNOWN;
+}
+
+void bia_bytecode_free(bia_bytecode_t bytecode)
+try {
+	delete static_cast<Bytecode*>(bytecode);
+} catch (...) {
+}
+
+bia_err_t bia_run(bia_context_t context, bia_bytecode_t bytecode)
+try {
+	const auto ctx   = static_cast<internal::Context*>(context);
+	const auto bcode = static_cast<Bytecode*>(bytecode);
+
+	memory::Stack stack{ ctx->global_namespace().gc().allocator(), 1024 };
+	memory::Frame<true> frame{ stack._memory, ctx->global_namespace().gc(), 0 };
+	auto resources = resource::deserialize(
+	  { reinterpret_cast<const util::Byte*>(bcode->resources.data()), bcode->resources.size() },
+	  ctx->global_namespace().gc());
+
+	// ctx->global_namespace().gc().register_stack(stack);
+
+	bvm::execute(
+	  { reinterpret_cast<const util::Byte*>(bcode->instructions.data()), bcode->instructions.size() }, frame,
+	  resources, *ctx);
+
+	// ctx->global_namespace().gc().unregister_stack(stack);
+	ctx->global_namespace().gc().run();
+
+	return BIA_OK;
+} catch (...) {
+	return BIA_ERR_UNKNOWN;
+}

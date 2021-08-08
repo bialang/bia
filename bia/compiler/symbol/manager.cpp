@@ -2,13 +2,12 @@
 
 #include <bia/error/exception.hpp>
 #include <bia/internal/type/bool.hpp>
-#include <bia/internal/type/floating_point.hpp>
-#include <bia/internal/type/integer.hpp>
 #include <bia/internal/type/regex.hpp>
 #include <bia/internal/type/string.hpp>
 #include <bia/internal/type/void.hpp>
 #include <bia/util/algorithm.hpp>
 
+using namespace bia;
 using namespace bia::compiler::symbol;
 
 Manager::Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
@@ -36,30 +35,30 @@ void Manager::close_scope()
 	_scopes.pop_back();
 }
 
-Variable Manager::create_temporary(util::Not_null<const internal::type::Definition*> type)
+Local_variable Manager::create_temporary(util::Not_null<const internal::type::Definition_base*> type)
 {
-	Variable variable{};
-	variable.definition      = type;
-	variable.location.offset = _stack;
-	variable.flags           = Variable::flag_mutable;
+	Local_variable variable{};
+	variable.definition = type;
+	variable.offset     = _stack;
+	variable.flags      = Local_variable::flag_mutable;
 	_stack += util::aligned(type->size(), alignof(std::max_align_t));
 	return variable;
 }
 
-void Manager::free_temporary(Variable variable)
+void Manager::free_temporary(Local_variable variable)
 {
 	BIA_EXPECTS(variable.definition);
 	// TODO solve alignment a more efficient way
 	const auto size = util::aligned(variable.definition->size(), alignof(std::max_align_t));
 	// TODO add support if variable is not at the end
-	if (variable.location.offset + size == _stack) {
+	if (variable.offset + size == _stack) {
 		_stack -= size;
 	}
 }
 
-bool Manager::promote_temporary(const resource::View& name, const Variable& variable)
+bool Manager::promote_temporary(const resource::View& name, const Local_variable& variable)
 {
-	if (_symbols.find({ name }) != _symbols.end()) {
+	if (_symbols.find({ name }) != _symbols.end() || !_global_namespace.global({ name }).empty()) {
 		return false;
 	}
 	const auto it = _symbols.insert(std::make_pair(name, variable)).first;
@@ -75,15 +74,15 @@ Symbol Manager::symbol(const internal::String_key& name)
 	}
 
 	const auto symbol = _global_namespace.global(name);
-	if (symbol.is_type<const internal::type::Definition*>()) {
-		return symbol.get<const internal::type::Definition*>();
-	} else if (symbol.is_type<internal::Symbol>()) {
-		return symbol.get<internal::Symbol>();
+	if (symbol.is_type<const internal::type::Definition_base*>()) {
+		return symbol.get<const internal::type::Definition_base*>();
+	} else if (symbol.is_type<internal::Global_variable>()) {
+		return symbol.get<internal::Global_variable>();
 	}
 	return {};
 }
 
-void Manager::_accept_declared(const resource::View& name, Variable var)
+void Manager::_accept_declared(const resource::View& name, Local_variable var)
 {
 	const auto d = _declared.find(name);
 	BIA_EXPECTS(d != _declared.end());
@@ -135,10 +134,10 @@ void Manager::_decline_declared(const resource::View& name)
 
 void Manager::_drop(map_type::const_iterator it)
 {
-	if (it->second.is_type<symbol::Variable>()) {
-		const auto& variable = it->second.get<symbol::Variable>();
+	if (it->second.is_type<Local_variable>()) {
+		const auto& variable = it->second.get<Local_variable>();
 		// TODO better freeing
-		if (variable.location.offset + variable.definition->size() == _stack) {
+		if (variable.offset + variable.definition->size() == _stack) {
 			_stack -= variable.definition->size();
 		}
 	}

@@ -16,12 +16,12 @@ elve::Tokens elve::while_stmt(Parameter& param, Tokens tokens)
 	param.flow_controller.start_flow(jumper);
 
 	// condition
-	util::Optional<symbol::Variable> variable;
+	util::Optional<symbol::Local_variable> variable;
 	auto expression_tokens     = tokens.subspan(1);
 	std::tie(tokens, variable) = single_expression(param, expression_tokens);
 
-	if (!dynamic_cast<const type::Bool*>(variable->definition)) {
-		param.errors.add_error(error::Code::type_mismatch, expression_tokens.left(tokens.begin()));
+	if (!dynamic_cast<const type::Definition<bool>*>(variable->definition)) {
+		param.errors.add_error(error::Code::not_boolean, expression_tokens.left(tokens.begin()));
 	}
 
 	param.symbols.free_temporary(*variable);

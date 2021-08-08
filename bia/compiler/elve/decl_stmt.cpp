@@ -12,13 +12,13 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 
 	int flags = 0;
 	if (tokens.at(1).value == Token::Keyword::mut) {
-		flags |= symbol::Variable::flag_mutable;
+		flags |= symbol::Local_variable::flag_mutable;
 		tokens = tokens.subspan(1);
 	}
 
 	const auto variable_token                      = tokens.at(1);
 	tokens                                         = tokens.subspan(2);
-	const internal::type::Definition* desired_type = nullptr;
+	const internal::type::Definition_base* desired_type = nullptr;
 
 	// process type definition available -> declare
 	if (tokens.front().value != Operator::assign) {

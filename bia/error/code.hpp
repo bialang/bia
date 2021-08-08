@@ -25,10 +25,13 @@ enum class Code
 	argument_count_mismatch,
 	bad_operation,
 
+	// bad usage
 	empty_optional,
 	empty_variant,
 	bad_variant_index,
+	undefined_definition,
 
+	// lexing errors
 	expected_opening_curly_bracket = 50,
 	expected_closing_curly_bracket,
 	expected_opening_bracket,
@@ -67,6 +70,7 @@ enum class Code
 	bad_number,
 	bad_operator,
 
+	// compilation errors
 	type_mismatch = 150,
 	not_boolean,
 	symbol_already_declared,
@@ -82,6 +86,7 @@ enum class Code
 	not_an_object,
 	unsupported_operator,
 
+	// bvm errors
 	bad_opcode = 200,
 	bad_offset_option,
 	bad_constant_option,
@@ -89,17 +94,20 @@ enum class Code
 	bad_member_source_option,
 	bad_member_destination_option,
 
+	// runtime errors
 	module_not_found = 250,
 
 	bad_switch_value = 300,
-	why_did_this_happen
+	why_did_this_happen,
 };
 
 enum class Condition
 {
 	success,
+	lexer,
 	compiler,
 	bvm,
+	runtime,
 	implementation,
 };
 
@@ -116,8 +124,14 @@ inline const std::error_category& code_category() noexcept
 		}
 		std::error_condition default_error_condition(int code) const noexcept override
 		{
-			if (code >= 150 && code < 200) {
+			if (code >= 50 && code < 150) {
+				return make_error_condition(Condition::lexer);
+			} else if (code >= 150 && code < 200) {
 				return make_error_condition(Condition::compiler);
+			} else if (code >= 200 && code < 250) {
+				return make_error_condition(Condition::bvm);
+			} else if (code >= 250 && code < 300) {
+				return make_error_condition(Condition::runtime);
 			}
 			return error_category::default_error_condition(code);
 		}
@@ -137,6 +151,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::bad_operation: return "bad operation";
 			case Code::empty_variant: return "accessing empty variant";
 			case Code::bad_variant_index: return "bad variant index";
+			case Code::undefined_definition: return "definition of C++ type is undefined";
 			// case code::expected_curly_bracket:
 			// case code::expected_flow_control:
 			// case code::expected_in:

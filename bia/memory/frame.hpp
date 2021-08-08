@@ -87,7 +87,7 @@ public:
 	Frame(Frame& parent, std::size_t offset) noexcept : Frame<false>{ parent, offset }, _gc{ parent._gc }
 	{}
 	template<typename Type>
-	void store(std::int32_t offset, const Type& value)
+	std::size_t store(std::int32_t offset, const Type& value)
 	{
 		static_assert(util::type_traits::Is_frameable<Type>::value, "Type is not frameable");
 		using Framer = internal::type::Framer<Type>;
@@ -99,6 +99,7 @@ public:
 			BIA_THROW(error::Code::out_of_stack);
 		}
 		Framer::frame(_gc, { position, Framer::size() }, value);
+		return Framer::size();
 	}
 
 private:

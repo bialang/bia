@@ -9,10 +9,10 @@ namespace bia {
 namespace internal {
 namespace type {
 
-class Regex : public Definition
+class Regex : public Definition_base
 {
 public:
-	bool is_assignable(const Definition* other) const noexcept override
+	bool is_assignable(const Definition_base* other) const noexcept override
 	{
 		return dynamic_cast<const Regex*>(other);
 	}
@@ -28,7 +28,7 @@ public:
 	{
 		return 0;
 	}
-	int compare(util::Not_null<const Definition*> other) const noexcept override
+	int compare(util::Not_null<const Definition_base*> other) const noexcept override
 	{
 		return util::compare(ordinal(), other->ordinal());
 	}

@@ -22,25 +22,12 @@ enum class Default_int_size
 	size_64 = 64,
 };
 
-struct Location
-{
-	std::uint32_t offset;
-};
-
-struct Variable
-{
-	enum Flag
-	{
-		flag_mutable = 0x1
-	};
-
-	Location location;
-	const internal::type::Definition* definition;
-	int flags;
-};
+struct Local_variable : internal::Global_variable
+{};
 
 /// A symbol is either a variable or a type.
-typedef util::Variant<Variable, const internal::type::Definition*, internal::Symbol> Symbol;
+typedef util::Variant<internal::Global_variable, Local_variable, const internal::type::Definition_base*>
+  Symbol;
 
 class Manager
 {
@@ -52,27 +39,27 @@ public:
 	        const internal::Namespace& global_namespace, Default_int_size default_int_size);
 	void open_scope();
 	void close_scope();
-	Variable create_temporary(util::Not_null<const internal::type::Definition*> type);
-	void free_temporary(Variable variable);
-	bool promote_temporary(const resource::View& name, const Variable& variable);
+	Local_variable create_temporary(util::Not_null<const internal::type::Definition_base*> type);
+	void free_temporary(Local_variable variable);
+	bool promote_temporary(const resource::View& name, const Local_variable& variable);
 	/// Returns the symbol or an empty variant if not found.
 	Symbol symbol(const internal::String_key& name);
-	bool is_tos(const Variable& variable) const
+	bool is_tos(const Local_variable& variable) const
 	{
 		BIA_EXPECTS(variable.definition);
 		const auto size = util::aligned(variable.definition->size(), alignof(std::max_align_t));
-		return variable.location.offset + size == _stack;
+		return variable.offset + size == _stack;
 	}
 	std::uint32_t stack_position() const noexcept
 	{
 		return _stack;
 	}
-	Variable push(Variable variable)
+	Local_variable push(Local_variable variable)
 	{
 		// TODO
 		return variable;
 	}
-	void pop(Variable variable)
+	void pop(Local_variable variable)
 	{
 		free_temporary(variable);
 	}
@@ -84,14 +71,14 @@ private:
 	/// All defined symbols.
 	map_type _symbols;
 	/// Variables that were declared but not defined.
-	std::map<resource::View, Location> _declared;
+	std::map<resource::View, std::size_t> _declared;
 	/// All scopes with the latest ones at the back.
 	std::vector<std::vector<map_type::const_iterator>> _scopes;
 	/// Size of the int and uint types.
 	Default_int_size _default_int_size;
 	std::uint32_t _stack = 0;
 
-	void _accept_declared(const resource::View& name, Variable var);
+	void _accept_declared(const resource::View& name, Local_variable var);
 	void _decline_declared(const resource::View& name);
 	// void _introduce_native_types();
 	void _drop(map_type::const_iterator it);

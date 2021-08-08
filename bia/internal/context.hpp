@@ -3,7 +3,6 @@
 
 #include "namespace.hpp"
 #include "type/function.hpp"
-#include "type/integer.hpp"
 #include "type/string.hpp"
 #include "type/system.hpp"
 #include "type/void.hpp"

@@ -65,6 +65,17 @@ void GC::register_stack(Stack& stack)
 	_roots.push_back(&stack);
 }
 
+void GC::unregister_stack(Stack& stack)
+{
+	std::lock_guard<std::mutex> _{ _mutex };
+	for(auto i = _roots.begin(); i != _roots.end(); ++i) {
+		if (*i == &stack) {
+			_roots.erase(i);
+			break;
+		}
+	}
+}
+
 bia::util::Not_null<std::shared_ptr<bia::memory::Allocator>> GC::allocator() noexcept
 {
 	return _allocator;

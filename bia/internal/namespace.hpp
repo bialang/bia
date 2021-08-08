@@ -3,9 +3,7 @@
 
 #include "string_key.hpp"
 #include "type/bool.hpp"
-#include "type/floating_point.hpp"
 #include "type/function.hpp"
-#include "type/integer.hpp"
 #include "type/regex.hpp"
 #include "type/string.hpp"
 #include "type/void.hpp"
@@ -28,11 +26,20 @@
 namespace bia {
 namespace internal {
 
-struct Symbol
+struct Variable_base
 {
+	enum Flag
+	{
+		flag_mutable = 0x1
+	};
+
 	std::size_t offset;
-	const type::Definition* definition;
+	const type::Definition_base* definition;
+	int flags;
 };
+
+struct Global_variable : Variable_base
+{};
 
 class Namespace
 {
@@ -43,41 +50,66 @@ public:
 		      _global_space, _gc, 0
 	      }
 	{
-		using namespace internal::type;
-
-		const Definition* def = nullptr;
-		_global_index.insert(std::make_pair(
-		  util::from_cstring("int"),
-		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::i32, true))));
-		_global_index.insert(std::make_pair(
-		  util::from_cstring("uint"),
-		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::u32, true))));
-
-		_global_index.insert(std::make_pair(util::from_cstring("void"),
-		                                    static_cast<const Definition*>(_type_system.get_or_create<Void>())));
+		// link Bia's data types to definitions
+		_global_index.insert(std::make_pair(util::from_cstring("void"), _type_system.definition_of<void>()));
+		_global_index.insert(std::make_pair(util::from_cstring("bool"), _type_system.definition_of<bool>()));
 
 		_global_index.insert(
-		  std::make_pair(util::from_cstring("bool"), def = _type_system.get_or_create<Bool>()));
-		_type_system.link<bool>(def);
+		  std::make_pair(util::from_cstring("int8"), _type_system.definition_of<std::int8_t>()));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("uint8"), _type_system.definition_of<std::uint8_t>()));
 
-		_global_index.insert(std::make_pair(
-		  util::from_cstring("int32"),
-		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::i32, false))));
-		_global_index.insert(std::make_pair(
-		  util::from_cstring("uint64"),
-		  static_cast<const Definition*>(_type_system.get_or_create<Integer>(Integer::Size::u64, false))));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("int16"), _type_system.definition_of<std::int16_t>()));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("uint16"), _type_system.definition_of<std::uint16_t>()));
 
-		_global_index.insert(std::make_pair(
-		  util::from_cstring("float32"),
-		  static_cast<const Definition*>(_type_system.get_or_create<Floating_point>(Floating_point::Size::f32))));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("int32"), _type_system.definition_of<std::int32_t>()));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("uint32"), _type_system.definition_of<std::uint32_t>()));
 
-		_global_index.insert(std::make_pair(
-		  util::from_cstring("string"), static_cast<const Definition*>(_type_system.get_or_create<String>())));
-		_global_index.insert(std::make_pair(util::from_cstring("regex"),
-		                                    static_cast<const Definition*>(_type_system.get_or_create<Regex>())));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("int"), _type_system.definition_of<std::ptrdiff_t>()));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("uint"),
+		                 _type_system.definition_of<typename std::make_unsigned<std::ptrdiff_t>::type>()));
+
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("int64"), _type_system.definition_of<std::int64_t>()));
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("uint64"), _type_system.definition_of<std::uint64_t>()));
+
+		_global_index.insert(std::make_pair(util::from_cstring("float32"), _type_system.definition_of<float>()));
+		_global_index.insert(std::make_pair(util::from_cstring("float64"), _type_system.definition_of<double>()));
+
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("string"), _type_system.definition_of<std::string>()));
+		// _global_index.insert(
+		//   std::make_pair(util::from_cstring("string"),
+		//                  static_cast<const Definition_base*>(_type_system.get_or_create<String>())));
+		// _global_index.insert(std::make_pair(
+		//   util::from_cstring("regex"), static_cast<const
+		//   Definition_base*>(_type_system.get_or_create<Regex>())));
+	}
+	template<typename Type>
+	void put_value(String_key name, Type&& value, bool immutable = true)
+	{
+		if (_global_index.find(name) != _global_index.end()) {
+			BIA_THROW(error::Code::symbol_already_declared);
+		}
+
+		const std::size_t written = _global_frame.store(_offset, std::forward<Type>(value));
+		const auto definition     = _type_system.definition_of<Type>();
+		Global_variable variable{};
+		variable.offset     = _offset;
+		variable.definition = definition;
+		variable.flags      = immutable ? 0 : Global_variable::flag_mutable;
+		_global_index.insert({ name, variable });
+		_offset += util::aligned(written, alignof(std::max_align_t));
 	}
 	template<typename Invokeable>
-	void put_invokable(String_key name, Invokeable&& invokable)
+	void put_invokable(String_key name, Invokeable&& invokable, bool immutable = true)
 	{
 		static_assert(util::type_traits::Invokable_info<Invokeable>::is_invokable,
 		              "Invokeable must be a invokable");
@@ -85,37 +117,34 @@ public:
 			BIA_THROW(error::Code::symbol_already_declared);
 		}
 
-		// get types of signature
-		const auto return_type =
-		  _type_system.definition_of(typeid(typename util::type_traits::Invokable_info<Invokeable>::Return));
-		auto argument_definitions =
-		  _type_system.definitions_of(util::type_traits::Invokable_info<Invokeable>::arguments);
-		BIA_ASSERT(argument_definitions.size() == util::type_traits::Invokable_info<Invokeable>::argument_count);
-		std::vector<type::Argument> arguments;
-		arguments.reserve(argument_definitions.size());
-		for (const auto definition : argument_definitions) {
-			arguments.push_back({ definition });
-		}
-
 		// TODO alignment of types
 		// TODO protect ptr from GC, because it cannot be collected in global namespace
 		const auto ptr = member::function::create(_gc, std::forward<Invokeable>(invokable));
 		_global_frame.store(_offset, ptr);
-		auto function_definition = _type_system.get_or_create<type::Function>(return_type, arguments);
-		_global_index.insert({ name, Symbol{ _offset, function_definition } });
+		const auto function_definition =
+		  _type_system.definition_of<typename util::type_traits::Invokable_info<Invokeable>::Signature>();
+		Global_variable variable{};
+		variable.offset     = _offset;
+		variable.definition = function_definition;
+		variable.flags      = immutable ? 0 : Global_variable::flag_mutable;
+		_global_index.insert({ name, variable });
 		_offset += util::aligned(sizeof(ptr), alignof(std::max_align_t));
 	}
-	memory::Frame<false> globals() const
+	memory::Frame<true> globals() const
 	{
 		return _global_frame;
 	}
-	util::Variant<Symbol, const type::Definition*> global(const String_key& name) const
+	util::Variant<Global_variable, const type::Definition_base*> global(const String_key& name) const
 	{
 		const auto it = _global_index.find(name);
 		if (it != _global_index.end()) {
 			return it->second;
 		}
 		return {};
+	}
+	memory::gc::GC& gc() noexcept
+	{
+		return _gc;
 	}
 
 private:
@@ -125,7 +154,8 @@ private:
 	util::Span<util::Byte*> _global_space;
 	memory::Frame<true> _global_frame;
 	/// Maps names to the global symbols relative to the global frame.
-	std::map<String_key, util::Variant<Symbol, const type::Definition*>, String_comparator> _global_index;
+	std::map<String_key, util::Variant<Global_variable, const type::Definition_base*>, String_comparator>
+	  _global_index;
 };
 
 } // namespace internal

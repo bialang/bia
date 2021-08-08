@@ -10,13 +10,26 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 {
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Statement_type::assign_statement);
 
-	const auto destination = param.symbols.symbol(tokens.at(1).value.get<Token::Identifier>().memory);
-	if (destination.empty()) {
-		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
-	} else if (!destination.is_type<symbol::Variable>()) {
-		param.errors.add_error(error::Code::symbol_not_a_value, tokens.subspan(1, 1));
-	} else if (!(destination.get<symbol::Variable>().flags & symbol::Variable::flag_mutable)) {
-		param.errors.add_error(error::Code::symbol_immutable, tokens.subspan(1, 1));
+	util::Optional<internal::Variable_base> destination;
+	bool global = false;
+
+	{
+		const auto tmp = param.symbols.symbol(tokens.at(1).value.get<Token::Identifier>().memory);
+		if (tmp.empty()) {
+			param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
+		} else {
+			if (tmp.is_type<symbol::Local_variable>()) {
+				destination = tmp.get<symbol::Local_variable>();
+			} else if (tmp.is_type<internal::Global_variable>()) {
+				destination = tmp.get<internal::Global_variable>();
+				global      = true;
+			} else {
+				param.errors.add_error(error::Code::symbol_not_a_value, tokens.subspan(1, 1));
+			}
+			if (destination.has_value() && !(destination->flags & internal::Variable_base::flag_mutable)) {
+				param.errors.add_error(error::Code::symbol_immutable, tokens.subspan(1, 1));
+			}
+		}
 	}
 
 	// TODO process multiple identifiers
@@ -25,15 +38,18 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 	tokens    = tokens.subspan(3);
 	auto expr = single_expression(param, tokens);
 	if (expr.second) {
-		if (destination.is_type<symbol::Variable>() &&
-		    !destination.get<symbol::Variable>().definition->is_assignable(expr.second->definition)) {
-			param.errors.add_error(error::Code::type_mismatch,
-			                       tokens.subspan(+0, tokens.size() - expr.first.size()));
-		} else if (destination.is_type<symbol::Variable>()) {
-			// TODO size
-			param.instructor.write<bytecode::Op_code::copy>(bytecode::Size::bit_32,
-			                                                destination.get<symbol::Variable>().location.offset,
-			                                                expr.second->location.offset);
+		if (destination.has_value()) {
+			if (!destination->definition->is_assignable(expr.second->definition)) {
+				param.errors.add_error(error::Code::type_mismatch,
+				                       tokens.subspan(+0, tokens.size() - expr.first.size()));
+			} else if (global) {
+				param.instructor.write<bytecode::Op_code::copy_to_namespace>(
+				  bytecode::Size::bit_32, destination->offset, expr.second->offset);
+			} else {
+				// TODO size
+				param.instructor.write<bytecode::Op_code::copy>(bytecode::Size::bit_32, destination->offset,
+				                                                expr.second->offset);
+			}
 		}
 		param.symbols.free_temporary(*expr.second);
 	} else {

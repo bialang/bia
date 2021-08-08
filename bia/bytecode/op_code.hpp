@@ -15,6 +15,7 @@ enum class Op_code : std::uint8_t
 
 	load_from_namespace,
 	copy,
+	copy_to_namespace,
 	add,
 	fadd,
 	sub,

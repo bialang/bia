@@ -2,7 +2,6 @@
 #include "helpers.hpp"
 
 #include <bia/internal/type/function.hpp>
-#include <bia/internal/type/integer.hpp>
 #include <bia/internal/type/regex.hpp>
 #include <bia/internal/type/string.hpp>
 #include <bia/internal/type/void.hpp>
@@ -35,12 +34,12 @@ inline bool has_right_hand_size(const Tokens& tokens) noexcept
 	       tokens[0].value != Operator::function_call_close;
 }
 
-inline util::Optional<symbol::Variable> apply_self_operator(Parameter& param, Operator optor,
-                                                            Tokens optor_tokens, symbol::Variable variable)
+inline util::Optional<symbol::Local_variable>
+  apply_self_operator(Parameter& param, Operator optor, Tokens optor_tokens, symbol::Local_variable variable)
 {
 	if (optor == Operator::logical_not) {
 		const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-		BIA_ASSERT(bool_type.is_type<const type::Definition*>());
+		BIA_ASSERT(bool_type.is_type<const type::Definition_base*>());
 		// TODO test size
 		BIA_ASSERT(false);
 		// param.instructor.write<bytecode::Op_code::falsey, std::int8_t>(variable.location.offset);
@@ -53,7 +52,7 @@ inline util::Optional<symbol::Variable> apply_self_operator(Parameter& param, Op
 	return {};
 }
 
-inline std::pair<Tokens, util::Optional<symbol::Variable>>
+inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
   single_expression_impl(Parameter& param, Tokens tokens, Jumper& jumper, int precedence)
 {
 	BIA_EXPECTS(!tokens.empty());
@@ -69,7 +68,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 	}
 
 	// handle left hand side
-	util::Optional<symbol::Variable> lhs;
+	util::Optional<symbol::Local_variable> lhs;
 	auto lhs_tokens = tokens;
 	// in parentheses
 	if (tokens.front().value == Token::Control::bracket_open) {
@@ -120,7 +119,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 			// continue;
 		} // function call
 		else if (optor == Operator::function_call_open || optor == Operator::nullable_function_call_open) {
-			util::Optional<symbol::Variable> result;
+			util::Optional<symbol::Local_variable> result;
 			std::tie(tokens, result) = member_invocation(param, tokens, lhs, lhs_tokens);
 			if (result) {
 				lhs = result;
@@ -128,7 +127,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 			continue;
 		} // member access
 		else if (optor == Operator::member_access || optor == Operator::nullable_member_access) {
-			util::Optional<symbol::Variable> result;
+			util::Optional<symbol::Local_variable> result;
 			std::tie(tokens, result) = member_access(param, tokens, *lhs, lhs_tokens);
 			if (result) {
 				lhs = result;
@@ -137,40 +136,43 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 		}
 
 		// right hand side
-		util::Optional<symbol::Variable> rhs;
+		util::Optional<symbol::Local_variable> rhs;
 		auto rhs_tokens       = tokens.subspan(1);
 		std::tie(tokens, rhs) = single_expression_impl(param, rhs_tokens, jumper, optor_precedence);
 		rhs_tokens            = rhs_tokens.left(tokens.begin());
 
-		// TODO
-		if (lhs->definition->compare(rhs->definition) && !(dynamic_cast<const type::Regex*>(lhs->definition) &&
-		                                                   dynamic_cast<const type::String*>(rhs->definition))) {
-			param.errors.add_error(error::Code::type_mismatch, rhs_tokens);
-		}
+		if (lhs.has_value()) {
+			// TODO
+			// if (lhs->definition->compare(rhs->definition) &&
+			//     !(dynamic_cast<const type::Regex*>(lhs->definition) &&
+			//       dynamic_cast<const type::String*>(rhs->definition))) {
+			// 	param.errors.add_error(error::Code::type_mismatch, rhs_tokens);
+			// }
 
-		if (!dynamic_cast<const type::Integer*>(lhs->definition)) {
-			param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
-		} else {
-			using namespace bytecode;
-			bool is_test = false;
-			switch (optor) {
-			case Operator::equal:
-				param.instructor.write<Op_code::equal>(Size::bit_32, lhs->location.offset, rhs->location.offset);
-				is_test = true;
-				break;
-			case Operator::plus:
-				param.instructor.write<Op_code::add>(Size::bit_32, lhs->location.offset, rhs->location.offset);
-				break;
-			default: param.errors.add_error(error::Code::unsupported_operator, optor_tokens); break;
-			}
+			if (!(lhs->definition->flags() & internal::type::Definition_base::flag_arithmetic)) {
+				param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
+			} else {
+				using namespace bytecode;
+				bool is_test = false;
+				switch (optor) {
+				case Operator::equal:
+					param.instructor.write<Op_code::equal>(Size::bit_32, lhs->offset, rhs->offset);
+					is_test = true;
+					break;
+				case Operator::plus:
+					param.instructor.write<Op_code::add>(Size::bit_32, lhs->offset, rhs->offset);
+					break;
+				default: param.errors.add_error(error::Code::unsupported_operator, optor_tokens); break;
+				}
 
-			if (is_test) {
-				const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-				BIA_ASSERT(bool_type.is_type<const type::Definition*>());
-				param.symbols.free_temporary(*rhs);
-				param.symbols.free_temporary(*lhs);
-				lhs = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
-				continue;
+				if (is_test) {
+					const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
+					BIA_ASSERT(bool_type.is_type<const type::Definition_base*>());
+					param.symbols.free_temporary(*rhs);
+					param.symbols.free_temporary(*lhs);
+					lhs = param.symbols.create_temporary(bool_type.get<const type::Definition_base*>());
+					continue;
+				}
 			}
 		}
 		param.symbols.free_temporary(*rhs);
@@ -220,7 +222,7 @@ inline std::pair<Tokens, util::Optional<symbol::Variable>>
 	return { tokens, lhs };
 }
 
-std::pair<Tokens, util::Optional<symbol::Variable>> single_expression(Parameter& param, Tokens tokens)
+std::pair<Tokens, util::Optional<symbol::Local_variable>> single_expression(Parameter& param, Tokens tokens)
 {
 	Jumper jumper{ param.instructor };
 	return single_expression_impl(param, tokens, jumper, -1);

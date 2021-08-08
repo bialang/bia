@@ -13,14 +13,14 @@ elve::Tokens elve::if_stmt(Parameter& param, Tokens tokens)
 
 	// if and every following else if statements
 	do {
-		util::Optional<symbol::Variable> variable;
+		util::Optional<symbol::Local_variable> variable;
 		auto expression_tokens     = tokens.subspan(1);
 		std::tie(tokens, variable) = single_expression(param, expression_tokens);
 		expression_tokens          = expression_tokens.left(tokens.begin());
 
 		if (variable) {
-			if (dynamic_cast<const type::Bool*>(variable->definition)) {
-				param.instructor.write<bytecode::Op_code::test>(variable->location.offset);
+			if (dynamic_cast<const type::Definition<bool>*>(variable->definition)) {
+				param.instructor.write<bytecode::Op_code::test>(variable->offset);
 			} else {
 				param.errors.add_error(error::Code::not_boolean, expression_tokens.left(tokens.begin()));
 			}

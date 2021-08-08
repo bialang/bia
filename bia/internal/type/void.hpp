@@ -9,10 +9,11 @@ namespace bia {
 namespace internal {
 namespace type {
 
-class Void : public Definition
+template<>
+class Definition<void> : public Definition_base
 {
 public:
-	bool is_assignable(const Definition* other) const noexcept override
+	bool is_assignable(const Definition_base* other) const noexcept override
 	{
 		return true;
 	}
@@ -28,7 +29,7 @@ public:
 	{
 		return 0;
 	}
-	int compare(util::Not_null<const Definition*> other) const noexcept override
+	int compare(util::Not_null<const Definition_base*> other) const noexcept override
 	{
 		return util::compare(ordinal(), other->ordinal());
 	}

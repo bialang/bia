@@ -23,7 +23,7 @@ elve::Tokens elve::root(Parameter& param, Tokens tokens)
 		default: BIA_THROW(error::Code::bad_switch_value);
 		}
 	} else {
-		util::Optional<symbol::Variable> variable;
+		util::Optional<symbol::Local_variable> variable;
 		std::tie(tokens, variable) = single_expression(param, tokens);
 		if (variable) {
 			param.symbols.free_temporary(*variable);

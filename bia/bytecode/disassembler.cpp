@@ -108,6 +108,7 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 		}
 		case Op_code::load_from_namespace: address_operation("load_ns"); break;
 		case Op_code::copy: address_operation("copy"); break;
+		case Op_code::copy_to_namespace: address_operation("copy_ns"); break;
 		case Op_code::add: address_operation("add"); break;
 		case Op_code::fadd: address_operation("fadd"); break;
 		case Op_code::sub: address_operation("sub"); break;

@@ -39,6 +39,7 @@ public:
 	}
 	void run();
 	void register_stack(Stack& stack);
+	void unregister_stack(Stack& stack);
 	util::Not_null<std::shared_ptr<Allocator>> allocator() noexcept;
 
 private:
