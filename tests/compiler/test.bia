@@ -2,6 +2,16 @@
 // hello_world()
 // print("asd")
 // print_vector(v)
-file = "yea es geht"
-print(file)
+// file = "yea es geht"
 // print(file)
+// print(file)
+
+let mut x = 0
+
+x = 3 + x
+x = 3 + x
+print(to_string(x))
+
+if not x == 0 {
+	print("hi")
+}

@@ -40,6 +40,7 @@ enum class Op_code : std::uint8_t
 
 	invoke,
 	test,
+	negate,
 
 	jump,
 	jump_true,

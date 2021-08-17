@@ -111,6 +111,11 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			test_register     = static_cast<bool>(frame.load<std::uint8_t>(source));
 			break;
 		}
+		case Op_code::negate: {
+			const auto source = ip.read<Address>();
+			frame.store(source, static_cast<std::uint8_t>(!frame.load<std::uint8_t>(source)));
+			break;
+		}
 		case Op_code::jump: {
 			const auto offset = ip.read<std::int32_t>();
 			ip += offset;

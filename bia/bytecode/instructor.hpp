@@ -60,7 +60,8 @@ public:
 		util::portable::write(_output, immediate);
 	}
 	template<Op_code op_code>
-	typename std::enable_if<(op_code == Op_code::invoke || op_code == Op_code::test)>::type
+	typename std::enable_if<(op_code == Op_code::invoke || op_code == Op_code::test ||
+	                         op_code == Op_code::negate)>::type
 	  write(Address function)
 	{
 		_write_op_code<op_code>();

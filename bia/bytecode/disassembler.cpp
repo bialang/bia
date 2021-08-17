@@ -138,6 +138,12 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 			address(output, source);
 			break;
 		}
+		case Op_code::negate: {
+			const auto source = read<Address>(input);
+			out(output, "negate");
+			address(output, source);
+			break;
+		}
 		case Op_code::jump: {
 			const auto offset = read<std::int32_t>(input);
 			out(output, "jump");

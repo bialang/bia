@@ -38,14 +38,11 @@ inline util::Optional<symbol::Local_variable>
   apply_self_operator(Parameter& param, Operator optor, Tokens optor_tokens, symbol::Local_variable variable)
 {
 	if (optor == Operator::logical_not) {
-		const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-		BIA_ASSERT(bool_type.is_type<const type::Definition_base*>());
-		// TODO test size
-		BIA_ASSERT(false);
-		// param.instructor.write<bytecode::Op_code::falsey, std::int8_t>(variable.location.offset);
-		// param.symbols.free_temporary(variable);
-		// variable = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
-		// param.instructor.write<bytecode::Op_code::booleanize>(variable.location.offset);
+		if (!dynamic_cast<const type::Definition<bool>*>(variable.definition)) {
+			// TODO fix tokens
+			param.errors.add_error(error::Code::not_boolean, optor_tokens);
+		}
+		param.instructor.write<bytecode::Op_code::negate>(variable.offset);
 		return variable;
 	}
 	param.errors.add_error(error::Code::bad_operator, optor_tokens);
@@ -157,6 +154,10 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 				switch (optor) {
 				case Operator::equal:
 					param.instructor.write<Op_code::equal>(Size::bit_32, lhs->offset, rhs->offset);
+					is_test = true;
+					break;
+				case Operator::not_equal:
+					param.instructor.write<Op_code::not_equal>(Size::bit_32, lhs->offset, rhs->offset);
 					is_test = true;
 					break;
 				case Operator::plus:

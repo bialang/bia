@@ -3,6 +3,7 @@
 #include <bia/bvm/bvm.hpp>
 #include <bia/bytecode/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
+#include <bia/member/function/dynamic.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/resource/deserialize.hpp>
@@ -130,6 +131,8 @@ try {
 		  return ss;
 	  });
 	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
+	context.global_namespace().put_invokable(util::from_cstring("to_string"),
+	                                         [](std::int64_t i) { return std::to_string(i); });
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
@@ -185,7 +188,7 @@ try {
 	std::cerr << "Exception from main: " << e.code() << "\n\twhat: " << e.what()
 	          << "\n\tcondition: " << e.code().default_error_condition().message()
 	          << "\n\tfrom: " << e.source_location() << std::endl;
-} /* catch (const bia::error::Contract_violation& e) {
+} catch (const bia::error::Contract_violation& e) {
   std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
             << std::endl;
-} */
+}
