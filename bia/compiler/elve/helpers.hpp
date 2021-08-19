@@ -37,6 +37,7 @@ Tokens batch(Parameter& param, Tokens tokens);
 
 Tokens decl_stmt(Parameter& param, Tokens tokens);
 Tokens drop_stmt(Parameter& param, Tokens tokens);
+Tokens scope_stmt(Parameter& param, Tokens tokens);
 Tokens assign_stmt(Parameter& param, Tokens tokens);
 Tokens if_stmt(Parameter& param, Tokens tokens);
 Tokens while_stmt(Parameter& param, Tokens tokens);

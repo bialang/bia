@@ -122,7 +122,7 @@ struct Token
 		use,
 		mut,
 		type,
-		scoped,
+		scope,
 		defer,
 		return_,
 		yield,

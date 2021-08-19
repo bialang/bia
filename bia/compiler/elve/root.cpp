@@ -14,6 +14,7 @@ elve::Tokens elve::root(Parameter& param, Tokens tokens)
 		case Token::Keyword::while_: tokens = while_stmt(param, tokens); break;
 		case Token::Keyword::import: tokens = import_stmt(param, tokens); break;
 		case Token::Keyword::drop: tokens = drop_stmt(param, tokens); break;
+		case Token::Keyword::scope: tokens = scope_stmt(param, tokens); break;
 		case Token::Keyword::break_:
 		case Token::Keyword::continue_: tokens = flow_control_stmt(param, tokens); break;
 		default: BIA_THROW(error::Code::bad_switch_value);

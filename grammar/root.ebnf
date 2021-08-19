@@ -3,7 +3,7 @@ small_stmt ::= (drop_stmt | decl_stmt | assign_stmt | return_stmt | yield_stmt |
 compound_stmt ::= if_stmt | while_stmt | scope_stmt | fun_stmt
 batch ::= "{" root* "}"
 
-scope_stmt ::= "scoped" batch
+scope_stmt ::= "scope" batch
 
 return_stmt ::= "return" multi_expression?
 yield_stmt ::= "yield" multi_expression?

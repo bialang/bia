@@ -1,3 +1,7 @@
-let tada = "hi"
-drop tada
+//let tada = "hi"
+//drop tada
+//print(tada)
+scope {
+	let tada = "hi"
+}
 print(tada)
