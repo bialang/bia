@@ -67,7 +67,7 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>> identifier_valu
 	} else if (identifier.is_type<symbol::Local_variable>()) {
 		variable = param.symbols.create_temporary(identifier.get<symbol::Local_variable>().definition);
 		// TODO actual copy size
-		param.instructor.write<Op_code::copy>(Size::bit_32, variable->offset,
+		param.instructor.write<Op_code::copy>(Size::bit_64, variable->offset,
 		                                      identifier.get<symbol::Local_variable>().offset);
 	} else if (identifier.is_type<internal::Global_variable>()) {
 		variable = param.symbols.create_temporary(identifier.get<internal::Global_variable>().definition);

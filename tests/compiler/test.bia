@@ -1,7 +1,3 @@
-// let v = read_three()
-// hello_world()
-// print("asd")
-// print_vector(v)
-file = "yea es geht"
-print(file)
-// print(file)
+let tada = "hi"
+drop tada
+print(tada)

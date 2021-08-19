@@ -85,6 +85,7 @@ enum class Code
 	too_many_arguments,
 	not_an_object,
 	unsupported_operator,
+	symbol_defined_in_different_scope,
 
 	// bvm errors
 	bad_opcode = 200,
@@ -186,6 +187,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::too_many_arguments: return "too many arguments in function call";
 			case Code::not_an_object: return "not an object";
 			case Code::unsupported_operator: return "unsupported operator";
+			case Code::symbol_defined_in_different_scope: return "symbol was defined in different scope";
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:
