@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BIA_STRING_ENCODING_UNICODE_HPP_
+#define BIA_STRING_ENCODING_UNICODE_HPP_
 
 #include "encoder.hpp"
 
@@ -42,21 +43,21 @@ enum class Category : std::int8_t
 	Zs
 };
 
-Category category_of(code_point_type value) noexcept;
+Category category_of(Code_point value) noexcept;
 
-inline bool is_letter(code_point_type value) noexcept
+inline bool is_letter(Code_point value) noexcept
 {
 	const auto c = category_of(value);
 	return c >= Category::Ll && c <= Category::Lu;
 }
 
-inline bool is_number(code_point_type value) noexcept
+inline bool is_number(Code_point value) noexcept
 {
 	const auto c = category_of(value);
 	return c >= Category::Nd && c <= Category::No;
 }
 
-inline bool is_valid_unicode(code_point_type value) noexcept
+inline bool is_valid_unicode(Code_point value) noexcept
 {
 	return value <= 0x10ffff && (value < 0xd800 || value > 0xdfff) && (value < 0xfdd0 || value > 0xfdef) &&
 	       (value & 0xfffe) != 0xfffe && value != 0xfeff;
@@ -65,3 +66,5 @@ inline bool is_valid_unicode(code_point_type value) noexcept
 } // namespace encoding
 } // namespace string
 } // namespace bia
+
+#endif
