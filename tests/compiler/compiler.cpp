@@ -110,6 +110,8 @@ try {
 	                                         static_cast<void (*)()>([] { puts("Hello, world!"); }));
 	context.global_namespace().put_invokable(util::from_cstring("print"),
 	                                         [](const std::string& v) { return puts(v.c_str()); });
+	context.global_namespace().put_invokable(util::from_cstring("to_string"),
+	                                         [](std::ptrdiff_t value) { return std::to_string(value); });
 	context.global_namespace().put_invokable(
 	  util::from_cstring("compare"), [](const std::string& a, const std::string& b) { return a.compare(b); });
 	context.global_namespace().put_invokable(

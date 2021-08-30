@@ -26,6 +26,7 @@ public:
 	{
 		flag_truthable  = 0x01,
 		flag_arithmetic = 0x02,
+		flag_unsigned   = 0x4,
 	};
 
 	virtual ~Definition_base()                                              = default;
@@ -69,7 +70,8 @@ public:
 	}
 	int flags() const noexcept override
 	{
-		return std::is_arithmetic<Type>::value ? flag_arithmetic : 0;
+		return (std::is_arithmetic<Type>::value ? flag_arithmetic : 0) |
+		       (std::is_unsigned<Type>::value ? flag_unsigned : 0);
 	}
 	int compare(util::Not_null<const Definition_base*> other) const noexcept override
 	{

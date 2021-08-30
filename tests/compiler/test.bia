@@ -1,7 +1,2 @@
-//let tada = "hi"
-//drop tada
-//print(tada)
-scope {
-	let tada = "hi"
-}
-print(tada)
+let x = 1+2*2
+print(to_string(x))
