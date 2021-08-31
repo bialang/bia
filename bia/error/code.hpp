@@ -86,6 +86,8 @@ enum class Code
 	not_an_object,
 	unsupported_operator,
 	symbol_defined_in_different_scope,
+	number_overflow,
+	number_underflow,
 
 	// bvm errors
 	bad_opcode = 200,

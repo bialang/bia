@@ -80,8 +80,10 @@ TEST_CASE("any of", "[tokenizer]")
 	REQUIRE(pair.first == 1);
 }
 
-TEST_CASE("number", "[tokenizer]")
+TEST_CASE("numbers", "[tokenizer]")
 {
+	using Type = Token::Number::Type;
+
 	const auto parse = [](const char* value) {
 		const auto param = create_parameter(value);
 		REQUIRE(!number(*param));
@@ -90,21 +92,50 @@ TEST_CASE("number", "[tokenizer]")
 		return param->bundle.begin()->value.get<Token::Number>();
 	};
 
-	auto num = parse("0");
-	REQUIRE(num.type == Token::Number::Type::i);
-	REQUIRE(num.value.i == 0);
+	SECTION("integrals")
+	{
+		auto num = parse("0");
+		REQUIRE(num.type == Type::i);
+		REQUIRE(num.value.i == 0);
 
-	num = parse("255");
-	REQUIRE(num.type == Token::Number::Type::i);
-	REQUIRE(num.value.i == 255);
+		num = parse("255");
+		REQUIRE(num.type == Type::i);
+		REQUIRE(num.value.i == 255);
 
-	num = parse("22222");
-	REQUIRE(num.type == Token::Number::Type::i);
-	REQUIRE(num.value.i == 22222);
+		num = parse("22222");
+		REQUIRE(num.type == Type::i);
+		REQUIRE(num.value.i == 22222);
 
-	REQUIRE(number(*create_parameter("?")).code == bia::error::Code::bad_number);
-	REQUIRE(number(*create_parameter("-")).code == bia::error::Code::bad_number);
-	REQUIRE(number(*create_parameter("+")).code == bia::error::Code::bad_number);
+		num = parse("22222u");
+		REQUIRE(num.type == Type::u);
+		REQUIRE(num.value.u == 22222u);
+	}
+
+	SECTION("floating points")
+	{
+		auto num = parse("0.0f");
+		REQUIRE(num.type == Type::f32);
+		REQUIRE(num.value.f32 == 0.0f);
+
+		num = parse("1.0F");
+		REQUIRE(num.type == Type::f32);
+		REQUIRE(num.value.f32 == 1.0f);
+
+		num = parse("0.0");
+		REQUIRE(num.type == Type::f64);
+		REQUIRE(num.value.f64 == 0.0);
+
+		num = parse("1.0");
+		REQUIRE(num.type == Type::f64);
+		REQUIRE(num.value.f64 == 1.0);
+	}
+
+	SECTION("bad numbers")
+	{
+		REQUIRE(number(*create_parameter("?")).code == Code::bad_number);
+		REQUIRE(number(*create_parameter("-")).code == Code::bad_number);
+		REQUIRE(number(*create_parameter("+")).code == Code::bad_number);
+	}
 }
 
 TEST_CASE("string", "[tokenizer]")
