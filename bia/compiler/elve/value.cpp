@@ -13,6 +13,16 @@ namespace bia {
 namespace compiler {
 namespace elve {
 
+template<std::size_t N, typename Type>
+inline symbol::Local_variable write_number(Parameter& param, const char (&name)[N], Type value)
+{
+	const auto definition = param.symbols.symbol(util::Span<const char*>{ name, N });
+	BIA_ASSERT(definition.is_type<const type::Definition_base*>());
+	auto variable = param.symbols.create_temporary(definition.get<const type::Definition_base*>());
+	param.instructor.write<bytecode::Op_code::store>(variable.offset, value);
+	return variable;
+}
+
 inline std::pair<Tokens, symbol::Local_variable> number_value(Parameter& param, Tokens tokens)
 {
 	using Type = Token::Number::Type;
@@ -22,11 +32,18 @@ inline std::pair<Tokens, symbol::Local_variable> number_value(Parameter& param, 
 	symbol::Local_variable variable;
 
 	switch (number.type) {
-	case Type::i:
-		variable = param.symbols.create_temporary(
-		  param.symbols.symbol(util::from_cstring("int")).get<const type::Definition_base*>());
-		param.instructor.write<bytecode::Op_code::store>(variable.offset, number.value.i);
-		break;
+	case Type::i: variable = write_number(param, "int", number.value.i); break;
+	case Type::i8: variable = write_number(param, "int8", number.value.i8); break;
+	case Type::i16: variable = write_number(param, "int16", number.value.i16); break;
+	case Type::i32: variable = write_number(param, "int32", number.value.i32); break;
+	case Type::i64: variable = write_number(param, "int64", number.value.i64); break;
+	case Type::u: variable = write_number(param, "uint", number.value.u); break;
+	case Type::u8: variable = write_number(param, "uint8", number.value.u8); break;
+	case Type::u16: variable = write_number(param, "uint16", number.value.u16); break;
+	case Type::u32: variable = write_number(param, "uint32", number.value.u32); break;
+	case Type::u64: variable = write_number(param, "uint64", number.value.u64); break;
+	case Type::f32: variable = write_number(param, "float32", number.value.f32); break;
+	case Type::f64: variable = write_number(param, "float64", number.value.f64); break;
 	default: BIA_THROW(error::Code::bad_switch_value);
 	}
 
@@ -47,9 +64,7 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>> keyword_value(P
 	case Token::Keyword::false_:
 		param.instructor.write<bytecode::Op_code::store>(variable.offset, std::uint8_t{ 0 });
 		break;
-	default:
-		// TODO
-		BIA_ASSERT(false);
+	default: BIA_THROW(error::Code::bad_switch_value);
 	}
 	return { tokens.subspan(1), variable };
 }

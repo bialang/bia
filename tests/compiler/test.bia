@@ -1,2 +1,2 @@
-let x = 1+2*2
-print(to_string(x))
+let x = 1.0
+print(fto_string(x))

@@ -3,6 +3,7 @@
 #include <bia/bvm/bvm.hpp>
 #include <bia/bytecode/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
+#include <bia/error/contract_violation.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/resource/deserialize.hpp>
@@ -112,6 +113,8 @@ try {
 	                                         [](const std::string& v) { return puts(v.c_str()); });
 	context.global_namespace().put_invokable(util::from_cstring("to_string"),
 	                                         [](std::ptrdiff_t value) { return std::to_string(value); });
+	context.global_namespace().put_invokable(util::from_cstring("fto_string"),
+	                                         [](double value) { return std::to_string(value); });
 	context.global_namespace().put_invokable(
 	  util::from_cstring("compare"), [](const std::string& a, const std::string& b) { return a.compare(b); });
 	context.global_namespace().put_invokable(
@@ -187,7 +190,7 @@ try {
 	std::cerr << "Exception from main: " << e.code() << "\n\twhat: " << e.what()
 	          << "\n\tcondition: " << e.code().default_error_condition().message()
 	          << "\n\tfrom: " << e.source_location() << std::endl;
-} /* catch (const bia::error::Contract_violation& e) {
-  std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
-            << std::endl;
-} */
+} catch (const bia::error::Contract_violation& e) {
+	std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
+	          << std::endl;
+}

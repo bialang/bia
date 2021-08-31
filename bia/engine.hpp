@@ -10,6 +10,7 @@
 
 namespace bia {
 
+/// Provides a simple interface to the Bia programming language.
 class Engine
 {
 public:
@@ -26,6 +27,7 @@ public:
 		_context.global_namespace().put_value(name, std::forward<Type>(value), immutable);
 	}
 	internal::Context& context() noexcept;
+	/// Compiles and runs the given Bia code.
 	void run(std::istream& code);
 
 private:

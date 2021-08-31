@@ -8,21 +8,27 @@ using namespace bia::tokenizer::token;
 
 inline std::tuple<std::string, Token::Number::Type, Error_info> extract_number(Parameter& param)
 {
+	using Type        = Token::Number::Type;
 	const auto ranger = param.begin_range();
 	std::string str;
+	Type type = Type::i;
 	while (true) {
 		const auto state = param.reader.backup();
 		const auto c     = param.reader.read();
-		if (c < '0' || c > '9') {
+		if ((type != Type::f32 || type != Type::f64) && c == '.') {
+			type = Type::f64;
+		} else if (type == Type::f64 && (c == 'f' || c == 'F')) {
+			type = Type::f32;
+		} else if (c < '0' || c > '9') {
 			param.reader.restore(state);
 			break;
 		}
 		str.append(1, c);
 	}
 	if (str.empty()) {
-		return { str, Token::Number::Type::i, param.make_error(bia::error::Code::bad_number, ranger.range()) };
+		return { "", Type::i, param.make_error(bia::error::Code::bad_number, ranger.range()) };
 	}
-	return { str, Token::Number::Type::i, {} };
+	return { str, type, {} };
 }
 
 inline std::pair<Token::Number::Type, Error_info> check_special(Parameter& param, Token::Number::Type type)
@@ -59,11 +65,13 @@ inline Error_info convert(Parameter& param, const std::string& str, Token::Numbe
 
 Error_info parse::number(Parameter& param)
 {
-	const auto ranger = param.begin_range();
+	const auto ranger    = param.begin_range();
 	const auto extracted = extract_number(param);
+	// check error
 	if (std::get<2>(extracted)) {
 		return std::get<2>(extracted);
 	}
 	const auto special = check_special(param, std::get<1>(extracted));
-	return special.second ? special.second : convert(param, std::get<0>(extracted), special.first, ranger.range());
+	return special.second ? special.second
+	                      : convert(param, std::get<0>(extracted), special.first, ranger.range());
 }

@@ -5,6 +5,7 @@
 #include "operator_.hpp"
 
 #include <bia/bytecode/op_code.hpp>
+#include <type_traits>
 #include <bia/error/exception.hpp>
 #include <bia/resource/view.hpp>
 #include <bia/util/variant.hpp>
@@ -47,7 +48,7 @@ struct Token
 			std::int16_t i16;
 			std::int32_t i32;
 			std::int64_t i64;
-			std::uintptr_t u;
+			typename std::make_unsigned<std::ptrdiff_t>::type u;
 			std::uint8_t u8;
 			std::uint16_t u16;
 			std::uint32_t u32;
