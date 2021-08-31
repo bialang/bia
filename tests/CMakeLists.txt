@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 file(GLOB DIRS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/" "*")
 
-set(CMAKE_CXX_STANDARD 17)
+# set(CMAKE_CXX_STANDARD 17)
 
 foreach(dir ${DIRS})
 	if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${dir}")
