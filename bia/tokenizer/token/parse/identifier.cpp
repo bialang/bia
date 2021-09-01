@@ -22,7 +22,7 @@ struct comparator
 		}
 
 		// find beginning
-		const auto c = static_cast<char>(cp);
+		const char c = static_cast<char>(cp);
 		for (; first != last; ++first) {
 			if (**first == c) {
 				break;
@@ -55,7 +55,7 @@ Error_info parse::identifier(Parameter& param)
 		                    "for",  "from",   "fun",      "if",    "import", "in",   "let",   "mut",
 		                    "null", "return", "scope",    "true",  "type",   "use",  "while", "yield" };
 	comparator keywords{ values, values + sizeof(values) / sizeof(const char*) };
-	auto first        = true;
+	bool first        = true;
 	auto streambuf    = param.manager.start_memory(true);
 	const auto outenc = get_encoder(standard_encoding::utf_8);
 	const auto free   = util::finallay([outenc] { free_encoder(outenc); });

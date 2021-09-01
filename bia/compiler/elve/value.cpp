@@ -80,10 +80,21 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>> identifier_valu
 	if (identifier.empty()) {
 		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(+0, 1));
 	} else if (identifier.is_type<symbol::Local_variable>()) {
-		variable = param.symbols.create_temporary(identifier.get<symbol::Local_variable>().definition);
-		// TODO actual copy size
-		param.instructor.write<Op_code::copy>(Size::bit_64, variable->offset,
-		                                      identifier.get<symbol::Local_variable>().offset);
+		const auto& source = identifier.get<symbol::Local_variable>();
+		variable           = param.symbols.create_temporary(source.definition);
+		// copy all bits
+		for (std::size_t copied = 0, size = source.definition->size(); copied < size;) {
+			Size s = Size::bit_8;
+			if (size >= 8) {
+				s = Size::bit_64;
+			} else if (size >= 4) {
+				s = Size::bit_32;
+			} else if (size >= 2) {
+				s = Size::bit_16;
+			}
+			param.instructor.write<Op_code::copy>(s, variable->offset + copied, source.offset + copied);
+			copied += size_to_bits(s) / 8;
+		}
 	} else if (identifier.is_type<internal::Global_variable>()) {
 		variable = param.symbols.create_temporary(identifier.get<internal::Global_variable>().definition);
 		param.instructor.write<bytecode::Op_code::load_from_namespace>(
