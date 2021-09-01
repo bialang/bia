@@ -181,7 +181,7 @@ try {
 	// print stack
 	std::cout << "\n==========STACK==========\n";
 	for (int i = 0; i < 5; ++i) {
-		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
+		std::cout << "%" << std::setw(4) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
 		          << std::setw(16) << std::setfill('0') << std::hex
 		          << base_frame.load<std::size_t>(i * 2 * sizeof(std::size_t)) << std::endl;
 	}

@@ -14,6 +14,7 @@ namespace parse {
 typedef Error_info(*token_type)(Parameter&);
 
 Error_info spacer(Parameter& param);
+bool is_spacing_character(string::encoding::code_point_type cp) noexcept;
 
 Error_info root(Parameter& param);
 Error_info batch(Parameter& param);

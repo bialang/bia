@@ -69,6 +69,7 @@ enum class Code
 	bad_else_if_statement,
 	bad_number,
 	bad_operator,
+	unsigned_cannot_be_negative,
 
 	// compilation errors
 	type_mismatch = 150,
@@ -162,19 +163,19 @@ inline const std::error_category& code_category() noexcept
 			// case code::expected_regex:
 			// case code::expected_declaration_statement:
 			// case code::expected_import_statement:
-			case Code::expected_command_end:
-				return "expected command end, like a semicolon";
-				// case code::expected_string:
-				// case code::expected_while_statement:
-				// case code::expected_whitespace:
-				// case code::bad_for_statement:
-				// case code::bad_function_statement:
-				// case code::bad_identifier:
-				// case code::bad_if_statement:
-				// case code::bad_else_statement:
-				// case code::bad_else_if_statement:
-				// case code::bad_number:
-				// case code::bad_operator:
+			case Code::expected_command_end: return "expected command end, like a semicolon";
+			// case code::expected_string:
+			// case code::expected_while_statement:
+			// case code::expected_whitespace:
+			// case code::bad_for_statement:
+			// case code::bad_function_statement:
+			// case code::bad_identifier:
+			// case code::bad_if_statement:
+			// case code::bad_else_statement:
+			// case code::bad_else_if_statement:
+			// case code::bad_number:
+			// case code::bad_operator:
+			case Code::unsigned_cannot_be_negative: return "unsigned integral cannot be negative";
 			case Code::type_mismatch: return "type mismatch";
 			case Code::not_boolean: return "expression is not boolean";
 			case Code::symbol_already_declared: return "symbol already declared";

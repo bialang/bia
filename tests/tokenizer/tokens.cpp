@@ -85,6 +85,7 @@ TEST_CASE("numbers", "[tokenizer]")
 	using Type = Token::Number::Type;
 
 	const auto parse = [](const char* value) {
+		INFO("Expression:" << value);
 		const auto param = create_parameter(value);
 		REQUIRE(!number(*param));
 		REQUIRE(param->bundle.size() == 1);
@@ -109,6 +110,47 @@ TEST_CASE("numbers", "[tokenizer]")
 		num = parse("22222u");
 		REQUIRE(num.type == Type::u);
 		REQUIRE(num.value.u == 22222u);
+
+		num = parse("13i16");
+		REQUIRE(num.type == Type::i16);
+		REQUIRE(num.value.i16 == 13);
+
+		num = parse("-47163i32");
+		REQUIRE(num.type == Type::i32);
+		REQUIRE(num.value.i32 == -47163);
+
+		num = parse("78647163u64");
+		REQUIRE(num.type == Type::u64);
+		REQUIRE(num.value.u64 == 78647163);
+
+		// hex
+		num = parse("0x16");
+		REQUIRE(num.type == Type::i);
+		REQUIRE(num.value.i == 0x16);
+
+		num = parse("0Xffffu16");
+		REQUIRE(num.type == Type::u16);
+		REQUIRE(num.value.u16 == 0xffff);
+
+		// octal
+		num = parse("0777");
+		REQUIRE(num.type == Type::i);
+		REQUIRE(num.value.i == 0777);
+
+		// binary
+		num = parse("0b11111111u8");
+		REQUIRE(num.type == Type::u8);
+		REQUIRE(num.value.u8 == 255);
+
+		// over- and underflow
+		REQUIRE(number(*create_parameter("0u8")) == Code::success);
+		REQUIRE(number(*create_parameter("255u8")) == Code::success);
+		REQUIRE(number(*create_parameter("256u8")) == Code::number_overflow);
+
+		REQUIRE(number(*create_parameter("127i8")) == Code::success);
+		REQUIRE(number(*create_parameter("-128i8")) == Code::success);
+		REQUIRE(number(*create_parameter("128i8")) == Code::number_overflow);
+		REQUIRE(number(*create_parameter("-129i8")) == Code::number_underflow);
 	}
 
 	SECTION("floating points")
@@ -128,13 +170,20 @@ TEST_CASE("numbers", "[tokenizer]")
 		num = parse("1.0");
 		REQUIRE(num.type == Type::f64);
 		REQUIRE(num.value.f64 == 1.0);
+
+		num = parse("-1.0");
+		REQUIRE(num.type == Type::f64);
+		REQUIRE(num.value.f64 == -1.0);
 	}
 
 	SECTION("bad numbers")
 	{
-		REQUIRE(number(*create_parameter("?")).code == Code::bad_number);
-		REQUIRE(number(*create_parameter("-")).code == Code::bad_number);
-		REQUIRE(number(*create_parameter("+")).code == Code::bad_number);
+		REQUIRE(number(*create_parameter("")) == Code::bad_number);
+		REQUIRE(number(*create_parameter("?")) == Code::bad_number);
+		REQUIRE(number(*create_parameter("-")) == Code::bad_number);
+		REQUIRE(number(*create_parameter("+")) == Code::bad_number);
+		REQUIRE(number(*create_parameter("-1u")) == Code::unsigned_cannot_be_negative);
+		REQUIRE(number(*create_parameter("255u7")) == Code::bad_number);
 	}
 }
 
