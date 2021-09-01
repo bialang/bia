@@ -25,7 +25,7 @@ while_stmt ::= "while" single_expression batch
 multi_expression ::= single_expression ("," single_expression)*
 single_expression ::= self_operator? expression_value (member_access | member_invocation | member_subscript)* (operator single_expression)*
 expression_value ::= value | "(" "use" value ")"
-value ::= number | "false" | "true" | "null" | string | regex | fun_value | object_value | array_value | tuple_value | identifier | "(" single_expression ")"
+value ::= number | "false" | "true" | "null" | "infinity" | "nan" | string | regex | fun_value | object_value | array_value | tuple_value | identifier | "(" single_expression ")"
 fun_value ::= "fun" parameter_decl type_definition? batch | "(" "fun" parameter_decl type_definition? "=>" multi_expression ")"
 object_value ::= "{" (object_value_field ("," object_value_field)* ","?)? "}"
 object_value_field ::= (string | identifier) "=" single_expression | "..." identifier
