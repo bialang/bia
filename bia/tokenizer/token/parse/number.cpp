@@ -92,6 +92,8 @@ inline std::tuple<std::string, Token::Number::Type, int, Error_info> extract_num
 		case State::floating_point: {
 			if (c >= '0' && c <= '9') {
 				break;
+			} else if (parse::is_spacing_character(c)) {
+				goto gt_end;
 			}
 			goto gt_error;
 		}
@@ -133,22 +135,28 @@ inline std::tuple<std::string, Token::Number::Type, int, Error_info> extract_num
 			goto gt_error;
 		}
 		case State::hexadecimal: {
-			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
-				goto gt_error;
+			if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')) {
+				break;
+			} else if (parse::is_spacing_character(c)) {
+				goto gt_end;
 			}
-			break;
+			goto gt_error;
 		}
 		case State::octal: {
-			if (c < '0' || c > '7') {
-				goto gt_error;
+			if (c >= '0' && c <= '7') {
+				break;
+			} else if (parse::is_spacing_character(c)) {
+				goto gt_end;
 			}
-			break;
+			goto gt_error;
 		}
 		case State::binary: {
-			if (c != '0' && c != '1') {
-				goto gt_error;
+			if (c == '0' || c == '1') {
+				break;
+			} else if (parse::is_spacing_character(c)) {
+				goto gt_end;
 			}
-			break;
+			goto gt_error;
 		}
 		}
 		str.push_back(c);

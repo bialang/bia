@@ -154,7 +154,8 @@ try {
 		for (auto err : compiler.errors()) {
 			print_error(str, err);
 		}
-		BIA_LOG(ERROR, "Compilation failed with {} errors", compiler.errors().size());
+		BIA_LOG(ERROR, "Compilation failed with {} error{}", compiler.errors().size(),
+		        compiler.errors().size() > 1 ? "s" : "");
 		return -1;
 	}
 
