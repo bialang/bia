@@ -3,7 +3,7 @@ small_stmt ::= (drop_stmt | decl_stmt | assign_stmt | return_stmt | yield_stmt |
 compound_stmt ::= if_stmt | while_stmt | scope_stmt | fun_stmt
 batch ::= "{" root* "}"
 
-scope_stmt ::= "scoped" batch
+scope_stmt ::= "scope" batch
 
 return_stmt ::= "return" multi_expression?
 yield_stmt ::= "yield" multi_expression?
@@ -25,7 +25,7 @@ while_stmt ::= "while" single_expression batch
 multi_expression ::= single_expression ("," single_expression)*
 single_expression ::= self_operator? expression_value (member_access | member_invocation | member_subscript)* (operator single_expression)*
 expression_value ::= value | "(" "use" value ")"
-value ::= number | "false" | "true" | "null" | string | regex | fun_value | object_value | array_value | tuple_value | identifier | "(" single_expression ")"
+value ::= number | "false" | "true" | "null" | "infinity" | "nan" | string | regex | fun_value | object_value | array_value | tuple_value | identifier | "(" single_expression ")"
 fun_value ::= "fun" parameter_decl type_definition? batch | "(" "fun" parameter_decl type_definition? "=>" multi_expression ")"
 object_value ::= "{" (object_value_field ("," object_value_field)* ","?)? "}"
 object_value_field ::= (string | identifier) "=" single_expression | "..." identifier

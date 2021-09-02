@@ -18,6 +18,14 @@ struct Error_info
 	{
 		return range.start < other.range.start;
 	}
+	bool operator==(error::Code code) const noexcept
+	{
+		return this->code == code;
+	}
+	bool operator!=(error::Code code) const noexcept
+	{
+		return this->code != code;
+	}
 	operator bool() const noexcept
 	{
 		return code != error::Code::success;

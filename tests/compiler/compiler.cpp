@@ -113,6 +113,10 @@ try {
 	                                         static_cast<void (*)()>([] { puts("Hello, world!"); }));
 	context.global_namespace().put_invokable(util::from_cstring("print"),
 	                                         [](const std::string& v) { return puts(v.c_str()); });
+	context.global_namespace().put_invokable(util::from_cstring("to_string"),
+	                                         [](std::ptrdiff_t value) { return std::to_string(value); });
+	context.global_namespace().put_invokable(util::from_cstring("fto_string"),
+	                                         [](double value) { return std::to_string(value); });
 	context.global_namespace().put_invokable(
 	  util::from_cstring("compare"), [](const std::string& a, const std::string& b) { return a.compare(b); });
 	context.global_namespace().put_invokable(
@@ -132,6 +136,8 @@ try {
 		  }
 		  return ss;
 	  });
+	context.global_namespace().put_invokable(
+	  util::from_cstring("test"), [](bool value) { std::cout << (value ? "true" : "false") << "\n"; });
 	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
 	context.global_namespace().put_invokable(util::from_cstring("to_string"),
 	                                         [](std::int64_t i) { return std::to_string(i); });
@@ -170,7 +176,8 @@ try {
 		for (auto err : compiler.errors()) {
 			print_error(str, err);
 		}
-		BIA_LOG(ERROR, "Compilation failed with {} errors", compiler.errors().size());
+		BIA_LOG(ERROR, "Compilation failed with {} error{}", compiler.errors().size(),
+		        compiler.errors().size() > 1 ? "s" : "");
 		return -1;
 	}
 
@@ -197,7 +204,7 @@ try {
 	// print stack
 	std::cout << "\n==========STACK==========\n";
 	for (int i = 0; i < 5; ++i) {
-		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
+		std::cout << "%" << std::setw(4) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
 		          << std::setw(16) << std::setfill('0') << std::hex
 		          << base_frame.load<std::size_t>(i * 2 * sizeof(std::size_t)) << std::endl;
 	}

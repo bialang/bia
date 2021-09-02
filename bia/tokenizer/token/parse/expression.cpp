@@ -1,6 +1,8 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+#include <limits>
+
 using namespace bia::tokenizer::token;
 
 inline Error_info operators(Parameter& param)
@@ -51,13 +53,29 @@ inline Error_info self_operator(Parameter& param)
 inline Error_info constant_keyword(Parameter& param)
 {
 	const auto ranger = param.begin_range();
-	const auto tmp    = parse::any_of(param, "true", "false", "null");
+	const auto tmp    = parse::any_of(param, "true", "false", "null", "infinity", "nan");
 	const auto range  = ranger.range();
 	if (tmp.second && !parse::spacer(param)) {
 		switch (tmp.first) {
 		case 0: param.bundle.emplace_back(Token::Keyword::true_, range); break;
 		case 1: param.bundle.emplace_back(Token::Keyword::false_, range); break;
 		case 2: param.bundle.emplace_back(Token::Keyword::null, range); break;
+		case 3: {
+			static_assert(std::numeric_limits<double>::has_infinity);
+			Token::Number number{};
+			number.type      = Token::Number::Type::f64;
+			number.value.f64 = std::numeric_limits<double>::infinity();
+			param.bundle.emplace_back(number, range);
+			break;
+		}
+		case 4: {
+			static_assert(std::numeric_limits<double>::has_quiet_NaN);
+			Token::Number number{};
+			number.type      = Token::Number::Type::f64;
+			number.value.f64 = std::numeric_limits<double>::quiet_NaN();
+			param.bundle.emplace_back(number, range);
+			break;
+		}
 		default: BIA_THROW(bia::error::Code::bad_switch_value);
 		}
 		return {};

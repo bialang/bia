@@ -19,7 +19,7 @@ namespace bytecode {
 template<Op_code op_code>
 using is_with_2_operands =
   std::integral_constant<bool,
-                         (op_code >= Op_code::load_from_namespace && op_code <= Op_code::greater_equal_than)>;
+                         (op_code >= Op_code::load_from_namespace && op_code <= Op_code::ugreater_equal_than)>;
 
 template<Op_code op_code>
 using is_branch_operation =

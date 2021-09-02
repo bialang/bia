@@ -10,7 +10,7 @@ namespace internal {
 namespace type {
 
 template<>
-class Definition<void> : public Definition_base
+class Definition<void, void> : public Definition_base
 {
 public:
 	bool is_assignable(const Definition_base* other) const noexcept override

@@ -2,14 +2,9 @@
 #define BIA_INTERNAL_NAMESPACE_HPP_
 
 #include "string_key.hpp"
-#include "type/bool.hpp"
-#include "type/function.hpp"
-#include "type/regex.hpp"
-#include "type/string.hpp"
-#include "type/void.hpp"
+#include "type/definitions.hpp"
+#include "type/system.hpp"
 
-#include <bia/internal/type/definition.hpp>
-#include <bia/internal/type/system.hpp>
 #include <bia/member/function/creator.hpp>
 #include <bia/memory/frame.hpp>
 #include <bia/memory/gc/gc.hpp>
@@ -54,6 +49,8 @@ public:
 		_global_index.insert(std::make_pair(util::from_cstring("void"), _type_system.definition_of<void>()));
 		_global_index.insert(std::make_pair(util::from_cstring("bool"), _type_system.definition_of<bool>()));
 
+		_global_index.insert(
+		  std::make_pair(util::from_cstring("byte"), _type_system.definition_of<std::uint8_t>()));
 		_global_index.insert(
 		  std::make_pair(util::from_cstring("int8"), _type_system.definition_of<std::int8_t>()));
 		_global_index.insert(
@@ -141,6 +138,10 @@ public:
 			return it->second;
 		}
 		return {};
+	}
+	internal::type::System& type_system() noexcept
+	{
+		return _type_system;
 	}
 	memory::gc::GC& gc() noexcept
 	{

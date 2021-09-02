@@ -1,7 +1,7 @@
 #include "manager.hpp"
 
 #include <bia/error/exception.hpp>
-#include <bia/internal/type/bool.hpp>
+#include <bia/internal/type/integral.hpp>
 #include <bia/internal/type/regex.hpp>
 #include <bia/internal/type/string.hpp>
 #include <bia/internal/type/void.hpp>
@@ -33,6 +33,23 @@ void Manager::close_scope()
 		_drop(*i);
 	}
 	_scopes.pop_back();
+}
+
+error::Code Manager::drop_symbol(const internal::String_key& name)
+{
+	const auto it = _symbols.find(name);
+	if (it == _symbols.end()) {
+		return error::Code::undefined_symbol;
+	}
+	auto& scope = _scopes.back();
+	for (auto i = scope.begin(); i != scope.end(); ++i) {
+		if (*i == it) {
+			// just remove from the symbols index
+			_symbols.erase(it);
+			return error::Code::success;
+		}
+	}
+	return error::Code::symbol_defined_in_different_scope;
 }
 
 Local_variable Manager::create_temporary(util::Not_null<const internal::type::Definition_base*> type)
