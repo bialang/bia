@@ -83,6 +83,8 @@ inline std::tuple<std::string, Token::Number::Type, int, Error_info> extract_num
 					goto gt_error;
 				}
 				type = type == Type::i ? Type::i64 : Type::u64;
+			} else if (parse::is_spacing_character(c)) {
+				goto gt_end;
 			} else {
 				goto gt_error;
 			}
