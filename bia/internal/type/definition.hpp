@@ -40,7 +40,7 @@ public:
 	virtual unsigned int ordinal() const noexcept                                    = 0;
 };
 
-template<typename Type>
+template<typename Type, typename = void>
 class Definition;
 
 class Definition_real_base : virtual public Definition_base
@@ -55,6 +55,7 @@ class Definition_helper : public Definition_real_base
 {
 public:
 	static_assert(util::type_traits::Is_frameable<Type>::value, "Type must be frameable");
+	static_assert(!std::is_integral<Type>::value, "Type must not be an integral");
 
 	bool is_assignable(const Definition_base* other) const noexcept override
 	{
@@ -101,7 +102,9 @@ private:
 };
 
 template<typename Type>
-class Definition : public Definition_helper<Type>
+class Definition<Type, typename std::enable_if<(util::type_traits::Is_frameable<Type>::value &&
+                                                !std::is_integral<Type>::value)>::type>
+    : public Definition_helper<Type>
 {};
 
 /*

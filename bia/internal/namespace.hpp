@@ -2,8 +2,8 @@
 #define BIA_INTERNAL_NAMESPACE_HPP_
 
 #include "string_key.hpp"
-#include "type/bool.hpp"
 #include "type/function.hpp"
+#include "type/integral.hpp"
 #include "type/regex.hpp"
 #include "type/string.hpp"
 #include "type/void.hpp"

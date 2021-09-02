@@ -1,7 +1,7 @@
 #include "../jumper.hpp"
 #include "helpers.hpp"
 
-#include <bia/internal/type/bool.hpp>
+#include <bia/internal/type/integral.hpp>
 
 using namespace bia::compiler;
 using namespace bia::tokenizer::token;

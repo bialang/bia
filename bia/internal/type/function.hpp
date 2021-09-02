@@ -105,7 +105,7 @@ private:
 };
 
 template<typename Return, typename... Arguments>
-class Definition<Return(Arguments...)> : public Definition_invokable_helper<Return, Arguments...>
+class Definition<Return(Arguments...), void> : public Definition_invokable_helper<Return, Arguments...>
 {
 public:
 	Definition() noexcept : Definition_invokable_helper<Return, Arguments...>{ typeid(Return(Arguments...)) }
@@ -117,7 +117,7 @@ public:
 };
 
 template<typename Return, typename... Arguments>
-class Definition<Return (*)(Arguments...)> : public Definition_invokable_helper<Return, Arguments...>
+class Definition<Return (*)(Arguments...), void> : public Definition_invokable_helper<Return, Arguments...>
 {
 public:
 	Definition() noexcept : Definition_invokable_helper<Return, Arguments...>{ typeid(Return(*)(Arguments...)) }
@@ -129,7 +129,7 @@ public:
 };
 
 template<typename Class, typename Return, typename... Arguments>
-class Definition<Return (Class::*)(Arguments...)> : public Definition_invokable_helper<Return, Arguments...>
+class Definition<Return (Class::*)(Arguments...), void> : public Definition_invokable_helper<Return, Arguments...>
 {
 public:
 	Definition() noexcept
@@ -142,7 +142,7 @@ public:
 };
 
 template<typename Class, typename Return, typename... Arguments>
-class Definition<Return (Class::*)(Arguments...) const>
+class Definition<Return (Class::*)(Arguments...) const, void>
     : public Definition_invokable_helper<Return, Arguments...>
 {
 public:

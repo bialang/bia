@@ -1,7 +1,7 @@
 #include "manager.hpp"
 
 #include <bia/error/exception.hpp>
-#include <bia/internal/type/bool.hpp>
+#include <bia/internal/type/integral.hpp>
 #include <bia/internal/type/regex.hpp>
 #include <bia/internal/type/string.hpp>
 #include <bia/internal/type/void.hpp>
