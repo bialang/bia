@@ -1,6 +1,6 @@
-let mut x = 5u64
+let mut x = -5
 
-while x > 0u64 {
-	print("moin")
-	x = x - 1u64
+while x < 0 {
+	print(to_string(x))
+	x = x - 1
 }

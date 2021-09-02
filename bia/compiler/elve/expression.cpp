@@ -74,26 +74,46 @@ inline symbol::Local_variable handle_operation(Parameter& param, const symbol::L
 		param.instructor.write<Op_code::equal>(Size::bit_32, lhs.offset, rhs.offset);
 		is_test = true;
 		break;
-	case Operator::not_equal: 
+	case Operator::not_equal:
 		param.instructor.write<Op_code::not_equal>(Size::bit_32, lhs.offset, rhs.offset);
 		is_test = true;
 		break;
-	case Operator::less: 
-		param.instructor.write<Op_code::less_than>(Size::bit_32, lhs.offset, rhs.offset);
+	case Operator::less: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sless_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sless_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
 		is_test = true;
 		break;
-	case Operator::less_equal: 
-		param.instructor.write<Op_code::less_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+	}
+	case Operator::less_equal: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sless_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sless_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
 		is_test = true;
 		break;
-	case Operator::greater: 
-		param.instructor.write<Op_code::greater_than>(Size::bit_32, lhs.offset, rhs.offset);
+	}
+	case Operator::greater: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sgreater_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sgreater_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
 		is_test = true;
 		break;
-	case Operator::greater_equal: 
-		param.instructor.write<Op_code::greater_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+	}
+	case Operator::greater_equal: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sgreater_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sgreater_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
 		is_test = true;
 		break;
+	}
 	// case Operator::in: break;
 	// case Operator::three_way_comparison: break;
 	case Operator::bitwise_or:
