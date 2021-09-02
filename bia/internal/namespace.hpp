@@ -2,13 +2,8 @@
 #define BIA_INTERNAL_NAMESPACE_HPP_
 
 #include "string_key.hpp"
-#include "type/definition.hpp"
-#include "type/function.hpp"
-#include "type/integral.hpp"
-#include "type/regex.hpp"
-#include "type/string.hpp"
+#include "type/definitions.hpp"
 #include "type/system.hpp"
-#include "type/void.hpp"
 
 #include <bia/member/function/creator.hpp>
 #include <bia/memory/frame.hpp>
@@ -143,6 +138,10 @@ public:
 			return it->second;
 		}
 		return {};
+	}
+	internal::type::System& type_system() noexcept
+	{
+		return _type_system;
 	}
 	memory::gc::GC& gc() noexcept
 	{

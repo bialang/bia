@@ -35,18 +35,24 @@ public:
 		}
 	}
 	template<typename Type>
-	const Definition_base* definition_of()
+	const Definition_base* register_definition(Type&& definition)
 	{
 		using T = typename std::decay<Type>::type;
-		Definition<T> type{};
-		const auto it = _type_index.find(&type);
+		static_assert(std::is_base_of<Definition_base, T>::value,
+		              "Given definition must inherit from Definition_base");
+		const auto it = _type_index.find(&definition);
 		if (it != _type_index.end()) {
 			return *it;
 		}
 		// create new
-		const auto ptr = _allocator->construct<Definition<T>>();
+		const auto ptr = _allocator->construct<T>(std::forward<Type>(definition));
 		_type_index.insert(ptr);
 		return ptr;
+	}
+	template<typename Type>
+	const Definition_base* definition_of()
+	{
+		return register_definition(Definition<typename std::decay<Type>::type>{});
 	}
 	System& operator=(const System& copy) = delete;
 	/// Move operator.

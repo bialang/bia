@@ -16,8 +16,8 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 		tokens = tokens.subspan(1);
 	}
 
-	const auto variable_token                      = tokens.at(1);
-	tokens                                         = tokens.subspan(2);
+	const auto variable_token                           = tokens.at(1);
+	tokens                                              = tokens.subspan(2);
 	const internal::type::Definition_base* desired_type = nullptr;
 
 	// process type definition available -> declare
@@ -28,16 +28,21 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 
 	auto expr = single_expression(param, tokens.subspan(1));
 	if (expr.second) {
-		expr.second->flags = flags;
-
 		if (desired_type && !desired_type->is_assignable(expr.second->definition)) {
 			param.errors.add_error(error::Code::type_mismatch,
 			                       tokens.subspan(1, tokens.size() - expr.first.size() - 1));
 			param.symbols.free_temporary(*expr.second);
-		} else if (!param.symbols.promote_temporary(variable_token.value.get<Token::Identifier>().memory,
-		                                            *expr.second)) {
-			param.errors.add_error(error::Code::symbol_already_declared, { &variable_token, 1 });
-			param.symbols.free_temporary(*expr.second);
+		} else {
+			// if desired type is given use it instead
+			if (desired_type) {
+				expr.second->definition = desired_type;
+			}
+			expr.second->flags = flags;
+			if (!param.symbols.promote_temporary(variable_token.value.get<Token::Identifier>().memory,
+			                                     *expr.second)) {
+				param.errors.add_error(error::Code::symbol_already_declared, { &variable_token, 1 });
+				param.symbols.free_temporary(*expr.second);
+			}
 		}
 	}
 	return expr.first;
