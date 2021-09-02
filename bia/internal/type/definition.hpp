@@ -26,7 +26,10 @@ public:
 	{
 		flag_truthable  = 0x01,
 		flag_arithmetic = 0x02,
-		flag_unsigned   = 0x4,
+		/// The definition is an unsigned integer.
+		flag_unsigned = 0x04,
+		/// The definition has no definite structure.
+		flag_indeterminate = 0x08,
 	};
 
 	virtual ~Definition_base()                                              = default;
@@ -71,8 +74,7 @@ public:
 	}
 	int flags() const noexcept override
 	{
-		return (std::is_arithmetic<Type>::value ? flag_arithmetic : 0) |
-		       (std::is_unsigned<Type>::value ? flag_unsigned : 0);
+		return (std::is_arithmetic<Type>::value ? flag_arithmetic : 0);
 	}
 	int compare(util::Not_null<const Definition_base*> other) const noexcept override
 	{
@@ -101,38 +103,10 @@ private:
 	std::type_index _index{ typeid(Type) };
 };
 
-template<typename Type>
-class Definition<Type, typename std::enable_if<(util::type_traits::Is_frameable<Type>::value &&
-                                                !std::is_integral<Type>::value)>::type>
-    : public Definition_helper<Type>
+// Default case
+template<typename Type, typename>
+class Definition : public Definition_helper<Type>
 {};
-
-/*
-Ordinals:
-
-| Type                   | Value |
-| ---------------------- | :---: |
-| void                   |   0   |
-| bool                   |   1   |
-| char                   |   2   |
-| signed char            |   3   |
-| unsigned char          |   4   |
-| wchar_t                |   5   |
-| char8_t                |   6   |
-| char16_t               |   7   |
-| char32_t               |   8   |
-| short int              |   9   |
-| unsigned short int     |  10   |
-| int                    |  11   |
-| unsigned int           |  12   |
-| long int               |  13   |
-| unsigned long int      |  14   |
-| long long int          |  15   |
-| unsigned long long int |  16   |
-| float                  |  17   |
-| double                 |  18   |
-| long double            |  19   |
-*/
 
 } // namespace type
 } // namespace internal

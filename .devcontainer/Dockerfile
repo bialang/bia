@@ -1,3 +1,3 @@
 FROM gcc:11
 
-RUN apt-get update && apt-get install -y git cmake libspdlog-dev
+RUN apt-get update && apt-get install -y git cmake libspdlog-dev gdb

@@ -2,14 +2,14 @@
 #define BIA_INTERNAL_NAMESPACE_HPP_
 
 #include "string_key.hpp"
+#include "type/definition.hpp"
 #include "type/function.hpp"
 #include "type/integral.hpp"
 #include "type/regex.hpp"
 #include "type/string.hpp"
+#include "type/system.hpp"
 #include "type/void.hpp"
 
-#include <bia/internal/type/definition.hpp>
-#include <bia/internal/type/system.hpp>
 #include <bia/member/function/creator.hpp>
 #include <bia/memory/frame.hpp>
 #include <bia/memory/gc/gc.hpp>
