@@ -4,12 +4,18 @@
 #include "definition.hpp"
 
 #include <bia/util/type_traits/int_maker.hpp>
+#include <bia/util/type_traits/is_varargs_invokable.hpp>
+#include <limits>
 #include <tuple>
 #include <type_traits>
 
 namespace bia {
 namespace internal {
 namespace type {
+
+template<typename Type>
+class Definition<member::function::Varargs<Type>> : public Definition<Type>
+{};
 
 struct Argument
 {
@@ -19,16 +25,22 @@ struct Argument
 class Definition_invokable_base : virtual public Definition_base
 {
 public:
-	virtual const Definition_base* return_type() const noexcept = 0;
-	virtual std::size_t arguments_size() const noexcept         = 0;
-	virtual const Argument* arguments_begin() const noexcept    = 0;
-	virtual const Argument* arguments_end() const noexcept      = 0;
+	virtual const Definition_base* return_type() const noexcept           = 0;
+	virtual bool is_vararg_index(std::size_t index) const noexcept        = 0;
+	virtual std::size_t argument_lower_count() const noexcept             = 0;
+	virtual std::size_t argument_upper_count() const noexcept             = 0;
+	virtual const Argument* argument_at(std::size_t index) const noexcept = 0;
+	virtual const Argument* arguments_begin() const noexcept              = 0;
+	virtual const Argument* arguments_end() const noexcept                = 0;
 };
 
 template<typename Return, typename... Arguments>
 class Definition_invokable_helper : public Definition_invokable_base, public Definition_real_base
 {
 public:
+	constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
+	  util::type_traits::type_container<Arguments...>>::value;
+
 	Definition_invokable_helper(const std::type_info& info) noexcept : _index{ info }
 	{
 		_fill_arguments(util::type_traits::Int_sequencer<std::size_t, 0, sizeof...(Arguments)>::value);
@@ -54,12 +66,11 @@ public:
 		int n = util::compare(ordinal(), other->ordinal());
 		if (n == 0) {
 			const auto ptr = dynamic_cast<const Definition_invokable_base*>(other.get());
-			n              = _return_type.compare(ptr->return_type());
 			// compare arguments
-			if (n == 0) {
-				n = util::compare(arguments_size(), ptr->arguments_size());
-				if (n == 0) {
-					for (auto i = arguments_begin(), j = ptr->arguments_begin(); i != arguments_end() && n == 0; ++i) {
+			if ((n = _return_type.compare(ptr->return_type())) == 0) {
+				if ((n = util::compare(argument_lower_count(), ptr->argument_lower_count())) == 0) {
+					n = util::compare(argument_upper_count(), ptr->argument_upper_count());
+					for (auto i = arguments_begin(), j = ptr->arguments_begin(); n == 0 && i != arguments_end(); ++i) {
 						n = i->definition->compare(j->definition);
 					}
 				}
@@ -71,9 +82,26 @@ public:
 	{
 		return &_return_type;
 	}
-	std::size_t arguments_size() const noexcept final
+	bool is_vararg_index(std::size_t index) const noexcept override
 	{
-		return sizeof...(Arguments);
+		return is_varargs && index == sizeof...(Arguments) - 1;
+	}
+	std::size_t argument_lower_count() const noexcept override
+	{
+		return is_varargs ? sizeof...(Arguments) - 1 : sizeof...(Arguments);
+	}
+	std::size_t argument_upper_count() const noexcept override
+	{
+		return is_varargs ? std::numeric_limits<std::size_t>::max() : sizeof...(Arguments);
+	}
+	const Argument* argument_at(std::size_t index) const noexcept override
+	{
+		if (index < argument_lower_count()) {
+			return _arguments + index;
+		} else if (is_varargs) {
+			return _arguments + sizeof...(Arguments) - 1;
+		}
+		return nullptr;
 	}
 	const Argument* arguments_begin() const noexcept final
 	{

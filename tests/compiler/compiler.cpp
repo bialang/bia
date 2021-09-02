@@ -3,7 +3,9 @@
 #include <bia/bvm/bvm.hpp>
 #include <bia/bytecode/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
+#include <bia/error/contract_violation.hpp>
 #include <bia/member/function/dynamic.hpp>
+#include <bia/member/function/varargs.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/resource/deserialize.hpp>
@@ -133,9 +135,25 @@ try {
 	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
 	context.global_namespace().put_invokable(util::from_cstring("to_string"),
 	                                         [](std::int64_t i) { return std::to_string(i); });
+	context.global_namespace().put_invokable(util::from_cstring("varargs"),
+	                                         [](std::int64_t, member::function::Varargs<std::string> strings) {
+		                                         printf("got %zu arguments: ", strings.size());
+		                                         for (std::size_t i = 0; i < strings.size(); ++i) {
+			                                         printf("%s ", strings.at(i).c_str());
+		                                         }
+		                                         puts("");
+	                                         });
+	context.global_namespace().put_invokable(util::from_cstring("variant"),
+	                                         [](util::Variant<std::int64_t, std::string> arg) {
+		                                         if (arg.is_type<std::int64_t>()) {
+			                                         std::cout << arg.get<std::int64_t>() << std::endl;
+		                                         } else {
+			                                         std::cout << arg.get<std::string>() << std::endl;
+		                                         }
+	                                         });
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
-	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
+	auto encoder = string::encoding::get_encoder(string::encoding::Standard::utf_8);
 	auto finally = util::finallay([encoder] { string::encoding::free_encoder(encoder); });
 	tokenizer::Bia_lexer lexer{ allocator };
 	tokenizer::Reader reader{ code, *encoder };
@@ -189,6 +207,6 @@ try {
 	          << "\n\tcondition: " << e.code().default_error_condition().message()
 	          << "\n\tfrom: " << e.source_location() << std::endl;
 } catch (const bia::error::Contract_violation& e) {
-  std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
-            << std::endl;
+	std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
+	          << std::endl;
 }

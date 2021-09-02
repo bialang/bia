@@ -18,7 +18,7 @@ template<typename... T>
 inline std::shared_ptr<Parameter> create_parameter(T&&... values)
 {
 	auto input   = std::make_shared<std::stringstream>();
-	auto enc     = get_encoder(standard_encoding::utf_8);
+	auto enc     = get_encoder(Standard::utf_8);
 	auto reader  = std::make_shared<bia::tokenizer::Reader>(*input, *enc);
 	auto bndl    = std::make_shared<std::vector<Token>>();
 	auto manager = std::make_shared<bia::resource::Manager>(std::make_shared<bia::memory::Simple_allocator>());
