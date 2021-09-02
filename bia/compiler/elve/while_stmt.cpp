@@ -20,7 +20,9 @@ elve::Tokens elve::while_stmt(Parameter& param, Tokens tokens)
 	auto expression_tokens     = tokens.subspan(1);
 	std::tie(tokens, variable) = single_expression(param, expression_tokens);
 
-	if (!dynamic_cast<const type::Definition<bool>*>(variable->definition)) {
+	if (dynamic_cast<const type::Definition<bool>*>(variable->definition)) {
+		param.instructor.write<bytecode::Op_code::test>(variable->offset);
+	} else {
 		param.errors.add_error(error::Code::not_boolean, expression_tokens.left(tokens.begin()));
 	}
 
