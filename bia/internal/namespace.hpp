@@ -55,6 +55,8 @@ public:
 		_global_index.insert(std::make_pair(util::from_cstring("bool"), _type_system.definition_of<bool>()));
 
 		_global_index.insert(
+		  std::make_pair(util::from_cstring("byte"), _type_system.definition_of<std::uint8_t>()));
+		_global_index.insert(
 		  std::make_pair(util::from_cstring("int8"), _type_system.definition_of<std::int8_t>()));
 		_global_index.insert(
 		  std::make_pair(util::from_cstring("uint8"), _type_system.definition_of<std::uint8_t>()));
