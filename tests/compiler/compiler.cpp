@@ -134,6 +134,8 @@ try {
 		  }
 		  return ss;
 	  });
+	context.global_namespace().put_invokable(
+	  util::from_cstring("test"), [](bool value) { std::cout << (value ? "true" : "false") << "\n"; });
 	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };

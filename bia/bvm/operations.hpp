@@ -139,6 +139,46 @@ struct Inequality
 	}
 };
 
+struct Less
+{
+	template<typename Type>
+	constexpr bool operator()(Type left, Type right) const noexcept
+	{
+		static_assert(std::is_pod<Type>::value, "Type must be POD");
+		return left < right;
+	}
+};
+
+struct Less_equality
+{
+	template<typename Type>
+	constexpr bool operator()(Type left, Type right) const noexcept
+	{
+		static_assert(std::is_pod<Type>::value, "Type must be POD");
+		return left <= right;
+	}
+};
+
+struct Greater
+{
+	template<typename Type>
+	constexpr bool operator()(Type left, Type right) const noexcept
+	{
+		static_assert(std::is_pod<Type>::value, "Type must be POD");
+		return left > right;
+	}
+};
+
+struct Greater_equality
+{
+	template<typename Type>
+	constexpr bool operator()(Type left, Type right) const noexcept
+	{
+		static_assert(std::is_pod<Type>::value, "Type must be POD");
+		return left >= right;
+	}
+};
+
 struct Inside_of
 {
 	bool operator()(memory::gc::GC_able<memory::gc::String*> left,

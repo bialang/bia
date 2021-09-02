@@ -100,6 +100,10 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		case Op_code::bitwise_xor: native_integral_operation<Bitwise_xor, false>(op, ip, frame); break;
 		case Op_code::equal: native_integral_test<Equality, false>(op, ip, frame); break;
 		case Op_code::not_equal: native_integral_test<Inequality, false>(op, ip, frame); break;
+		case Op_code::less_than: native_integral_test<Less, false>(op, ip, frame); break;
+		case Op_code::less_equal_than: native_integral_test<Less_equality, false>(op, ip, frame); break;
+		case Op_code::greater_than: native_integral_test<Greater, false>(op, ip, frame); break;
+		case Op_code::greater_equal_than: native_integral_test<Greater_equality, false>(op, ip, frame); break;
 		case Op_code::invoke: {
 			const auto function_address = ip.read<Address>();
 			const auto function_object = frame.load<memory::gc::GC_able<member::function::Base*>>(function_address);

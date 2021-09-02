@@ -126,6 +126,10 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 		case Op_code::bitwise_xor: address_operation("bitwise_xor"); break;
 		case Op_code::equal: address_operation("equal"); break;
 		case Op_code::not_equal: address_operation("not_equal"); break;
+		case Op_code::less_than: address_operation("less_than"); break;
+		case Op_code::less_equal_than: address_operation("less_equal_than"); break;
+		case Op_code::greater_than: address_operation("greater_than"); break;
+		case Op_code::greater_equal_than: address_operation("greater_equal_than"); break;
 		case Op_code::invoke: {
 			const auto function_address = read<Address>(input);
 			out(output, "invoke");

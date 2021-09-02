@@ -1,2 +1,6 @@
-let x = 1.0f
-print(fto_string(x))
+let mut x = 5u64
+
+while x > 0u64 {
+	print("moin")
+	x = x - 1u64
+}

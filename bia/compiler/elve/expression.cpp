@@ -59,6 +59,11 @@ inline symbol::Local_variable handle_operation(Parameter& param, const symbol::L
                                                Tokens optor_tokens)
 {
 	using namespace bytecode;
+	// TODO improve test depending on situation
+	if (!lhs.definition->is_assignable(rhs.definition)) {
+		param.errors.add_error(error::Code::type_mismatch, optor_tokens);
+		return lhs;
+	}
 	bool is_test = false;
 	switch (optor) {
 	// case Operator::assign: break;
