@@ -109,17 +109,17 @@ std::pair<Tokens, util::Optional<symbol::Local_variable>>
 }
 
 std::pair<Tokens, util::Optional<symbol::Local_variable>>
-  member_access(Parameter& param, Tokens tokens, symbol::Local_variable member, Tokens member_tokens)
+  member_access(Parameter& param, Tokens tokens, symbol::Local_variable object, Tokens object_tokens)
 {
 	BIA_ASSERT(tokens.front().value == Operator::member_access);
-	if (!dynamic_cast<const type::Object*>(member.definition)) {
-		param.errors.add_error(error::Code::not_an_object, member_tokens);
-	} else if (auto object = static_cast<const type::Object*>(member.definition)
+	if (!dynamic_cast<const type::Definition<type::Dynamic_object>*>(object.definition)) {
+		param.errors.add_error(error::Code::not_an_object, object_tokens);
+	} else if (auto member = static_cast<const type::Definition<type::Dynamic_object>*>(object.definition)
 	                           ->get_member(tokens[1].value.get<Token::Identifier>().memory)) {
-		param.symbols.free_temporary(member);
-		auto result = param.symbols.create_temporary(object->first);
+		param.symbols.free_temporary(object);
+		auto result = param.symbols.create_temporary(member->definition);
 		// TODO
-		param.instructor.write<Op_code::copy>(Size::bit_32, result.offset, member.offset + object->second);
+		param.instructor.write<Op_code::get>(result.offset, object.offset, member->offset);
 		return { tokens.subspan(2), result };
 	} else {
 		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));

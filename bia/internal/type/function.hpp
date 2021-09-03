@@ -110,7 +110,7 @@ public:
 	}
 	const Argument* argument_at(std::size_t index) const noexcept override
 	{
-		if (index < argument_lower_count()) {
+		if (index < _arguments.size()) {
 			return &_arguments[index];
 		} else if (is_varargs) {
 			return &_arguments.back();

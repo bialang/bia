@@ -1,7 +1,1 @@
-let mut y: int | string = "hi"
-
-// y = "0"
-print("y")
-print(98)
-print(8.6)
-print(false)
+print.asd()

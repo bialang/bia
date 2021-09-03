@@ -106,6 +106,18 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 			constant(output, index);
 			break;
 		}
+		case Op_code::get: {
+			const auto destination = read<Address>(input);
+			const auto source      = read<Address>(input);
+			const auto index       = read<std::uint32_t>(input);
+			out(output, "get");
+			address(output, destination);
+			output << ", ";
+			address(output, source);
+			output << ", ";
+			constant(output, index);
+			break;
+		}
 		case Op_code::load_from_namespace: address_operation("load_ns"); break;
 		case Op_code::copy: address_operation("copy"); break;
 		case Op_code::copy_to_namespace: address_operation("copy_ns"); break;
