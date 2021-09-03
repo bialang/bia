@@ -2,6 +2,7 @@
 #define BIA_UTIL_VARIANT_HPP_
 
 #include "algorithm.hpp"
+#include "config.hpp"
 #include "type_traits/are_all_copyable.hpp"
 #include "type_traits/are_all_moveable.hpp"
 #include "type_traits/equals_any.hpp"
@@ -20,7 +21,6 @@ template<typename... Types>
 class Variant
 {
 public:
-	constexpr static std::size_t npos       = type_traits::type_index<>::npos;
 	constexpr static std::size_t type_count = sizeof...(Types);
 
 	template<typename Type>

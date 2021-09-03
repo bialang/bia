@@ -55,15 +55,6 @@ public:
 	{
 		return _stack;
 	}
-	Local_variable push(Local_variable variable)
-	{
-		// TODO
-		return variable;
-	}
-	void pop(Local_variable variable)
-	{
-		free_temporary(variable);
-	}
 
 private:
 	typedef std::map<internal::String_key, Symbol, internal::String_comparator> map_type;

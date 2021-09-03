@@ -3,6 +3,7 @@
 
 #include "definition.hpp"
 
+#include <array>
 #include <bia/util/algorithm.hpp>
 #include <bia/util/variant.hpp>
 #include <tuple>
@@ -64,6 +65,16 @@ public:
 	{
 		return 57;
 	}
+	std::size_t definition_index(const Definition_base* definition) const noexcept
+	{
+		std::size_t index = 0;
+		for (auto it = union_begin(); it != union_end(); ++it, ++index) {
+			if ((*it)->is_assignable(definition)) {
+				return index;
+			}
+		}
+		return util::npos;
+	}
 	virtual const Definition_base* const* union_begin() const noexcept = 0;
 	virtual const Definition_base* const* union_end() const noexcept   = 0;
 };
@@ -96,18 +107,25 @@ public:
 	{
 		_fill_pointers<0, Types...>();
 	}
+	Definition(const Definition&) noexcept : Definition{}
+	{}
+	~Definition() noexcept = default;
 	const Definition_base* const* union_begin() const noexcept override
 	{
-		return _pointers;
+		return _pointers.begin();
 	}
 	const Definition_base* const* union_end() const noexcept override
 	{
-		return _pointers + sizeof...(Types);
+		return _pointers.end();
+	}
+	Definition& operator=(const Definition&) noexcept
+	{
+		return *this;
 	}
 
 private:
 	std::tuple<Definition<Types>...> _definitions;
-	const Definition_base* _pointers[sizeof...(Types)];
+	std::array<const Definition_base*, sizeof...(Types)> _pointers;
 
 	template<std::size_t Index>
 	void _fill_pointers() noexcept
@@ -115,7 +133,7 @@ private:
 	template<std::size_t Index, typename Type, typename... Others>
 	void _fill_pointers() noexcept
 	{
-		_pointers[Index] = std::get<Index>(_definitions);
+		_pointers[Index] = &std::get<Index>(_definitions);
 		_fill_pointers<Index + 1, Others...>();
 	}
 };

@@ -61,7 +61,7 @@ inline Error_info constant_keyword(Parameter& param)
 		case 1: param.bundle.emplace_back(Token::Keyword::false_, range); break;
 		case 2: param.bundle.emplace_back(Token::Keyword::null, range); break;
 		case 3: {
-			static_assert(std::numeric_limits<double>::has_infinity);
+			static_assert(std::numeric_limits<double>::has_infinity, "Floating point infinity not supported");
 			Token::Number number{};
 			number.type      = Token::Number::Type::f64;
 			number.value.f64 = std::numeric_limits<double>::infinity();
@@ -69,7 +69,7 @@ inline Error_info constant_keyword(Parameter& param)
 			break;
 		}
 		case 4: {
-			static_assert(std::numeric_limits<double>::has_quiet_NaN);
+			static_assert(std::numeric_limits<double>::has_quiet_NaN, "Floating point NaN not supported");
 			Token::Number number{};
 			number.type      = Token::Number::Type::f64;
 			number.value.f64 = std::numeric_limits<double>::quiet_NaN();

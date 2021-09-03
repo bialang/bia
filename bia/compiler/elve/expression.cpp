@@ -169,8 +169,6 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 {
 	BIA_EXPECTS(!tokens.empty());
 
-	bool last_cond_was_and = false;
-
 	// has self operator
 	util::Optional<std::pair<Operator, Tokens>> self_operator;
 	if (tokens.front().value.is_type<Operator>()) {

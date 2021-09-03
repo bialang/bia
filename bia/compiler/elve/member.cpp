@@ -10,9 +10,76 @@ namespace bia {
 namespace compiler {
 namespace elve {
 
-/**
- * Handles the compilation part for a function call.
- */
+inline Tokens push_arguments(Parameter& param, Tokens tokens,
+                             const type::Definition_invokable_base* function_definition,
+                             const Tokens& function_tokens)
+{
+	BIA_EXPECTS(tokens.front().value == Operator::function_call_open);
+	std::vector<symbol::Local_variable> pushed;
+	std::size_t argument_count = 0;
+	tokens                     = tokens.subspan(1);
+	for (; tokens.front().value != Operator::function_call_close; ++argument_count) {
+		const auto required = function_definition ? function_definition->argument_at(argument_count) : nullptr;
+		const auto union_definition =
+		  dynamic_cast<const type::Definition_union_base*>(required ? required->definition : nullptr);
+		std::streampos union_index_pos{};
+
+		// type union requires an index
+		if (union_definition) {
+			pushed.push_back(param.symbols.create_temporary(
+			  param.context.global_namespace().type_system().definition_of<std::size_t>()));
+			union_index_pos = param.instructor.output().tellp();
+			param.instructor.write<bytecode::Op_code::store>(pushed.back().offset, util::npos);
+		}
+
+		// evaluate argument
+		util::Optional<symbol::Local_variable> argument;
+		Tokens argument_tokens     = tokens;
+		std::tie(tokens, argument) = single_expression(param, argument_tokens);
+		argument_tokens            = argument_tokens.left(tokens.begin());
+
+		if (argument.has_value()) {
+			BIA_ASSERT(param.symbols.is_tos(*argument));
+
+			// update index of type union
+			if (union_definition) {
+				const auto pos = param.instructor.output().tellp();
+				param.instructor.output().seekp(union_index_pos);
+				param.instructor.write<bytecode::Op_code::store>(
+				  pushed.back().offset, union_definition->definition_index(argument->definition));
+				param.instructor.output().seekp(pos);
+			}
+
+			pushed.push_back(*argument);
+
+			// check type
+			if (required && !required->definition->is_assignable(argument->definition)) {
+				param.errors.add_error(error::Code::type_mismatch, argument_tokens);
+			}
+		}
+
+		// consume comma
+		if (tokens.front().value == Token::Control::comma) {
+			tokens = tokens.subspan(1);
+		}
+	}
+
+	// check argument boundaries
+	if (function_definition && argument_count < function_definition->argument_lower_count()) {
+		param.errors.add_error(error::Code::too_few_arguments, function_tokens);
+	} else if (function_definition && argument_count > function_definition->argument_upper_count()) {
+		param.errors.add_error(error::Code::too_many_arguments, function_tokens);
+	}
+
+	// pop all pushed arguments
+	for (auto it = pushed.rbegin(); it != pushed.rend(); ++it) {
+		param.symbols.free_temporary(*it);
+	}
+
+	return tokens.subspan(1);
+}
+
+/// Handles the compilation part for a function call.
 std::pair<Tokens, util::Optional<symbol::Local_variable>>
   member_invocation(Parameter& param, Tokens tokens, util::Optional<symbol::Local_variable> function,
                     Tokens function_tokens)
@@ -26,42 +93,7 @@ std::pair<Tokens, util::Optional<symbol::Local_variable>>
 		param.errors.add_error(error::Code::not_a_function, function_tokens);
 	}
 
-	std::vector<symbol::Local_variable> pushed;
-	tokens = tokens.subspan(1);
-	while (tokens.front().value != Operator::function_call_close) {
-		util::Optional<symbol::Local_variable> argument;
-		Tokens argument_tokens = tokens;
-		// evaluate the argument
-		std::tie(tokens, argument) = single_expression(param, argument_tokens);
-		argument_tokens            = argument_tokens.left(tokens.begin());
-		if (argument) {
-			pushed.push_back(param.symbols.push(*argument));
-			// check argument type
-			if (function_definition && pushed.size() <= function_definition->arguments_size() &&
-			    !function_definition->arguments_begin()[pushed.size() - 1].definition->is_assignable(
-			      argument->definition)) {
-				param.errors.add_error(error::Code::type_mismatch, argument_tokens);
-			}
-
-			// TODO
-			BIA_ASSERT(pushed.back().offset == argument->offset);
-		}
-		// consume comma
-		if (tokens.front().value == Token::Control::comma) {
-			tokens = tokens.subspan(1);
-		}
-	}
-	// check argument count
-	if (function_definition && pushed.size() < function_definition->arguments_size()) {
-		param.errors.add_error(error::Code::too_few_arguments, function_tokens);
-	} else if (function_definition && pushed.size() > function_definition->arguments_size()) {
-		param.errors.add_error(error::Code::too_many_arguments, function_tokens);
-	}
-
-	tokens = tokens.subspan(1);
-	for (auto i = pushed.rbegin(); i != pushed.rend(); ++i) {
-		param.symbols.pop(*i);
-	}
+	tokens = push_arguments(param, tokens, function_definition, function_tokens);
 
 	// invoke
 	if (function_definition) {

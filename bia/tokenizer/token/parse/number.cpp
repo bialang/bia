@@ -172,7 +172,7 @@ inline std::tuple<std::string, Token::Number::Type, int, Error_info> extract_num
 	gt_error:
 		// go until no space is available
 		Parameter::State old;
-		string::encoding::code_point_type cp;
+		string::encoding::Code_point cp;
 		do {
 			old = param.backup();
 			cp  = param.reader.read();

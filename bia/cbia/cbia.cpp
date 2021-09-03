@@ -46,7 +46,7 @@ try {
 	compiler::Compiler compiler{ ctx->global_namespace().gc().allocator(), instructions, resources, *ctx };
 	util::Memory_streambuf code_buffer{ { reinterpret_cast<const util::Byte*>(code), size } };
 	std::istream input{ &code_buffer };
-	auto encoder      = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
+	auto encoder      = string::encoding::get_encoder(string::encoding::Standard::utf_8);
 	auto free_encoder = util::finallay([&] { string::encoding::free_encoder(encoder); });
 	tokenizer::Reader reader{ input, *encoder };
 

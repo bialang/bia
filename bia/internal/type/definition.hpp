@@ -28,8 +28,6 @@ public:
 		flag_arithmetic = 0x02,
 		/// The definition is an unsigned integer.
 		flag_unsigned = 0x04,
-		/// The definition has no definite structure.
-		flag_indeterminate = 0x08,
 	};
 
 	virtual ~Definition_base()                                              = default;
@@ -92,7 +90,7 @@ public:
 		                                              char16_t, char32_t, short int, unsigned short int, int,
 		                                              unsigned int, long int, unsigned long int, long long int,
 		                                              unsigned long long int, float, double, long double>;
-		return Indexer::value == Indexer::npos ? 99 : Indexer::value + 1;
+		return Indexer::value == util::npos ? 99 : Indexer::value + 1;
 	}
 	const std::type_index& type_index() const noexcept override
 	{

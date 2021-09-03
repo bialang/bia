@@ -85,7 +85,8 @@ target_sources(bia
 	PRIVATE "${BIA_SOURCE_FILES}" "${CMAKE_CURRENT_HEADER_FILES}")
 target_include_directories(bia
 	PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>")
-add_compile_options(-Wall -Wextra -pedantic -Werror -Wno-missing-field-initializers -Wno-unused-parameter)
+# -Werror
+target_compile_options(bia PUBLIC -Wall -Wextra -pedantic -Wno-missing-field-initializers -Wno-unused-parameter)
 add_library(bia::bia ALIAS bia)
 
 
