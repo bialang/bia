@@ -3,10 +3,7 @@
 
 #include <bia/internal/type/framer.hpp>
 #include <bia/memory/gc/gc.hpp>
-#include <bia/util/algorithm.hpp>
 #include <bia/util/type_traits/is_frameable.hpp>
-#include <bia/util/type_traits/type_at.hpp>
-#include <bia/util/type_traits/type_select.hpp>
 #include <cstdint>
 
 namespace bia {
@@ -27,8 +24,7 @@ class Frame<false>
 public:
 	Frame(util::Span<util::Byte*> space, std::size_t offset) noexcept : _space{ space }, _offset{ offset }
 	{}
-	Frame(const Frame& parent, std::size_t offset) noexcept
-	    : _space{ parent._space }, _offset{ offset }
+	Frame(const Frame& parent, std::size_t offset) noexcept : _space{ parent._space }, _offset{ offset }
 	{}
 	/**
 	 * Loads a frameable type.
@@ -54,27 +50,10 @@ public:
 		}
 		return Framer::unframe({ position, Framer::size() });
 	}
-	template<std::size_t Index, typename... Parameters>
-	typename util::type_traits::type_at<Index, Parameters...>::type load_parameter()
-	{
-		static_assert(util::sum(static_cast<int>(util::type_traits::Is_frameable<Parameters>::value)...) ==
-		                sizeof...(Parameters),
-		              "all parameters must be frameable");
-		// TODO
-		return _load_parameter<typename util::type_traits::type_at<Index, Parameters...>::type>(
-		  util::type_traits::type_select<0, Index + 1, gc::GC_able<void*>, Parameters...>::value);
-	}
 
 protected:
 	util::Span<util::Byte*> _space;
 	std::size_t _offset;
-
-	template<typename Parameter, typename... PreviousParameters>
-	Parameter _load_parameter(util::type_traits::type_container<PreviousParameters...>)
-	{
-		return load<Parameter>(util::sum(
-		  util::aligned(internal::type::Framer<PreviousParameters>::size(), alignof(std::max_align_t))...));
-	}
 };
 
 template<>

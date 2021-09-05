@@ -12,7 +12,7 @@ inline void test_encoding(Encoder* enc, const Type* string, const char32_t* char
 	std::istream input{ &buffer };
 
 	while (*characters) {
-		REQUIRE(enc->read(input) == static_cast<code_point_type>(*characters++));
+		REQUIRE(enc->read(input) == static_cast<Code_point>(*characters++));
 	}
 
 	REQUIRE(enc->read(input) == Encoder::eof);
@@ -20,7 +20,7 @@ inline void test_encoding(Encoder* enc, const Type* string, const char32_t* char
 
 TEST_CASE("standard ascii encoder", "[string][encoder][standard]")
 {
-	const auto enc = get_encoder(standard_encoding::ascii);
+	const auto enc = get_encoder(Standard::ascii);
 
 	SECTION("correct encoding")
 	{
@@ -35,7 +35,7 @@ TEST_CASE("standard ascii encoder", "[string][encoder][standard]")
 
 TEST_CASE("standard utf8 encoder", "[string][encoder][standard]")
 {
-	const auto enc = get_encoder(standard_encoding::utf_8);
+	const auto enc = get_encoder(Standard::utf_8);
 
 	SECTION("ascii")
 	{

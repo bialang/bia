@@ -12,9 +12,9 @@ namespace thread {
 namespace lock {
 
 #if BIA_THREAD_BACKEND_STD
-using mutex = std::mutex;
+typedef std::mutex Mutex;
 #elif BIA_THREAD_BACKEND_NONE
-class mutex
+class Mutex
 {
 public:
 	void lock() noexcept
