@@ -112,7 +112,7 @@ Error_info parse::spacer(Parameter& param)
 	}
 }
 
-bool parse::is_spacing_character(string::encoding::code_point_type cp) noexcept
+bool parse::is_spacing_character(string::encoding::Code_point cp) noexcept
 {
 	switch (cp) {
 	case '/':

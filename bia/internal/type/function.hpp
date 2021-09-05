@@ -3,13 +3,21 @@
 
 #include "definition.hpp"
 
-#include <bia/util/type_traits/int_maker.hpp>
-#include <bia/util/type_traits/is_varargs_invokable.hpp>
+// #include <bia/util/type_traits/is_varargs_invokable.hpp>
+#include <array>
 #include <limits>
 #include <tuple>
 #include <type_traits>
+#include <typeindex>
+#include <typeinfo>
 
 namespace bia {
+namespace member {
+namespace function {
+template<typename Type>
+class Varargs;
+}
+} // namespace member
 namespace internal {
 namespace type {
 
@@ -38,13 +46,19 @@ template<typename Return, typename... Arguments>
 class Definition_invokable_helper : public Definition_invokable_base, public Definition_real_base
 {
 public:
-	constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
-	  util::type_traits::type_container<Arguments...>>::value;
+	// constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
+	//   util::type_traits::type_container<Arguments...>>::value;
+	constexpr static bool is_varargs = false;
 
 	Definition_invokable_helper(const std::type_info& info) noexcept : _index{ info }
 	{
-		_fill_arguments(util::type_traits::Int_sequencer<std::size_t, 0, sizeof...(Arguments)>::value);
+		_fill_arguments<0, Arguments...>();
 	}
+	Definition_invokable_helper(const Definition_invokable_helper& copy) noexcept : _index{ copy._index }
+	{
+		_fill_arguments<0, Arguments...>();
+	}
+	~Definition_invokable_helper() noexcept = default;
 	bool is_assignable(const Definition_base* other) const noexcept override
 	{
 		return compare(other) == 0;
@@ -96,39 +110,45 @@ public:
 	}
 	const Argument* argument_at(std::size_t index) const noexcept override
 	{
-		if (index < argument_lower_count()) {
-			return _arguments + index;
+		if (index < _arguments.size()) {
+			return &_arguments[index];
 		} else if (is_varargs) {
-			return _arguments + sizeof...(Arguments) - 1;
+			return &_arguments.back();
 		}
 		return nullptr;
 	}
 	const Argument* arguments_begin() const noexcept final
 	{
-		return _arguments;
+		return _arguments.begin();
 	}
 	const Argument* arguments_end() const noexcept final
 	{
-		return _arguments + sizeof...(Arguments);
+		return _arguments.end();
 	}
 	const std::type_index& type_index() const noexcept override
 	{
 		return _index;
 	}
+	Definition_invokable_helper& operator=(const Definition_invokable_helper& copy) noexcept
+	{
+		_index = copy._index;
+		return *this;
+	}
 
 private:
 	Definition<typename std::decay<Return>::type> _return_type;
 	std::tuple<Definition<typename std::decay<Arguments>::type>...> _argument_definitions;
-	Argument _arguments[sizeof...(Arguments)];
+	std::array<Argument, sizeof...(Arguments)> _arguments{};
 	std::type_index _index;
 
-	void _fill_arguments(util::type_traits::Int_container<std::size_t>) noexcept
+	template<std::size_t Index>
+	void _fill_arguments() noexcept
 	{}
-	template<std::size_t Index, std::size_t... Indices>
-	void _fill_arguments(util::type_traits::Int_container<std::size_t, Index, Indices...>) noexcept
+	template<std::size_t Index, typename, typename... Others>
+	void _fill_arguments() noexcept
 	{
-		_arguments[Index] = { &std::get<Index>(_argument_definitions) };
-		_fill_arguments(util::type_traits::Int_container<std::size_t, Indices...>{});
+		_arguments[Index].definition = &std::get<Index>(_argument_definitions);
+		_fill_arguments<Index + 1, Others...>();
 	}
 };
 
@@ -157,7 +177,8 @@ public:
 };
 
 template<typename Class, typename Return, typename... Arguments>
-class Definition<Return (Class::*)(Arguments...), void> : public Definition_invokable_helper<Return, Arguments...>
+class Definition<Return (Class::*)(Arguments...), void>
+    : public Definition_invokable_helper<Return, Arguments...>
 {
 public:
 	Definition() noexcept

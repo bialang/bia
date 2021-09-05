@@ -21,7 +21,6 @@ GC_able<void*> GC::allocate(std::size_t size)
 void GC::run()
 {
 	BIA_LOG(DEBUG, "starting GC cycle");
-	const auto start = std::chrono::high_resolution_clock::now();
 	std::lock_guard<std::mutex> _{ _mutex };
 	std::set<void*> reachable;
 

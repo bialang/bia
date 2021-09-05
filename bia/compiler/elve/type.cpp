@@ -17,7 +17,6 @@ std::pair<elve::Tokens, const type::Definition_base*> elve::type_definition(Para
 	std::vector<const type::Definition_base*> definitions;
 	while (tokens.front().value.is_type<Token::Array_dimension>()) {
 		const auto type = param.symbols.symbol(tokens.at(1).value.get<Token::Identifier>().memory);
-		const type::Definition_base* definition = nullptr;
 
 		if (type.empty()) {
 			param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(+0, 2));

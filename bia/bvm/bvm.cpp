@@ -8,6 +8,7 @@
 #include <bia/bytecode/operation.hpp>
 #include <bia/error/exception.hpp>
 #include <bia/member/function/base.hpp>
+#include <bia/member/object/base.hpp>
 #include <vector>
 
 using namespace bia;
@@ -53,6 +54,14 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 				// TODO
 				BIA_ASSERT(false);
 			}
+			break;
+		}
+		case Op_code::get: {
+			const auto destination = ip.read<Address>();
+			const auto source      = ip.read<Address>();
+			const auto index       = ip.read<std::uint32_t>();
+			frame.load<memory::gc::GC_able<member::object::Base*>>(source)->store_to(
+			  index, memory::Frame<true>{ frame, destination });
 			break;
 		}
 		case Op_code::load_from_namespace: {

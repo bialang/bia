@@ -1,3 +1,1 @@
-let mut y: int | string = 0
-
-y = "0"
+print.asd()

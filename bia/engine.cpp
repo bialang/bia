@@ -2,11 +2,18 @@
 
 #include "bvm/bvm.hpp"
 #include "compiler/compiler.hpp"
+#include "config.hpp"
 #include "memory/simple_allocator.hpp"
 #include "resource/deserialize.hpp"
 #include "string/encoding/encoder.hpp"
 #include "tokenizer/bia_lexer.hpp"
 #include "util/finally.hpp"
+
+#if BIA_DEVELOPER_DISASSEMBLY
+#	include "bytecode/disassembler.hpp"
+
+#	include <iostream>
+#endif
 
 #include <sstream>
 
@@ -26,7 +33,7 @@ void Engine::run(std::istream& code)
 	std::stringstream resource_output;
 	tokenizer::Bia_lexer lexer{ _gc.allocator() };
 	compiler::Compiler compiler{ _gc.allocator(), instructions, resource_output, _context };
-	auto encoder      = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
+	auto encoder      = string::encoding::get_encoder(string::encoding::Standard::utf_8);
 	auto free_encoder = util::finallay([&] { string::encoding::free_encoder(encoder); });
 	tokenizer::Reader reader{ code, *encoder };
 
@@ -44,6 +51,12 @@ void Engine::run(std::istream& code)
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, _gc);
 
 	// _gc.register_stack(stack);
+
+#if BIA_DEVELOPER_DISASSEMBLY
+	// print disassembly
+	instructions.seekg(0, std::ios::beg);
+	bytecode::disassemble(instructions, std::cout);
+#endif
 
 	bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, frame, resources, _context);
 

@@ -12,7 +12,7 @@ bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(Parameter
 
 	using namespace string::encoding;
 	auto streambuf    = param.manager.start_memory(true);
-	const auto outenc = get_encoder(standard_encoding::utf_8);
+	const auto outenc = get_encoder(Standard::utf_8);
 	const auto free   = util::finallay([outenc] { free_encoder(outenc); });
 	auto escape       = false;
 	std::ostream output{ &streambuf };

@@ -169,8 +169,6 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 {
 	BIA_EXPECTS(!tokens.empty());
 
-	bool last_cond_was_and = false;
-
 	// has self operator
 	util::Optional<std::pair<Operator, Tokens>> self_operator;
 	if (tokens.front().value.is_type<Operator>()) {
@@ -268,38 +266,6 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 			}
 		}
 		param.symbols.free_temporary(*rhs);
-
-		// if (is_test_operator(optor)) {
-		// 	// TODO
-		// 	const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-		// 	BIA_ASSERT(bool_type.is_type<const type::Definition*>());
-
-		// 	if (dynamic_cast<const type::Integer*>(lhs->definition)) {
-		// 		param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	} else if (dynamic_cast<const type::String*>(lhs->definition)) {
-		// 		param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::String>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	} else if (dynamic_cast<const type::Regex*>(lhs->definition)) {
-		// 		param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::Regex>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	} else {
-		// 		// TODO
-		// 		BIA_ASSERT(false);
-		// 	}
-		// 	param.symbols.free_temporary(*rhs);
-		// 	param.symbols.free_temporary(*lhs);
-		// 	lhs = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
-		// 	param.instructor.write<bytecode::Op_code::booleanize>(lhs->location.offset);
-		// } else {
-		// 	if (!dynamic_cast<const type::Integer*>(lhs->definition)) {
-		// 		param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
-		// 	} else {
-		// 		param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	}
-		// 	param.symbols.free_temporary(*rhs);
-		// }
 	}
 
 	// apply self operator
