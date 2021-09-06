@@ -1,9 +1,9 @@
 #ifndef BIA_TOKENIZER_TOKEN_PARSE_ANY_OF_HPP_
 #define BIA_TOKENIZER_TOKEN_PARSE_ANY_OF_HPP_
 
-#include "../error_info.hpp"
 #include "../parameter.hpp"
 
+#include <bia/error/bia_error.hpp>
 #include <bia/util/gsl.hpp>
 #include <initializer_list>
 #include <utility>
@@ -37,12 +37,12 @@ inline std::pair<std::size_t, bool> any_of(Parameter& param, util::Czstring toke
 }
 
 template<typename... Types>
-inline Error_info any_of(Parameter& param, Types&&... tokens)
+inline error::Bia any_of(Parameter& param, Types&&... tokens)
 {
 	static_assert(sizeof...(Types) > 0, "must provide at least one option");
 
 	const auto old = param.backup();
-	Error_info error{};
+	error::Bia error{};
 	for (auto token : { tokens... }) {
 		const auto err = token(param);
 		if (!err) {

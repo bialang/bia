@@ -13,28 +13,29 @@ Bia_lexer::Bia_lexer(util::Not_null<std::shared_ptr<memory::Allocator>> allocato
     : _manager{ std::move(allocator), 4096 }
 {}
 
-void Bia_lexer::lex(Reader& reader, token::Receiver& receiver)
+error::Bia Bia_lexer::lex(Reader& reader, token::Receiver& receiver)
 {
 	std::vector<token::Token> bundle;
 	token::Parameter param{ reader, _manager, bundle };
 
-	while (!reader.eof()) {
-		token::parse::spacer(param);
-
+	for (; !reader.eof(); token::parse::spacer(param)) {
 		// match single statements
 		if (const auto err = token::parse::root(param)) {
+			// return err;
 		}
 
 		// nothing matched
 		if (bundle.empty() && !reader.eof()) {
 			BIA_LOG(ERROR, "Bundle is empty. Nothing could be parsed");
-			return;
+			// TODO add error
+			return {};
 		}
 
 		// give to receiver
 		receiver.receive({ bundle.data(), bundle.size() }, _manager);
 		bundle.clear();
 	}
+	return {};
 }
 
 } // namespace tokenizer

@@ -57,23 +57,25 @@ struct Framer<Type, typename std::enable_if<
 
 #define IN_FILE "../../tests/compiler/test.bia"
 
-inline void print_error(const std::string& code, const compiler::Error& error)
+inline std::vector<util::Span<const char*>> split_lines(const std::string& code)
 {
-	BIA_EXPECTS(error.range.start.line == error.range.end.line && error.range.start <= error.range.end);
 	std::vector<util::Span<const char*>> lines;
-	// split
-	{
-		std::size_t line_start = 0;
-		for (std::size_t i = 0; i < code.length(); ++i) {
-			if (code[i] == '\n') {
-				lines.push_back({ code.data() + line_start, code.data() + i });
-				line_start = i + 1;
-			}
-		}
-		if (line_start < code.length()) {
-			lines.push_back({ code.data() + line_start, code.data() + code.length() });
+	std::size_t line_start = 0;
+	for (std::size_t i = 0; i < code.length(); ++i) {
+		if (code[i] == '\n') {
+			lines.push_back({ code.data() + line_start, code.data() + i });
+			line_start = i + 1;
 		}
 	}
+	if (line_start < code.length()) {
+		lines.push_back({ code.data() + line_start, code.data() + code.length() });
+	}
+	return lines;
+}
+
+inline void print_error(const std::vector<util::Span<const char*>>& lines, const error::Bia& error)
+{
+	BIA_EXPECTS(error.range.start.line == error.range.end.line && error.range.start <= error.range.end);
 	std::cerr << error.code.default_error_condition().message() << " in line " IN_FILE ":"
 	          << error.range.start.line << ":" << error.range.start.character << " => " << error.code.message()
 	          << '\n';
@@ -137,7 +139,18 @@ try {
 	tokenizer::Bia_lexer lexer{ allocator };
 	tokenizer::Reader reader{ code, *encoder };
 
-	lexer.lex(reader, compiler);
+	bool failed = false;
+
+	if (const auto err = lexer.lex(reader, compiler)) {
+		code.clear();
+		code.seekg(0, std::ios::end);
+		std::string str;
+		str.resize(code.tellg());
+		code.seekg(0, std::ios::beg);
+		code.read(&str[0], str.size());
+		print_error(split_lines(str), err);
+		BIA_LOG(ERROR, "Lexing failed");
+	}
 
 	if (compiler.errors().size() > 0) {
 		code.clear();
@@ -146,10 +159,15 @@ try {
 		str.resize(code.tellg());
 		code.seekg(0, std::ios::beg);
 		code.read(&str[0], str.size());
+		const auto lines = split_lines(str);
 		for (auto err : compiler.errors()) {
-			print_error(str, err);
+			print_error(lines, err);
 		}
 		BIA_LOG(ERROR, "Compilation failed with {} errors", compiler.errors().size());
+		failed = true;
+	}
+
+	if (failed) {
 		return -1;
 	}
 

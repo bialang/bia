@@ -1,9 +1,10 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-inline Error_info decl_stmt_signature(Parameter& param)
+inline error::Bia decl_stmt_signature(Parameter& param)
 {
 	auto old          = param.backup();
 	const auto ranger = param.begin_range();
@@ -24,7 +25,7 @@ inline Error_info decl_stmt_signature(Parameter& param)
 	return {};
 }
 
-Error_info parse::decl_stmt(Parameter& param)
+error::Bia parse::decl_stmt(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (!any_of(param, "let").second || spacer(param)) {
@@ -63,7 +64,7 @@ Error_info parse::decl_stmt(Parameter& param)
 	return {};
 }
 
-Error_info parse::drop_stmt(Parameter& param)
+error::Bia parse::drop_stmt(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (!any_of(param, "drop").second || spacer(param)) {

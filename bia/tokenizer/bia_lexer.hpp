@@ -12,7 +12,7 @@ class Bia_lexer : public Lexer
 {
 public:
 	Bia_lexer(util::Not_null<std::shared_ptr<memory::Allocator>> allocator);
-	void lex(Reader& reader, token::Receiver& receiver) override;
+	error::Bia lex(Reader& reader, token::Receiver& receiver) override;
 
 private:
 	resource::Manager _manager;

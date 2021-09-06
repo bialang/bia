@@ -1,8 +1,7 @@
 #ifndef BIA_TOKENIZER_READER_HPP_
 #define BIA_TOKENIZER_READER_HPP_
 
-#include "location.hpp"
-
+#include <bia/error/bia_error.hpp>
 #include <bia/string/encoding/encoder.hpp>
 #include <istream>
 
@@ -15,7 +14,7 @@ public:
 	struct Backup
 	{
 		std::istream::pos_type position;
-		Location location;
+		error::Bia_location location;
 	};
 
 	Reader(std::istream& input, string::encoding::Encoder& encoder) noexcept
@@ -55,7 +54,7 @@ public:
 		}
 		return cp;
 	}
-	Location location() const noexcept
+	error::Bia_location location() const noexcept
 	{
 		return _location;
 	}
@@ -63,7 +62,7 @@ public:
 private:
 	std::istream& _input;
 	string::encoding::Encoder& _encoder;
-	Location _location{};
+	error::Bia_location _location{};
 };
 
 } // namespace tokenizer

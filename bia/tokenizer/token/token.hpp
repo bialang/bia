@@ -1,10 +1,10 @@
 #ifndef BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 #define BIA_TOKENIZER_TOKEN_TOKEN_HPP_
 
-#include "../location.hpp"
 #include "operator_.hpp"
 
 #include <bia/bytecode/op_code.hpp>
+#include <bia/error/bia_error.hpp>
 #include <bia/error/exception.hpp>
 #include <bia/resource/view.hpp>
 #include <bia/util/variant.hpp>
@@ -148,11 +148,11 @@ struct Token
 	  Value;
 
 	Value value;
-	Range range;
+	error::Bia_range range;
 
 	Token() = default;
 	template<typename Type>
-	Token(Type&& value, Range range) : value{ std::forward<Type>(value) }, range{ std::move(range) }
+	Token(Type&& value, error::Bia_range range) : value{ std::forward<Type>(value) }, range{ std::move(range) }
 	{}
 	Token(const Token& copy) : value{ copy.value }, range{ copy.range }
 	{}

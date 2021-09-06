@@ -1,11 +1,12 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-Error_info chained_type(Parameter& param);
+error::Bia chained_type(Parameter& param);
 
-inline Error_info tuple_type(Parameter& param)
+inline error::Bia tuple_type(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (param.reader.read() != '(') {
@@ -47,7 +48,7 @@ inline Error_info tuple_type(Parameter& param)
 	return {};
 }
 
-inline Error_info single_type(Parameter& param)
+inline error::Bia single_type(Parameter& param)
 {
 	Token::Array_dimension array{};
 	const auto ranger = param.begin_range();
@@ -63,12 +64,12 @@ inline Error_info single_type(Parameter& param)
 	return parse::any_of(param, parse::identifier, tuple_type);
 }
 
-inline Error_info type(Parameter& param)
+inline error::Bia type(Parameter& param)
 {
 	return parse::any_of(param, tuple_type, single_type);
 }
 
-inline Error_info chained_type(Parameter& param)
+inline error::Bia chained_type(Parameter& param)
 {
 	if (const auto err = type(param)) {
 		return err;
@@ -89,7 +90,7 @@ inline Error_info chained_type(Parameter& param)
 	return {};
 }
 
-Error_info parse::type_stmt(Parameter& param)
+error::Bia parse::type_stmt(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (!any_of(param, "type").second) {
@@ -113,7 +114,7 @@ Error_info parse::type_stmt(Parameter& param)
 	return chained_type(param);
 }
 
-Error_info parse::type_definition(Parameter& param)
+error::Bia parse::type_definition(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, ":").second) {

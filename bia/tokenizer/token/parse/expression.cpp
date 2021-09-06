@@ -1,9 +1,10 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-inline Error_info operators(Parameter& param)
+inline error::Bia operators(Parameter& param)
 {
 	constexpr Operator ops[] = { Operator::logical_and,
 		                           Operator::logical_or,
@@ -37,7 +38,7 @@ inline Error_info operators(Parameter& param)
 	return {};
 }
 
-inline Error_info self_operator(Parameter& param)
+inline error::Bia self_operator(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	const auto x      = parse::any_of(param, "not");
@@ -48,7 +49,7 @@ inline Error_info self_operator(Parameter& param)
 	return {};
 }
 
-inline Error_info constant_keyword(Parameter& param)
+inline error::Bia constant_keyword(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	const auto tmp    = parse::any_of(param, "true", "false", "null");
@@ -65,7 +66,7 @@ inline Error_info constant_keyword(Parameter& param)
 	return param.make_error(bia::error::Code::bad_constant_keyword, ranger.range());
 }
 
-inline Error_info single_expression_in_brackets(Parameter& param)
+inline error::Bia single_expression_in_brackets(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (param.reader.read() != '(') {
@@ -85,12 +86,12 @@ inline Error_info single_expression_in_brackets(Parameter& param)
 	return {};
 }
 
-Error_info parse::value(Parameter& param)
+error::Bia parse::value(Parameter& param)
 {
 	return any_of(param, number, constant_keyword, regex, string, identifier, single_expression_in_brackets);
 }
 
-inline Error_info use_value(Parameter& param)
+inline error::Bia use_value(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (param.reader.read() != '(') {
@@ -113,17 +114,17 @@ inline Error_info use_value(Parameter& param)
 	return {};
 }
 
-inline Error_info expression_value(Parameter& param)
+inline error::Bia expression_value(Parameter& param)
 {
 	return parse::any_of(param, parse::value, use_value);
 }
 
-Error_info parse::multi_expression(Parameter& param)
+error::Bia parse::multi_expression(Parameter& param)
 {
 	return single_expression(param);
 }
 
-Error_info parse::single_expression(Parameter& param)
+error::Bia parse::single_expression(Parameter& param)
 {
 	auto old = param.backup();
 	if (self_operator(param)) {

@@ -1,9 +1,10 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-Error_info parse::return_stmt(Parameter& param)
+error::Bia parse::return_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, "return").second || spacer(param)) {
@@ -13,7 +14,7 @@ Error_info parse::return_stmt(Parameter& param)
 	return multi_expression(param);
 }
 
-Error_info parse::yield_stmt(Parameter& param)
+error::Bia parse::yield_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, "yield").second || spacer(param)) {
@@ -23,7 +24,7 @@ Error_info parse::yield_stmt(Parameter& param)
 	return multi_expression(param);
 }
 
-Error_info parse::import_stmt(Parameter& param)
+error::Bia parse::import_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, "import").second || spacer(param)) {
@@ -33,7 +34,7 @@ Error_info parse::import_stmt(Parameter& param)
 	return any_of(param, string, identifier);
 }
 
-Error_info parse::flow_control_stmt(Parameter& param)
+error::Bia parse::flow_control_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	const auto x = any_of(param, "break", "continue");
@@ -49,7 +50,7 @@ Error_info parse::flow_control_stmt(Parameter& param)
 	return {};
 }
 
-Error_info parse::defer_stmt(Parameter& param)
+error::Bia parse::defer_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, "defer").second || spacer(param)) {

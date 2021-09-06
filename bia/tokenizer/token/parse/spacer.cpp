@@ -1,8 +1,9 @@
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-Error_info parse::spacer(Parameter& param)
+error::Bia parse::spacer(Parameter& param)
 {
 	enum class state
 	{
