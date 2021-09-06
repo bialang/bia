@@ -16,6 +16,9 @@ inline Tokens push_arguments(Parameter& param, Tokens tokens,
 {
 	BIA_EXPECTS(tokens.front().value == Operator::function_call_open);
 	std::vector<symbol::Local_variable> pushed;
+	std::streampos vararg_size_pos{};
+	std::size_t arguments_at_vararg = 0;
+	util::Optional<symbol::Local_variable> vararg_size;
 	std::size_t argument_count = 0;
 	tokens                     = tokens.subspan(1);
 	for (; tokens.front().value != Operator::function_call_close; ++argument_count) {
@@ -23,6 +26,17 @@ inline Tokens push_arguments(Parameter& param, Tokens tokens,
 		const auto union_definition =
 		  dynamic_cast<const type::Definition_union_base*>(required ? required->definition : nullptr);
 		std::streampos union_index_pos{};
+
+		// varargs requires a size
+		if (function_definition && function_definition->is_vararg_index(argument_count)) {
+			BIA_LOG(INFO, "Setting vararg to {}", argument_count);
+			arguments_at_vararg = argument_count;
+			pushed.push_back(param.symbols.create_temporary(
+			  param.context.global_namespace().type_system().definition_of<std::ptrdiff_t>()));
+			vararg_size     = pushed.back();
+			vararg_size_pos = param.instructor.output().tellp();
+			param.instructor.write<bytecode::Op_code::store>(pushed.back().offset, std::ptrdiff_t{ 0 });
+		}
 
 		// type union requires an index
 		if (union_definition) {
@@ -62,6 +76,16 @@ inline Tokens push_arguments(Parameter& param, Tokens tokens,
 		if (tokens.front().value == Token::Control::comma) {
 			tokens = tokens.subspan(1);
 		}
+	}
+
+	// update size of varargs
+	if (vararg_size.has_value()) {
+		BIA_LOG(INFO, "dogin {}", argument_count);
+		const auto pos = param.instructor.output().tellp();
+		param.instructor.output().seekp(vararg_size_pos);
+		param.instructor.write<bytecode::Op_code::store>(
+		  vararg_size->offset, static_cast<std::ptrdiff_t>(argument_count - arguments_at_vararg));
+		param.instructor.output().seekp(pos);
 	}
 
 	// check argument boundaries

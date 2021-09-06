@@ -42,7 +42,7 @@ public:
 	Namespace(internal::type::System& type_system, memory::gc::GC& gc) noexcept
 	    : _type_system{ type_system }, _gc{ gc },
 	      _global_space{ static_cast<util::Byte*>(gc.allocator()->allocate(1024)), 1024 }, _global_frame{
-		      _global_space, _gc, 0
+		      _global_space, _gc
 	      }
 	{
 		// link Bia's data types to definitions

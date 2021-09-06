@@ -5,7 +5,7 @@
 #include <bia/compiler/compiler.hpp>
 #include <bia/error/contract_violation.hpp>
 // #include <bia/member/function/dynamic.hpp>
-// #include <bia/member/function/varargs.hpp>
+#include <bia/member/function/varargs.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/resource/deserialize.hpp>
@@ -99,14 +99,14 @@ inline void print_error(const std::string& code, const compiler::Error& error)
 template<std::size_t Index, typename Variant>
 inline void do_print(const Variant& value)
 {
-	std::cout << "<empty>\n";
+	std::cout << "<empty>";
 }
 
 template<std::size_t Index, typename, typename... Others, typename Variant>
 inline void do_print(const Variant& value)
 {
 	if (value.index() == Index) {
-		std::cout << value.template get<Index>() << "\n";
+		std::cout << value.template get<Index>();
 	} else {
 		do_print<Index + 1, Others...>(value);
 	}
@@ -130,11 +130,17 @@ try {
 	                                         static_cast<void (*)()>([] { puts("Hello, world!"); }));
 	context.global_namespace().put_invokable(
 	  util::from_cstring("print"),
-	  [](util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
-	                   std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>
-	       value) {
-		  do_print<0, bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t, std::uint32_t,
-		           std::int64_t, std::uint64_t, float, double, std::string>(value);
+	  [](member::function::Varargs<
+	     util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
+	                   std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>>
+	       args) {
+		  BIA_LOG(DEBUG, "Trying to print {} arguments", args.size());
+		  for (std::size_t i = 0; i < args.size(); ++i) {
+			  do_print<0, bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t, std::uint32_t,
+			           std::int64_t, std::uint64_t, float, double, std::string>(args.at(i));
+			  std::cout << " ";
+		  }
+		  std::cout << "\n";
 	  });
 	context.global_namespace().put_invokable(util::from_cstring("to_string"),
 	                                         [](std::ptrdiff_t value) { return std::to_string(value); });
@@ -162,15 +168,14 @@ try {
 	context.global_namespace().put_invokable(
 	  util::from_cstring("test"), +[](bool value) { std::cout << (value ? "true" : "false") << "\n"; });
 	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
-	// context.global_namespace().put_invokable(util::from_cstring("varargs"),
-	//                                          [](std::int64_t, member::function::Varargs<std::string> strings)
-	//                                          {
-	// 	                                         printf("got %zu arguments: ", strings.size());
-	// 	                                         for (std::size_t i = 0; i < strings.size(); ++i) {
-	// 		                                         printf("%s ", strings.at(i).c_str());
-	// 	                                         }
-	// 	                                         puts("");
-	//                                          });
+	context.global_namespace().put_invokable(util::from_cstring("varargs"),
+	                                         [](std::int64_t, member::function::Varargs<std::string> strings) {
+		                                         printf("got %zu arguments: ", strings.size());
+		                                         for (std::size_t i = 0; i < strings.size(); ++i) {
+			                                         printf("%s ", strings.at(i).c_str());
+		                                         }
+		                                         puts("");
+	                                         });
 	context.global_namespace().put_invokable(util::from_cstring("variant"),
 	                                         [](util::Variant<std::int64_t, std::string> arg) {
 		                                         if (arg.is_type<std::int64_t>()) {
@@ -211,7 +216,7 @@ try {
 	bytecode::disassemble(output, std::cout);
 
 	memory::Stack stack{ allocator, 1024 };
-	memory::Frame<true> base_frame{ stack._memory, gc, 0 };
+	memory::Frame<true> base_frame{ stack._memory, gc };
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);

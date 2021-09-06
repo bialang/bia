@@ -1,1 +1,1 @@
-print.asd()
+print("Ich", "bin", 22, "Jahre", "alt")

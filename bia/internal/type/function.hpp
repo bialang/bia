@@ -3,7 +3,7 @@
 
 #include "definition.hpp"
 
-// #include <bia/util/type_traits/is_varargs_invokable.hpp>
+#include <bia/util/type_traits/is_varargs_invokable.hpp>
 #include <array>
 #include <limits>
 #include <tuple>
@@ -46,9 +46,8 @@ template<typename Return, typename... Arguments>
 class Definition_invokable_helper : public Definition_invokable_base, public Definition_real_base
 {
 public:
-	// constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
-	//   util::type_traits::type_container<Arguments...>>::value;
-	constexpr static bool is_varargs = false;
+	constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
+	  util::type_traits::type_container<Arguments...>>::value;
 
 	Definition_invokable_helper(const std::type_info& info) noexcept : _index{ info }
 	{

@@ -108,7 +108,7 @@ try {
 	const auto bcode = static_cast<Bytecode*>(bytecode);
 
 	memory::Stack stack{ ctx->global_namespace().gc().allocator(), 1024 };
-	memory::Frame<true> frame{ stack._memory, ctx->global_namespace().gc(), 0 };
+	memory::Frame<true> frame{ stack._memory, ctx->global_namespace().gc() };
 	auto resources = resource::deserialize(
 	  { reinterpret_cast<const util::Byte*>(bcode->resources.data()), bcode->resources.size() },
 	  ctx->global_namespace().gc());

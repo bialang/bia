@@ -3,6 +3,8 @@
 
 #include <bia/internal/type/framer.hpp>
 #include <bia/memory/gc/gc.hpp>
+#include <bia/util/algorithm.hpp>
+#include <bia/util/gsl.hpp>
 #include <bia/util/type_traits/is_frameable.hpp>
 #include <cstdint>
 
@@ -22,10 +24,14 @@ template<>
 class Frame<false>
 {
 public:
-	Frame(util::Span<util::Byte*> space, std::size_t offset) noexcept : _space{ space }, _offset{ offset }
-	{}
-	Frame(const Frame& parent, std::size_t offset) noexcept : _space{ parent._space }, _offset{ offset }
-	{}
+	Frame(util::Span<util::Byte*> space) noexcept : _space{ space }
+	{
+		BIA_EXPECTS(util::is_aligned(_space.begin(), alignof(std::max_align_t)));
+	}
+	Frame(const Frame& parent, std::size_t offset) : _space{ parent._space.subspan(offset) }
+	{
+		BIA_EXPECTS(util::is_aligned(_space.begin(), alignof(std::max_align_t)));
+	}
 	/**
 	 * Loads a frameable type.
 	 *
@@ -42,7 +48,7 @@ public:
 		static_assert(util::type_traits::Is_frameable<Type>::value, "Type is not frameable");
 		using Framer = internal::type::Framer<Type>;
 
-		const auto position = _space.begin() + offset + _offset;
+		const auto position = _space.begin() + offset;
 		if (reinterpret_cast<std::intptr_t>(position) % Framer::alignment()) {
 			BIA_THROW(error::Code::bad_stack_alignment);
 		} else if (position < _space.begin() || position + Framer::size() > _space.end()) {
@@ -53,17 +59,15 @@ public:
 
 protected:
 	util::Span<util::Byte*> _space;
-	std::size_t _offset;
 };
 
 template<>
 class Frame<true> : public Frame<false>
 {
 public:
-	Frame(util::Span<util::Byte*> space, gc::GC& gc, std::size_t offset) noexcept
-	    : Frame<false>{ space, offset }, _gc{ gc }
+	Frame(util::Span<util::Byte*> space, gc::GC& gc) noexcept : Frame<false>{ space }, _gc{ gc }
 	{}
-	Frame(Frame& parent, std::size_t offset) noexcept : Frame<false>{ parent, offset }, _gc{ parent._gc }
+	Frame(Frame& parent, std::size_t offset) : Frame<false>{ parent, offset }, _gc{ parent._gc }
 	{}
 	template<typename Type>
 	std::size_t store(std::int32_t offset, const Type& value)
@@ -71,7 +75,7 @@ public:
 		static_assert(util::type_traits::Is_frameable<Type>::value, "Type is not frameable");
 		using Framer = internal::type::Framer<Type>;
 
-		const auto position = _space.begin() + offset + _offset;
+		const auto position = _space.begin() + offset;
 		if (reinterpret_cast<std::intptr_t>(position) % Framer::alignment()) {
 			BIA_THROW(error::Code::bad_stack_alignment);
 		} else if (position < _space.begin() || position + Framer::size() > _space.end()) {
