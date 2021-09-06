@@ -5,7 +5,7 @@
 
 using namespace bia::string::encoding::standard;
 
-inline bia::string::encoding::code_point_type next(std::istream& input)
+inline bia::string::encoding::Code_point next(std::istream& input)
 {
 	const auto tmp = input.get();
 	if (tmp == std::istream::traits_type::eof()) {
@@ -13,10 +13,10 @@ inline bia::string::encoding::code_point_type next(std::istream& input)
 	} else if ((tmp & 0xc0) != 0x80) {
 		BIA_THROW(bia::error::Code::bad_utf_sequence);
 	}
-	return static_cast<bia::string::encoding::code_point_type>(tmp & 0x3f);
+	return static_cast<bia::string::encoding::Code_point>(tmp & 0x3f);
 }
 
-void UTF8::put(std::ostream& output, code_point_type cp) const
+void UTF8::put(std::ostream& output, Code_point cp) const
 {
 	if (cp < 0) {
 		BIA_THROW(error::Code::bad_unicode);
@@ -43,7 +43,7 @@ void UTF8::put(std::ostream& output, code_point_type cp) const
 	}
 }
 
-bia::string::encoding::code_point_type UTF8::read(std::istream& input) const
+bia::string::encoding::Code_point UTF8::read(std::istream& input) const
 {
 	const auto first = input.get();
 	if (first == std::istream::traits_type::eof()) {
@@ -52,16 +52,16 @@ bia::string::encoding::code_point_type UTF8::read(std::istream& input) const
 	}
 
 	if (!(first & 0x80)) {
-		return static_cast<code_point_type>(first);
+		return static_cast<Code_point>(first);
 	} else if ((first & 0xe0) == 0xc0) {
-		return static_cast<code_point_type>((first & 0x1f) << 6 | next(input));
+		return static_cast<Code_point>((first & 0x1f) << 6 | next(input));
 	} else if ((first & 0xf0) == 0xe0) {
 		const auto second = next(input);
-		return static_cast<code_point_type>((first & 0x0f) << 12 | second << 6 | next(input));
+		return static_cast<Code_point>((first & 0x0f) << 12 | second << 6 | next(input));
 	} else if ((first & 0xf8) == 0xf0) {
 		const auto second = next(input);
 		const auto third  = next(input);
-		return static_cast<code_point_type>((first & 0x07) << 18 | second << 12 | third << 6 | next(input));
+		return static_cast<Code_point>((first & 0x07) << 18 | second << 12 | third << 6 | next(input));
 	}
 	BIA_THROW(error::Code::bad_utf_sequence);
 }

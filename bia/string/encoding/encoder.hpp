@@ -10,13 +10,13 @@ namespace bia {
 namespace string {
 namespace encoding {
 
-typedef std::int32_t code_point_type;
+typedef std::int32_t Code_point;
 
 /// Interface for converting from and to a specific encoding.
 class Encoder
 {
 public:
-	enum : code_point_type
+	enum : Code_point
 	{
 		/// The byte order mark.
 		bom = 0xfeff,
@@ -24,17 +24,13 @@ public:
 		eof = -1
 	};
 
-	/**
-	 * Destructor.
-	 */
-	virtual ~Encoder() = default;
-
-	virtual void put(std::ostream& output, code_point_type cp) const = 0;
-	virtual code_point_type read(std::istream& input) const          = 0;
+	virtual ~Encoder()                                          = default;
+	virtual void put(std::ostream& output, Code_point cp) const = 0;
+	virtual Code_point read(std::istream& input) const          = 0;
 };
 
 /// The standard supported encodings.
-enum class standard_encoding
+enum class Standard
 {
 	/// Normal 7 bit ascii encoding.
 	ascii,
@@ -54,13 +50,9 @@ enum class standard_encoding
 	utf_32_be
 };
 
-/**
- * Returns the standard encoder.
- *
- * @param encoding is the standard encoding
- * @return a pointer to the instance that can **ONLY** be used in the current thread
- */
-Encoder* get_encoder(standard_encoding encoding);
+/// Returns the specified standard encoder which can **only** be used in the current thread. Use
+/// free_encoder() to free the encoder.
+Encoder* get_encoder(Standard encoding);
 void free_encoder(Encoder* encoder);
 
 } // namespace encoding

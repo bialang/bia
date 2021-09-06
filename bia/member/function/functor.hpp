@@ -2,6 +2,7 @@
 #define BIA_MEMBER_FUNCTION_LAMBDA_HPP_
 
 #include "base.hpp"
+#include "parameter_loader.hpp"
 
 #include <bia/util/type_traits/int_maker.hpp>
 #include <bia/util/type_traits/invokable_info.hpp>
@@ -16,7 +17,7 @@ template<typename Class, typename Return, typename... Arguments, std::size_t... 
 inline void invoke_method(Return (Class::*method)(Arguments...), Class& object, memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
-	frame.store(0, (object.*method)(frame.load_parameter<Indices, Arguments...>()...));
+	frame.store(0, (object.*method)(load_parameter<Indices, Arguments...>(frame)...));
 }
 
 template<typename Class, typename Return, typename... Arguments, std::size_t... Indices>
@@ -24,14 +25,14 @@ inline void invoke_method(Return (Class::*method)(Arguments...) const, const Cla
                           memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
-	frame.store(0, (object.*method)(frame.load_parameter<Indices, Arguments...>()...));
+	frame.store(0, (object.*method)(load_parameter<Indices, Arguments...>(frame)...));
 }
 
 template<typename Class, typename... Arguments, std::size_t... Indices>
 inline void invoke_method(void (Class::*method)(Arguments...), Class& object, memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
-	(object.*method)(frame.load_parameter<Indices, Arguments...>()...);
+	(object.*method)(load_parameter<Indices, Arguments...>(frame)...);
 }
 
 template<typename Class, typename... Arguments, std::size_t... Indices>
@@ -39,7 +40,7 @@ inline void invoke_method(void (Class::*method)(Arguments...) const, const Class
                           memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
-	(object.*method)(frame.load_parameter<Indices, Arguments...>()...);
+	(object.*method)(load_parameter<Indices, Arguments...>(frame)...);
 }
 
 template<typename Type>

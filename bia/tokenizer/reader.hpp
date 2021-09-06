@@ -38,7 +38,7 @@ public:
 	{
 		return { _input.tellg(), _location };
 	}
-	string::encoding::code_point_type read()
+	string::encoding::Code_point read()
 	{
 		const auto pos = _input.tellg();
 		const auto cp  = _encoder.read(_input);

@@ -47,6 +47,14 @@ struct Bia
 	{}
 	Bia(error::Code code, Bia_range range) noexcept : code{ code }, range{ range }
 	{}
+	bool operator==(error::Code code) const noexcept
+	{
+		return this->code == code;
+	}
+	bool operator!=(error::Code code) const noexcept
+	{
+		return this->code != code;
+	}
 	bool operator<(const Bia& other) const noexcept
 	{
 		return range.start < other.range.start;

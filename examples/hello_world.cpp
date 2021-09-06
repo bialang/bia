@@ -20,19 +20,19 @@ struct internal::type::Framer<
 {
 	constexpr static std::size_t size() noexcept
 	{
-		return sizeof(memory::gc::GC_able<Vector*>);
+		return sizeof(std::vector<std::string>);
 	}
 	constexpr static std::size_t alignment() noexcept
 	{
-		return alignof(memory::gc::GC_able<Vector*>);
+		return alignof(std::vector<std::string>);
 	}
 	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, std::vector<std::string> value)
 	{
-		*reinterpret_cast<memory::gc::GC_able<Vector*>*>(buffer.data()) = gc.create<Vector>(std::move(value));
+		new (buffer.data()) std::vector<std::string>{ std::move(value) };
 	}
 	static const std::vector<std::string>& unframe(util::Span<const util::Byte*> buffer)
 	{
-		return (*reinterpret_cast<const memory::gc::GC_able<Vector*>*>(buffer.data()))->value;
+		return *reinterpret_cast<const std::vector<std::string>*>(buffer.data());
 	}
 };
 
@@ -41,32 +41,30 @@ struct internal::type::Framer<
 int main(int argc, char** argv)
 {
 	bia::Engine engine;
-	engine.function(
-	  "hello_world", [] { std::cout << "Hello, World! - C++\n"; });
-	engine.function(
-	  "print", [](const std::vector<std::string>& ss) {
-		  for (const auto& s : ss) {
-			  std::cout << s << " ";
-		  }
-		  std::cout << "\n";
-	  });
-	engine.function(
-	  "read", [] {
-			std::cout << "Enter a string twice...\n";
-		  std::string s;
-		  std::vector<std::string> ss;
-		  for (int i = 0; i < 2; ++i) {
-			  std::getline(std::cin, s);
-			  ss.push_back(s);
-		  }
-		  return ss;
-	  });
+	engine.function("hello_world", [] { std::cout << "Hello, World! - C++\n"; });
+	engine.function("print", [](const std::vector<std::string>& ss, std::ptrdiff_t i) {
+		for (const auto& s : ss) {
+			std::cout << s << " ";
+		}
+		std::cout << i << "\n";
+	});
+	engine.function("read", [] {
+		std::cout << "Enter a string twice...\n";
+		std::string s;
+		std::vector<std::string> ss;
+		for (int i = 0; i < 1; ++i) {
+			std::getline(std::cin, s);
+			ss.push_back(s);
+		}
+		return ss;
+	});
 
 	std::stringstream code;
 	code << u8R"(
 
-let x = hello_world()
-print(read())
+let args = read()
+print(read(), 9)
+print(args, 45)
 
 	)";
 	engine.run(code);

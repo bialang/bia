@@ -6,6 +6,7 @@
 #include <bia/util/type_traits/int_maker.hpp>
 #include <bia/util/type_traits/invokable_info.hpp>
 #include <bia/util/type_traits/is_invokable.hpp>
+#include <bia/util/type_traits/is_varargs_invokable.hpp>
 #include <bia/util/type_traits/size_of.hpp>
 #include <bia/util/type_traits/type_index.hpp>
 #include <catch.hpp>
@@ -82,6 +83,16 @@ TEST_CASE("is_invokable", "[type_traits][util]")
 	REQUIRE(!Is_invokable<void (*)(bool), std::string>::value);
 	REQUIRE(Is_invokable<void (*)(int), int>::value);
 	REQUIRE(Is_invokable<void (*)(int), bool>::value);
+}
+
+TEST_CASE("Is_vararg_invokable", "[type_traits][util]")
+{
+	using namespace bia::member::function;
+	REQUIRE(!Is_varargs_invokable<void(*)()>::value);
+	REQUIRE(!Is_varargs_invokable<void(*)(int)>::value);
+	REQUIRE(!Is_varargs_invokable<void(*)(Varargs<int>, int)>::value);
+	REQUIRE(!Is_varargs_invokable<void(*)(Varargs<int>, int, Varargs<int>)>::value);
+	REQUIRE(Is_varargs_invokable<void(*)(float, int, Varargs<int>)>::value);
 }
 
 TEST_CASE("int maker", "[type_traits][util]")

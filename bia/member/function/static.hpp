@@ -2,6 +2,7 @@
 #define BIA_MEMBER_FUNCTION_STATIC_HPP_
 
 #include "base.hpp"
+#include "parameter_loader.hpp"
 
 #include <bia/util/type_traits/int_maker.hpp>
 #include <type_traits>
@@ -14,14 +15,14 @@ template<typename Return, typename... Arguments, std::size_t... Indices>
 inline void invoke_static(Return (*function)(Arguments...), memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
-	frame.store(0, function(frame.load_parameter<Indices, Arguments...>()...));
+	frame.store(0, function(load_parameter<Indices, Arguments...>(frame)...));
 }
 
 template<typename... Arguments, std::size_t... Indices>
 inline void invoke_static(void (*function)(Arguments...), memory::Frame<true>& frame,
                           util::type_traits::Int_container<std::size_t, Indices...>)
 {
-	function(frame.load_parameter<Indices, Arguments...>()...);
+	function(load_parameter<Indices, Arguments...>(frame)...);
 }
 
 template<typename Return, typename... Arguments>

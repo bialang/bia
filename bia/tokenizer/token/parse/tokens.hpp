@@ -11,9 +11,10 @@ namespace tokenizer {
 namespace token {
 namespace parse {
 
-typedef error::Bia(*token_type)(Parameter&);
+typedef error::Bia (*token_type)(Parameter&);
 
 error::Bia spacer(Parameter& param);
+bool is_spacing_character(string::encoding::Code_point cp) noexcept;
 
 error::Bia root(Parameter& param);
 error::Bia batch(Parameter& param);

@@ -2,7 +2,7 @@
 #define BIA_UTIL_TYPE_TRAITS_INVOKABLE_INFO_HPP_
 
 #include "type_select.hpp"
-#include "void_type.hpp"
+#include "void.hpp"
 
 namespace bia {
 namespace util {
@@ -78,7 +78,7 @@ struct Invokable_info<Return_ (Class_::*)(Arguments...) const, void>
 };
 
 template<typename Functor>
-struct Invokable_info<Functor, void_type<decltype(&Functor::operator())>>
+struct Invokable_info<Functor, Void<decltype(&Functor::operator())>>
     : Invokable_info<decltype(&Functor::operator())>
 {
 	constexpr static bool is_functor = true;

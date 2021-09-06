@@ -5,7 +5,7 @@ using namespace bia::tokenizer::token;
 
 error::Bia parse::spacer(Parameter& param)
 {
-	enum class state
+	enum class State
 	{
 		whitespace,
 		comment_start,
@@ -15,9 +15,9 @@ error::Bia parse::spacer(Parameter& param)
 		comment_multi_ending
 	};
 
-	auto state          = state::whitespace;
-	auto seperator      = false;
-	auto last_state     = param.reader.backup();
+	State state       = State::whitespace;
+	bool seperator    = false;
+	auto last_state   = param.reader.backup();
 	const auto ranger = param.begin_range();
 
 	while (true) {
@@ -29,11 +29,11 @@ error::Bia parse::spacer(Parameter& param)
 		}
 
 		switch (state) {
-		case state::whitespace: {
+		case State::whitespace: {
 			switch (cp) {
 			case '/': {
 				seperator = true;
-				state     = state::comment_start;
+				state     = State::comment_start;
 				break;
 			}
 			case '\r':
@@ -58,43 +58,43 @@ error::Bia parse::spacer(Parameter& param)
 			}
 			break;
 		}
-		case state::comment_start: {
+		case State::comment_start: {
 			switch (cp) {
-			case '/': state = state::comment_single; break;
-			case '*': state = state::comment_multi; break;
+			case '/': state = State::comment_single; break;
+			case '*': state = State::comment_multi; break;
 			default: old = last_state; goto gt_return; // rollback one character more
 			}
 			break;
 		}
-		case state::comment_single: {
+		case State::comment_single: {
 			if (cp == '\r' || cp == '\n') {
-				state = state::comment_single_ending;
+				state = State::comment_single_ending;
 			}
 			break;
 		}
-		case state::comment_single_ending: {
+		case State::comment_single_ending: {
 			switch (cp) {
 			case '\r':
 			case '\n': break;
 			default: {
 				param.reader.restore(old);
-				state = state::whitespace;
+				state = State::whitespace;
 				break;
 			}
 			}
 			break;
 		}
-		case state::comment_multi: {
+		case State::comment_multi: {
 			if (cp == '*') {
-				state = state::comment_multi_ending;
+				state = State::comment_multi_ending;
 			}
 			break;
 		}
-		case state::comment_multi_ending: {
+		case State::comment_multi_ending: {
 			if (cp == '/') {
-				state = state::whitespace;
+				state = State::whitespace;
 			} else if (cp != '*') {
-				state = state::comment_multi;
+				state = State::comment_multi;
 			}
 			break;
 		}
@@ -110,5 +110,31 @@ error::Bia parse::spacer(Parameter& param)
 			return {};
 		}
 		return param.make_error(error::Code::expected_seperator, ranger.range());
+	}
+}
+
+bool parse::is_spacing_character(string::encoding::Code_point cp) noexcept
+{
+	switch (cp) {
+	case '/':
+	case '\r':
+	case '\n':
+	case ' ':
+	case '\t':
+	case '\v':
+	case '\f':
+	case '+':
+	case '-':
+	case '*':
+	case '%':
+	case '=':
+	case '{':
+	case '}':
+	case '(':
+	case ')':
+	case ':':
+	case ',':
+	case '.': return true;
+	default: return false;
 	}
 }

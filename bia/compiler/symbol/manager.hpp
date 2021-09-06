@@ -39,6 +39,7 @@ public:
 	        const internal::Namespace& global_namespace, Default_int_size default_int_size);
 	void open_scope();
 	void close_scope();
+	error::Code drop_symbol(const internal::String_key& name);
 	Local_variable create_temporary(util::Not_null<const internal::type::Definition_base*> type);
 	void free_temporary(Local_variable variable);
 	bool promote_temporary(const resource::View& name, const Local_variable& variable);
@@ -53,15 +54,6 @@ public:
 	std::uint32_t stack_position() const noexcept
 	{
 		return _stack;
-	}
-	Local_variable push(Local_variable variable)
-	{
-		// TODO
-		return variable;
-	}
-	void pop(Local_variable variable)
-	{
-		free_temporary(variable);
 	}
 
 private:

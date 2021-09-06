@@ -1,10 +1,23 @@
 #ifndef BIA_UTIL_CONFIG_HPP_
 #define BIA_UTIL_CONFIG_HPP_
 
+#include <cstdint>
+#include <limits>
+
 // clang-format off
 #cmakedefine01 BIA_BIA_ENDIAN
 #cmakedefine01 BIA_UTIL_CONTRACT_BEHAVIOR_THROW
 #cmakedefine01 BIA_UTIL_CONTRACT_BEHAVIOR_ABORT
 // clang-format on
+
+namespace bia {
+namespace util {
+namespace {
+
+constexpr std::size_t npos = std::numeric_limits<std::size_t>::max();
+
+}
+} // namespace util
+} // namespace bia
 
 #endif

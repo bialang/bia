@@ -26,6 +26,8 @@ public:
 	{
 		flag_truthable  = 0x01,
 		flag_arithmetic = 0x02,
+		/// The definition is an unsigned integer.
+		flag_unsigned = 0x04,
 	};
 
 	virtual ~Definition_base()                                              = default;
@@ -39,7 +41,7 @@ public:
 	virtual unsigned int ordinal() const noexcept                                    = 0;
 };
 
-template<typename Type>
+template<typename Type, typename = void>
 class Definition;
 
 class Definition_real_base : virtual public Definition_base
@@ -54,6 +56,7 @@ class Definition_helper : public Definition_real_base
 {
 public:
 	static_assert(util::type_traits::Is_frameable<Type>::value, "Type must be frameable");
+	static_assert(!std::is_integral<Type>::value, "Type must not be an integral");
 
 	bool is_assignable(const Definition_base* other) const noexcept override
 	{
@@ -69,7 +72,7 @@ public:
 	}
 	int flags() const noexcept override
 	{
-		return std::is_arithmetic<Type>::value ? flag_arithmetic : 0;
+		return (std::is_arithmetic<Type>::value ? flag_arithmetic : 0);
 	}
 	int compare(util::Not_null<const Definition_base*> other) const noexcept override
 	{
@@ -87,7 +90,7 @@ public:
 		                                              char16_t, char32_t, short int, unsigned short int, int,
 		                                              unsigned int, long int, unsigned long int, long long int,
 		                                              unsigned long long int, float, double, long double>;
-		return Indexer::value == Indexer::npos ? 99 : Indexer::value + 1;
+		return Indexer::value == util::npos ? 99 : Indexer::value + 1;
 	}
 	const std::type_index& type_index() const noexcept override
 	{
@@ -98,36 +101,10 @@ private:
 	std::type_index _index{ typeid(Type) };
 };
 
-template<typename Type>
+// Default case
+template<typename Type, typename>
 class Definition : public Definition_helper<Type>
 {};
-
-/*
-Ordinals:
-
-| Type                   | Value |
-| ---------------------- | :---: |
-| void                   |   0   |
-| bool                   |   1   |
-| char                   |   2   |
-| signed char            |   3   |
-| unsigned char          |   4   |
-| wchar_t                |   5   |
-| char8_t                |   6   |
-| char16_t               |   7   |
-| char32_t               |   8   |
-| short int              |   9   |
-| unsigned short int     |  10   |
-| int                    |  11   |
-| unsigned int           |  12   |
-| long int               |  13   |
-| unsigned long int      |  14   |
-| long long int          |  15   |
-| unsigned long long int |  16   |
-| float                  |  17   |
-| double                 |  18   |
-| long double            |  19   |
-*/
 
 } // namespace type
 } // namespace internal

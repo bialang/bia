@@ -16,14 +16,14 @@ struct comparator
 		this->first = first;
 		this->last  = last;
 	}
-	void next(bia::string::encoding::code_point_type cp) noexcept
+	void next(bia::string::encoding::Code_point cp) noexcept
 	{
 		if (first == last || cp < 'a' || cp > 'z') {
 			return;
 		}
 
 		// find beginning
-		const auto c = static_cast<char>(cp);
+		const char c = static_cast<char>(cp);
 		for (; first != last; ++first) {
 			if (**first == c) {
 				break;
@@ -54,11 +54,11 @@ error::Bia parse::identifier(Parameter& param)
 	using namespace string::encoding;
 	const char* values[]{ "as",   "break",  "continue", "defer", "drop",   "else", "error", "false",
 		                    "for",  "from",   "fun",      "if",    "import", "in",   "let",   "mut",
-		                    "null", "return", "scoped",   "true",  "type",   "use",  "while", "yield" };
+		                    "null", "return", "scope",    "true",  "type",   "use",  "while", "yield" };
 	comparator keywords{ values, values + sizeof(values) / sizeof(const char*) };
-	auto first        = true;
+	bool first        = true;
 	auto streambuf    = param.manager.start_memory(true);
-	const auto outenc = get_encoder(standard_encoding::utf_8);
+	const auto outenc = get_encoder(Standard::utf_8);
 	const auto free   = util::finallay([outenc] { free_encoder(outenc); });
 	const auto ranger = param.begin_range();
 	std::ostream output{ &streambuf };

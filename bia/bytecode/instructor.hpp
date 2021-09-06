@@ -17,9 +17,8 @@ namespace bia {
 namespace bytecode {
 
 template<Op_code op_code>
-using is_with_2_operands =
-  std::integral_constant<bool,
-                         (op_code >= Op_code::load_from_namespace && op_code <= Op_code::greater_equal_than)>;
+using is_with_2_operands = std::integral_constant<bool, (op_code >= Op_code::load_from_namespace &&
+                                                         op_code <= Op_code::ugreater_equal_than)>;
 
 template<Op_code op_code>
 using is_branch_operation =
@@ -36,6 +35,15 @@ public:
 	{
 		_write_op_code<op_code>();
 		util::portable::write(_output, destination);
+		util::portable::write(_output, index);
+	}
+	template<Op_code op_code>
+	typename std::enable_if<(op_code == Op_code::get)>::type write(Address destination, Address source,
+	                                                               std::uint32_t index)
+	{
+		_write_op_code<op_code>();
+		util::portable::write(_output, destination);
+		util::portable::write(_output, source);
 		util::portable::write(_output, index);
 	}
 	template<Op_code op_code>
@@ -60,7 +68,8 @@ public:
 		util::portable::write(_output, immediate);
 	}
 	template<Op_code op_code>
-	typename std::enable_if<(op_code == Op_code::invoke || op_code == Op_code::test)>::type
+	typename std::enable_if<(op_code == Op_code::invoke || op_code == Op_code::test ||
+	                         op_code == Op_code::negate)>::type
 	  write(Address function)
 	{
 		_write_op_code<op_code>();

@@ -3,9 +3,10 @@
 
 #include "../string_key.hpp"
 #include "definition.hpp"
-#include "function.hpp"
+#include "framer.hpp"
 
 #include <bia/error/exception.hpp>
+#include <bia/member/object/base.hpp>
 #include <bia/util/optional.hpp>
 #include <map>
 
@@ -13,22 +14,53 @@ namespace bia {
 namespace internal {
 namespace type {
 
-class Object : public Definition_base
+struct Member
+{
+	const Definition_base* definition;
+	std::size_t offset;
+};
+
+struct Dynamic_object
+{};
+
+template<>
+class Definition<Dynamic_object> : public Definition_base
 {
 public:
-	void add_member(const String_key& name, const Definition_base* type)
+	typedef std::map<String_key, Member, String_comparator> Map;
+
+	Definition(Map members) noexcept : _members{ std::move(members) }
+	{}
+	bool is_assignable(const Definition_base* other) const noexcept override
 	{
-		// already defined
-		// if (_members.find(name) != _members.end()) {
-		// 	BIA_THROW(error::Code::symbol_already_declared);
-		// }
-		// if (dynamic_cast<const Function*>(type)) {
-		// 	_members.insert({ name, { type, _methods++ } });
-		// } else {
-		// 	_members.insert({ name, { type, _variables++ } });
-		// }
+		return compare(other) == 0;
 	}
-	util::Optional<std::pair<const Definition_base*, std::size_t>> get_member(const String_key& name) const
+	std::size_t size() const noexcept override
+	{}
+	std::size_t alignment() const noexcept override
+	{}
+	int flags() const noexcept override
+	{
+		return 0;
+	}
+	int compare(util::Not_null<const Definition_base*> other) const noexcept override
+	{
+		int n = util::compare(ordinal(), other->ordinal());
+		if (n == 0) {
+			const auto ptr = static_cast<const Definition*>(other.get());
+			n              = util::compare(_members.size(), ptr->_members.size());
+			for (auto it = _members.begin(); n == 0 && it != _members.end(); ++it) {
+				// TODO implement this
+				BIA_ASSERT(false);
+			}
+		}
+		return n;
+	}
+	unsigned int ordinal() const noexcept override
+	{
+		return 37;
+	}
+	util::Optional<Member> get_member(const String_key& name) const
 	{
 		const auto it = _members.find(name);
 		if (it != _members.end()) {
@@ -38,9 +70,7 @@ public:
 	}
 
 private:
-	std::size_t _variables = 8;
-	std::size_t _methods   = 0;
-	std::map<String_key, std::pair<const Definition_base*, std::size_t>, String_comparator> _members;
+	Map _members;
 };
 
 } // namespace type

@@ -8,34 +8,31 @@ namespace thread {
 namespace lock {
 
 template<typename BasicLockable>
-class guard
+class Guard
 {
 public:
-	guard(BasicLockable& lock)
+	Guard(BasicLockable& lock)
 	{
 		_lock = &lock;
-
 		_lock->lock();
 	}
-	guard(guard&& move) noexcept
+	Guard(Guard&& move) noexcept
 	{
 		std::swap(_lock, move._lock);
 	}
-	~guard()
+	~Guard() noexcept
 	{
 		if (_lock) {
 			_lock->unlock();
 		}
 	}
-	guard& operator=(guard&& move)
+	Guard& operator=(Guard&& move)
 	{
 		if (_lock) {
 			_lock->unlock();
 		}
-
 		_lock      = move._lock;
 		move._lock = nullptr;
-
 		return *this;
 	}
 

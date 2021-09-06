@@ -11,8 +11,8 @@ namespace standard {
 class UTF8 final : public Encoder
 {
 public:
-	void put(std::ostream& output, code_point_type cp) const override;
-	code_point_type read(std::istream& input) const override;
+	void put(std::ostream& output, Code_point cp) const override;
+	Code_point read(std::istream& input) const override;
 };
 
 } // namespace standard

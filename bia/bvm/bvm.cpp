@@ -8,6 +8,7 @@
 #include <bia/bytecode/operation.hpp>
 #include <bia/error/exception.hpp>
 #include <bia/member/function/base.hpp>
+#include <bia/member/object/base.hpp>
 #include <vector>
 
 using namespace bia;
@@ -55,6 +56,14 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			}
 			break;
 		}
+		case Op_code::get: {
+			const auto destination = ip.read<Address>();
+			const auto source      = ip.read<Address>();
+			const auto index       = ip.read<std::uint32_t>();
+			frame.load<memory::gc::GC_able<member::object::Base*>>(source)->store_to(
+			  index, memory::Frame<true>{ frame, destination });
+			break;
+		}
 		case Op_code::load_from_namespace: {
 			const auto destination = ip.read<Address>();
 			const auto source      = ip.read<Address>();
@@ -100,6 +109,14 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		case Op_code::bitwise_xor: native_integral_operation<Bitwise_xor, false>(op, ip, frame); break;
 		case Op_code::equal: native_integral_test<Equality, false>(op, ip, frame); break;
 		case Op_code::not_equal: native_integral_test<Inequality, false>(op, ip, frame); break;
+		case Op_code::sless_than: native_integral_test<Less, true>(op, ip, frame); break;
+		case Op_code::uless_than: native_integral_test<Less, false>(op, ip, frame); break;
+		case Op_code::sless_equal_than: native_integral_test<Less_equality, true>(op, ip, frame); break;
+		case Op_code::uless_equal_than: native_integral_test<Less_equality, false>(op, ip, frame); break;
+		case Op_code::sgreater_than: native_integral_test<Greater, true>(op, ip, frame); break;
+		case Op_code::ugreater_than: native_integral_test<Greater, false>(op, ip, frame); break;
+		case Op_code::sgreater_equal_than: native_integral_test<Greater_equality, true>(op, ip, frame); break;
+		case Op_code::ugreater_equal_than: native_integral_test<Greater_equality, false>(op, ip, frame); break;
 		case Op_code::invoke: {
 			const auto function_address = ip.read<Address>();
 			const auto function_object = frame.load<memory::gc::GC_able<member::function::Base*>>(function_address);
@@ -109,6 +126,11 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		case Op_code::test: {
 			const auto source = ip.read<Address>();
 			test_register     = static_cast<bool>(frame.load<std::uint8_t>(source));
+			break;
+		}
+		case Op_code::negate: {
+			const auto source = ip.read<Address>();
+			frame.store(source, static_cast<std::uint8_t>(!frame.load<std::uint8_t>(source)));
 			break;
 		}
 		case Op_code::jump: {

@@ -8,6 +8,7 @@
 #include <bia/util/type_traits/type_select.hpp>
 #include <cstddef>
 #include <map>
+#include <set>
 #include <type_traits>
 #include <typeindex>
 #include <typeinfo>
@@ -17,53 +18,57 @@ namespace bia {
 namespace internal {
 namespace type {
 
-/// Stores and manages all types that were declared during compilation or by the user. The types are not
-/// required for the runtime, only for compilation.
+/// Stores and manages all type definitions introduced to it. Additionally real C++ types can be linked with
+/// type definitions.
 class System
 {
 public:
-	typedef unsigned int Code;
-
-	System(util::Not_null<std::shared_ptr<memory::Allocator>> allocator);
-	System(const System& copy) = delete;
-	System(System&& move) noexcept;
-	~System() noexcept;
+	System(util::Not_null<std::shared_ptr<memory::Allocator>> allocator)
+	    : _allocator{ allocator.get() }, _type_index{ allocator }, _real_types{ allocator }
+	{}
+	System(const System& copy)     = delete;
+	System(System&& move) noexcept = default;
+	~System() noexcept
+	{
+		for (const auto& definition : _type_index) {
+			_allocator->destroy(const_cast<type::Definition_base*>(definition));
+		}
+	}
+	template<typename Type>
+	const Definition_base* register_definition(Type&& definition)
+	{
+		using T = typename std::decay<Type>::type;
+		static_assert(std::is_base_of<Definition_base, T>::value,
+		              "Given definition must inherit from Definition_base");
+		const auto it = _type_index.find(&definition);
+		if (it != _type_index.end()) {
+			return *it;
+		}
+		// create new
+		const auto ptr = _allocator->construct<T>(std::forward<Type>(definition));
+		_type_index.insert(ptr);
+		return ptr;
+	}
 	template<typename Type>
 	const Definition_base* definition_of()
 	{
-		using T = typename std::decay<Type>::type;
-		Definition<T> type{};
-		const auto it = _type_index.find(&type);
-		if (it != _type_index.end()) {
-			return it->first;
-		}
-		// create new
-		const auto ptr = _allocator->construct<Definition<T>>();
-		_type_index.insert(std::make_pair(ptr, ++_id_counter));
-		return ptr;
+		return register_definition(Definition<typename std::decay<Type>::type>{});
 	}
 	System& operator=(const System& copy) = delete;
 	/// Move operator.
-	System& operator=(System&& move) noexcept;
+	System& operator=(System&& move) noexcept = default;
 
 private:
-	struct Comparator
-	{
-		bool operator()(const Definition_base* left, const Definition_base* right) const
-		{
-			return left->compare(right) < 0;
-		}
-	};
-
-	Code _id_counter = 0;
 	/// Memory allocator for the dynamically created types.
 	std::shared_ptr<memory::Allocator> _allocator;
 	/// Index of all known types.
-	std::map<const Definition_base*, Code, Comparator,
-	         memory::Std_allocator<std::pair<const Definition_base*, Code>>>
+	std::set<const Definition_base*, std::less<const Definition_base*>,
+	         memory::Std_allocator<const Definition_base*>>
 	  _type_index;
 	/// Mappings of real C++ types to dynamic types. The definition must be in the type index.
-	std::map<std::type_index, const Definition_base*> _real_types;
+	std::map<std::type_index, const Definition_base*, std::less<std::type_index>,
+	         memory::Std_allocator<std::pair<std::type_index, const Definition_base*>>>
+	  _real_types;
 };
 
 } // namespace type

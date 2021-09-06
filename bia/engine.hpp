@@ -10,6 +10,7 @@
 
 namespace bia {
 
+/// Provides a simple interface to the Bia programming language.
 class Engine
 {
 public:

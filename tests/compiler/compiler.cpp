@@ -3,6 +3,9 @@
 #include <bia/bvm/bvm.hpp>
 #include <bia/bytecode/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
+#include <bia/error/contract_violation.hpp>
+// #include <bia/member/function/dynamic.hpp>
+// #include <bia/member/function/varargs.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/resource/deserialize.hpp>
@@ -95,9 +98,26 @@ inline void print_error(const std::vector<util::Span<const char*>>& lines, const
 	std::cerr << std::endl;
 }
 
+template<std::size_t Index, typename Variant>
+inline void do_print(const Variant& value)
+{
+	std::cout << "<empty>\n";
+}
+
+template<std::size_t Index, typename, typename... Others, typename Variant>
+inline void do_print(const Variant& value)
+{
+	if (value.index() == Index) {
+		std::cout << value.template get<Index>() << "\n";
+	} else {
+		do_print<Index + 1, Others...>(value);
+	}
+}
+
 // TEST_CASE("simple compiling", "[compiler]")
 int main()
 try {
+	std::cout << std::boolalpha;
 	// std::stringstream code;
 	std::fstream code{ IN_FILE, std::ios::binary | std::ios::in };
 	std::stringstream output;
@@ -110,8 +130,18 @@ try {
 	// define user defined types
 	context.global_namespace().put_invokable(util::from_cstring("hello_world"),
 	                                         static_cast<void (*)()>([] { puts("Hello, world!"); }));
-	context.global_namespace().put_invokable(util::from_cstring("print"),
-	                                         [](const std::string& v) { return puts(v.c_str()); });
+	context.global_namespace().put_invokable(
+	  util::from_cstring("print"),
+	  [](util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
+	                   std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>
+	       value) {
+		  do_print<0, bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t, std::uint32_t,
+		           std::int64_t, std::uint64_t, float, double, std::string>(value);
+	  });
+	context.global_namespace().put_invokable(util::from_cstring("to_string"),
+	                                         [](std::ptrdiff_t value) { return std::to_string(value); });
+	context.global_namespace().put_invokable(util::from_cstring("fto_string"),
+	                                         [](double value) { return std::to_string(value); });
 	context.global_namespace().put_invokable(
 	  util::from_cstring("compare"), [](const std::string& a, const std::string& b) { return a.compare(b); });
 	context.global_namespace().put_invokable(
@@ -131,10 +161,29 @@ try {
 		  }
 		  return ss;
 	  });
+	context.global_namespace().put_invokable(
+	  util::from_cstring("test"), +[](bool value) { std::cout << (value ? "true" : "false") << "\n"; });
 	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
+	// context.global_namespace().put_invokable(util::from_cstring("varargs"),
+	//                                          [](std::int64_t, member::function::Varargs<std::string> strings)
+	//                                          {
+	// 	                                         printf("got %zu arguments: ", strings.size());
+	// 	                                         for (std::size_t i = 0; i < strings.size(); ++i) {
+	// 		                                         printf("%s ", strings.at(i).c_str());
+	// 	                                         }
+	// 	                                         puts("");
+	//                                          });
+	context.global_namespace().put_invokable(util::from_cstring("variant"),
+	                                         [](util::Variant<std::int64_t, std::string> arg) {
+		                                         if (arg.is_type<std::int64_t>()) {
+			                                         std::cout << "<int> " << arg.get<std::int64_t>() << std::endl;
+		                                         } else {
+			                                         std::cout << "<str> " << arg.get<std::string>() << std::endl;
+		                                         }
+	                                         });
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
-	auto encoder = string::encoding::get_encoder(string::encoding::standard_encoding::utf_8);
+	auto encoder = string::encoding::get_encoder(string::encoding::Standard::utf_8);
 	auto finally = util::finallay([encoder] { string::encoding::free_encoder(encoder); });
 	tokenizer::Bia_lexer lexer{ allocator };
 	tokenizer::Reader reader{ code, *encoder };
@@ -163,7 +212,8 @@ try {
 		for (auto err : compiler.errors()) {
 			print_error(lines, err);
 		}
-		BIA_LOG(ERROR, "Compilation failed with {} errors", compiler.errors().size());
+		BIA_LOG(ERROR, "Compilation failed with {} error{}", compiler.errors().size(),
+		        compiler.errors().size() > 1 ? "s" : "");
 		failed = true;
 	}
 
@@ -194,7 +244,7 @@ try {
 	// print stack
 	std::cout << "\n==========STACK==========\n";
 	for (int i = 0; i < 5; ++i) {
-		std::cout << "%" << std::setw(3) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
+		std::cout << "%" << std::setw(4) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
 		          << std::setw(16) << std::setfill('0') << std::hex
 		          << base_frame.load<std::size_t>(i * 2 * sizeof(std::size_t)) << std::endl;
 	}
@@ -203,7 +253,7 @@ try {
 	std::cerr << "Exception from main: " << e.code() << "\n\twhat: " << e.what()
 	          << "\n\tcondition: " << e.code().default_error_condition().message()
 	          << "\n\tfrom: " << e.source_location() << std::endl;
-} /* catch (const bia::error::Contract_violation& e) {
-  std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
-            << std::endl;
-} */
+} catch (const bia::error::Contract_violation& e) {
+	std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
+	          << std::endl;
+}

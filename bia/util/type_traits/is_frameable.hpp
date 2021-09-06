@@ -1,7 +1,7 @@
 #ifndef BIA_UTIL_TYPE_TRAITS_IS_FRAMEABLE_HPP_
 #define BIA_UTIL_TYPE_TRAITS_IS_FRAMEABLE_HPP_
 
-#include "void_type.hpp"
+#include "void.hpp"
 
 #include <type_traits>
 
@@ -22,7 +22,7 @@ struct Is_frameable : std::false_type
 {};
 
 template<typename Type>
-struct Is_frameable<Type, void_type<decltype(sizeof(internal::type::Framer<Type>))>> : std::true_type
+struct Is_frameable<Type, Void<decltype(sizeof(internal::type::Framer<Type>))>> : std::true_type
 {};
 
 } // namespace type_traits

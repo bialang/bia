@@ -38,26 +38,136 @@ inline util::Optional<symbol::Local_variable>
   apply_self_operator(Parameter& param, Operator optor, Tokens optor_tokens, symbol::Local_variable variable)
 {
 	if (optor == Operator::logical_not) {
-		const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-		BIA_ASSERT(bool_type.is_type<const type::Definition_base*>());
-		// TODO test size
-		BIA_ASSERT(false);
-		// param.instructor.write<bytecode::Op_code::falsey, std::int8_t>(variable.location.offset);
-		// param.symbols.free_temporary(variable);
-		// variable = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
-		// param.instructor.write<bytecode::Op_code::booleanize>(variable.location.offset);
+		if (!dynamic_cast<const type::Definition<bool>*>(variable.definition)) {
+			// TODO fix tokens
+			param.errors.add_error(error::Code::not_boolean, optor_tokens);
+		}
+		param.instructor.write<bytecode::Op_code::negate>(variable.offset);
 		return variable;
 	}
 	param.errors.add_error(error::Code::bad_operator, optor_tokens);
 	return {};
 }
 
+/// Handles the given operation between the left-hand and the right-hand side. If the operator is of a testing
+/// type, both lhs and rhs will be freed and a new result will be returned.
+inline symbol::Local_variable handle_operation(Parameter& param, const symbol::Local_variable& lhs,
+                                               const symbol::Local_variable& rhs, Operator optor,
+                                               Tokens optor_tokens)
+{
+	using namespace bytecode;
+	// TODO improve test depending on situation
+	if (!lhs.definition->is_assignable(rhs.definition)) {
+		param.errors.add_error(error::Code::type_mismatch, optor_tokens);
+		return lhs;
+	}
+	bool is_test = false;
+	switch (optor) {
+	// case Operator::assign: break;
+	// case Operator::logical_or: break;
+	// case Operator::logical_and: break;
+	// case Operator::logical_not: break;
+	case Operator::equal:
+		param.instructor.write<Op_code::equal>(Size::bit_32, lhs.offset, rhs.offset);
+		is_test = true;
+		break;
+	case Operator::not_equal:
+		param.instructor.write<Op_code::not_equal>(Size::bit_32, lhs.offset, rhs.offset);
+		is_test = true;
+		break;
+	case Operator::less: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sless_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sless_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
+		is_test = true;
+		break;
+	}
+	case Operator::less_equal: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sless_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sless_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
+		is_test = true;
+		break;
+	}
+	case Operator::greater: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sgreater_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sgreater_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
+		is_test = true;
+		break;
+	}
+	case Operator::greater_equal: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::sgreater_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sgreater_equal_than>(Size::bit_32, lhs.offset, rhs.offset);
+		}
+		is_test = true;
+		break;
+	}
+	// case Operator::in: break;
+	// case Operator::three_way_comparison: break;
+	case Operator::bitwise_or:
+		param.instructor.write<Op_code::bitwise_or>(Size::bit_32, lhs.offset, rhs.offset);
+		break;
+	case Operator::bitwise_xor:
+		param.instructor.write<Op_code::bitwise_xor>(Size::bit_32, lhs.offset, rhs.offset);
+		break;
+	case Operator::bitwise_and:
+		param.instructor.write<Op_code::bitwise_and>(Size::bit_32, lhs.offset, rhs.offset);
+		break;
+	// case Operator::bitwise_left_shift: break;
+	// case Operator::bitwise_right_shift: break;
+	case Operator::plus: param.instructor.write<Op_code::add>(Size::bit_32, lhs.offset, rhs.offset); break;
+	case Operator::minus: param.instructor.write<Op_code::sub>(Size::bit_32, lhs.offset, rhs.offset); break;
+	case Operator::multiply: param.instructor.write<Op_code::mul>(Size::bit_32, lhs.offset, rhs.offset); break;
+	case Operator::divide: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::udiv>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::sdiv>(Size::bit_32, lhs.offset, rhs.offset);
+		}
+		break;
+	}
+	case Operator::modulus: {
+		if (lhs.definition->flags() & type::Definition_base::flag_unsigned) {
+			param.instructor.write<Op_code::urem>(Size::bit_32, lhs.offset, rhs.offset);
+		} else {
+			param.instructor.write<Op_code::srem>(Size::bit_32, lhs.offset, rhs.offset);
+		}
+		break;
+	}
+	// case Operator::unary_minus: break;
+	// case Operator::bitwise_not: break;
+	// case Operator::exponentation: break;
+	// case Operator::member_access: break;
+	// case Operator::nullable_member_access: break;
+	// case Operator::function_call_open: break;
+	// case Operator::nullable_function_call_open: break;
+	// case Operator::function_call_close: break;
+	default: param.errors.add_error(error::Code::unsupported_operator, optor_tokens); break;
+	}
+
+	if (is_test) {
+		const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
+		BIA_ASSERT(bool_type.is_type<const type::Definition_base*>());
+		param.symbols.free_temporary(rhs);
+		param.symbols.free_temporary(lhs);
+		return param.symbols.create_temporary(bool_type.get<const type::Definition_base*>());
+	}
+	return lhs;
+}
+
 inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
   single_expression_impl(Parameter& param, Tokens tokens, Jumper& jumper, int precedence)
 {
 	BIA_EXPECTS(!tokens.empty());
-
-	bool last_cond_was_and = false;
 
 	// has self operator
 	util::Optional<std::pair<Operator, Tokens>> self_operator;
@@ -152,62 +262,10 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 			if (!(lhs->definition->flags() & internal::type::Definition_base::flag_arithmetic)) {
 				param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
 			} else {
-				using namespace bytecode;
-				bool is_test = false;
-				switch (optor) {
-				case Operator::equal:
-					param.instructor.write<Op_code::equal>(Size::bit_32, lhs->offset, rhs->offset);
-					is_test = true;
-					break;
-				case Operator::plus:
-					param.instructor.write<Op_code::add>(Size::bit_32, lhs->offset, rhs->offset);
-					break;
-				default: param.errors.add_error(error::Code::unsupported_operator, optor_tokens); break;
-				}
-
-				if (is_test) {
-					const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-					BIA_ASSERT(bool_type.is_type<const type::Definition_base*>());
-					param.symbols.free_temporary(*rhs);
-					param.symbols.free_temporary(*lhs);
-					lhs = param.symbols.create_temporary(bool_type.get<const type::Definition_base*>());
-					continue;
-				}
+				lhs = handle_operation(param, *lhs, *rhs, optor, optor_tokens);
 			}
 		}
 		param.symbols.free_temporary(*rhs);
-
-		// if (is_test_operator(optor)) {
-		// 	// TODO
-		// 	const auto bool_type = param.symbols.symbol(util::from_cstring("bool"));
-		// 	BIA_ASSERT(bool_type.is_type<const type::Definition*>());
-
-		// 	if (dynamic_cast<const type::Integer*>(lhs->definition)) {
-		// 		param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	} else if (dynamic_cast<const type::String*>(lhs->definition)) {
-		// 		param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::String>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	} else if (dynamic_cast<const type::Regex*>(lhs->definition)) {
-		// 		param.instructor.write<bytecode::Op_code::resource_operation, memory::gc::Regex>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	} else {
-		// 		// TODO
-		// 		BIA_ASSERT(false);
-		// 	}
-		// 	param.symbols.free_temporary(*rhs);
-		// 	param.symbols.free_temporary(*lhs);
-		// 	lhs = param.symbols.create_temporary(bool_type.get<const type::Definition*>());
-		// 	param.instructor.write<bytecode::Op_code::booleanize>(lhs->location.offset);
-		// } else {
-		// 	if (!dynamic_cast<const type::Integer*>(lhs->definition)) {
-		// 		param.errors.add_error(error::Code::not_an_integral, lhs_tokens);
-		// 	} else {
-		// 		param.instructor.write<bytecode::Op_code::unsigned_raw_operation, std::int32_t>(
-		// 		  to_operation(optor), lhs->location.offset, rhs->location.offset);
-		// 	}
-		// 	param.symbols.free_temporary(*rhs);
-		// }
 	}
 
 	// apply self operator
