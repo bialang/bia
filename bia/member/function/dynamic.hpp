@@ -10,25 +10,23 @@ namespace bia {
 namespace member {
 namespace function {
 
-typedef std::function<void(Context&)> Dynamic_callback;
+typedef std::function<void(Context&)> Dynamic_invokable;
 
 class Dynamic : public Base
 {
 public:
-	Dynamic(Signature signature, Dynamic_callback function) : _signature{ signature }, _function{ function }
+	Dynamic(Signature signature, Dynamic_invokable invokable) : _signature{ signature }, _invokable{ invokable }
 	{}
 	void invoke(memory::Frame<true> frame) override
 	{
-		// create parameters with signature
 		Context context{ _signature, frame };
-
-		// call the function
-		_function(context);
+		_invokable(context);
+		BIA_LOG(INFO, "Dynamic function exit, return set: {}", context.return_is_set());
 	}
 
 private:
 	Signature _signature;
-	Dynamic_callback _function;
+	Dynamic_invokable _invokable;
 };
 
 } // namespace function

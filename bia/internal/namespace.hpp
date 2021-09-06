@@ -6,6 +6,7 @@
 #include "type/system.hpp"
 
 #include <bia/member/function/creator.hpp>
+#include <bia/member/function/dynamic.hpp>
 #include <bia/memory/frame.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
@@ -82,12 +83,6 @@ public:
 
 		_global_index.insert(
 		  std::make_pair(util::from_cstring("string"), _type_system.definition_of<std::string>()));
-		// _global_index.insert(
-		//   std::make_pair(util::from_cstring("string"),
-		//                  static_cast<const Definition_base*>(_type_system.get_or_create<String>())));
-		// _global_index.insert(std::make_pair(
-		//   util::from_cstring("regex"), static_cast<const
-		//   Definition_base*>(_type_system.get_or_create<Regex>())));
 	}
 	template<typename Type>
 	void put_value(String_key name, Type&& value, bool immutable = true)
@@ -124,6 +119,23 @@ public:
 		variable.offset     = _offset;
 		variable.definition = function_definition;
 		variable.flags      = immutable ? 0 : Global_variable::flag_mutable;
+		_global_index.insert({ name, variable });
+		_offset += util::aligned(sizeof(ptr), alignof(std::max_align_t));
+	}
+	void put_invokable(String_key name, member::function::Dynamic_invokable invokable,
+	                   member::function::Signature signature, bool immutable = true)
+	{
+		if (_global_index.find(name) != _global_index.end()) {
+			BIA_THROW(error::Code::symbol_already_declared);
+		}
+
+		const auto ptr = _gc.create<member::function::Dynamic>(signature, std::move(invokable));
+		_global_frame.store(_offset, ptr);
+		Global_variable variable{};
+		variable.offset     = _offset;
+		variable.definition = _type_system.register_definition(
+		  internal::type::Definition<internal::type::Dynamic_function>{ signature });
+		variable.flags = immutable ? 0 : Global_variable::flag_mutable;
 		_global_index.insert({ name, variable });
 		_offset += util::aligned(sizeof(ptr), alignof(std::max_align_t));
 	}

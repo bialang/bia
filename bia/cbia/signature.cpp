@@ -21,7 +21,7 @@ int bia_signature_set_return(bia_signature_t signature, bia_definition_t definit
 	if (sig->use_count) {
 		return 1;
 	}
-	sig->signature.return_type = static_cast<const std::type_info*>(definition);
+	// sig->signature.return_type = static_cast<const std::type_info*>(definition);
 	return BIA_OK;
 }
 
@@ -30,11 +30,11 @@ int bia_signature_set_argument(bia_signature_t signature, int index, bia_definit
 	const auto sig = static_cast<Signature*>(signature);
 	thread::lock::Guard<thread::lock::Mutex> _{ sig->mutex };
 	// already in use
-	if (sig->use_count) {
-		return 1;
-	} else if (sig->signature.arguments.size() != index) {
-		return 1;
-	}
-	sig->signature.arguments.push_back(static_cast<const std::type_info*>(definition));
+	// if (sig->use_count) {
+	// 	return 1;
+	// } else if (sig->signature.arguments.size() != index) {
+	// 	return 1;
+	// }
+	// sig->signature.arguments.push_back(static_cast<const std::type_info*>(definition));
 	return BIA_OK;
 }

@@ -3,13 +3,15 @@
 
 #include "definition.hpp"
 
-#include <bia/util/type_traits/is_varargs_invokable.hpp>
 #include <array>
+#include <bia/util/gsl.hpp>
+#include <bia/util/type_traits/is_varargs_invokable.hpp>
 #include <limits>
 #include <tuple>
 #include <type_traits>
 #include <typeindex>
 #include <typeinfo>
+#include <vector>
 
 namespace bia {
 namespace member {
@@ -23,7 +25,13 @@ namespace type {
 
 template<typename Type>
 class Definition<member::function::Varargs<Type>> : public Definition<Type>
-{};
+{
+public:
+	int flags() const noexcept override
+	{
+		return Definition::flags() | Definition_base::flag_vararg;
+	}
+};
 
 struct Argument
 {
@@ -33,31 +41,6 @@ struct Argument
 class Definition_invokable_base : virtual public Definition_base
 {
 public:
-	virtual const Definition_base* return_type() const noexcept           = 0;
-	virtual bool is_vararg_index(std::size_t index) const noexcept        = 0;
-	virtual std::size_t argument_lower_count() const noexcept             = 0;
-	virtual std::size_t argument_upper_count() const noexcept             = 0;
-	virtual const Argument* argument_at(std::size_t index) const noexcept = 0;
-	virtual const Argument* arguments_begin() const noexcept              = 0;
-	virtual const Argument* arguments_end() const noexcept                = 0;
-};
-
-template<typename Return, typename... Arguments>
-class Definition_invokable_helper : public Definition_invokable_base, public Definition_real_base
-{
-public:
-	constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
-	  util::type_traits::type_container<Arguments...>>::value;
-
-	Definition_invokable_helper(const std::type_info& info) noexcept : _index{ info }
-	{
-		_fill_arguments<0, Arguments...>();
-	}
-	Definition_invokable_helper(const Definition_invokable_helper& copy) noexcept : _index{ copy._index }
-	{
-		_fill_arguments<0, Arguments...>();
-	}
-	~Definition_invokable_helper() noexcept = default;
 	bool is_assignable(const Definition_base* other) const noexcept override
 	{
 		return compare(other) == 0;
@@ -80,7 +63,7 @@ public:
 		if (n == 0) {
 			const auto ptr = dynamic_cast<const Definition_invokable_base*>(other.get());
 			// compare arguments
-			if ((n = _return_type.compare(ptr->return_type())) == 0) {
+			if ((n = return_type()->compare(ptr->return_type())) == 0) {
 				if ((n = util::compare(argument_lower_count(), ptr->argument_lower_count())) == 0) {
 					n = util::compare(argument_upper_count(), ptr->argument_upper_count());
 					for (auto i = arguments_begin(), j = ptr->arguments_begin(); n == 0 && i != arguments_end(); ++i) {
@@ -91,6 +74,100 @@ public:
 		}
 		return n;
 	}
+	virtual const Definition_base* return_type() const noexcept           = 0;
+	virtual bool is_vararg_index(std::size_t index) const noexcept        = 0;
+	virtual std::size_t argument_lower_count() const noexcept             = 0;
+	virtual std::size_t argument_upper_count() const noexcept             = 0;
+	virtual const Argument* argument_at(std::size_t index) const noexcept = 0;
+	virtual const Argument* arguments_begin() const noexcept              = 0;
+	virtual const Argument* arguments_end() const noexcept                = 0;
+};
+
+struct Dynamic_function_signature
+{
+	util::Not_null<const Definition_base*> return_definition;
+	std::vector<Argument> argument_definitions;
+};
+
+struct Dynamic_function
+{};
+
+template<>
+class Definition<Dynamic_function> : public Definition_invokable_base
+{
+public:
+	Definition(Dynamic_function_signature signature) : _signature{ std::move(signature) }
+	{
+		for (const auto& argument : signature.argument_definitions) {
+			if (argument.definition->flags() & flag_vararg) {
+				if (_is_vararg) {
+					// TODO throw right exception
+					BIA_ASSERT(false);
+				}
+				_is_vararg = true;
+			}
+		}
+		BIA_LOG(INFO, "Is varargs={}", _is_vararg);
+	}
+	unsigned int ordinal() const noexcept override
+	{
+		return 59;
+	}
+	const Definition_base* return_type() const noexcept override
+	{
+		return _signature.return_definition;
+	}
+	bool is_vararg_index(std::size_t index) const noexcept override
+	{
+		return _is_vararg && index == _signature.argument_definitions.size() - 1;
+	}
+	std::size_t argument_lower_count() const noexcept override
+	{
+		return _signature.argument_definitions.size() - (_is_vararg ? 1 : 0);
+	}
+	std::size_t argument_upper_count() const noexcept override
+	{
+		return _is_vararg ? std::numeric_limits<std::size_t>::max() : _signature.argument_definitions.size();
+	}
+	const Argument* argument_at(std::size_t index) const noexcept override
+	{
+		if (index < _signature.argument_definitions.size()) {
+			return &_signature.argument_definitions[index];
+		} else if (_is_vararg) {
+			return &_signature.argument_definitions.back();
+		}
+		return nullptr;
+	}
+	const Argument* arguments_begin() const noexcept final
+	{
+		return _signature.argument_definitions.empty() ? nullptr : &_signature.argument_definitions.front();
+	}
+	const Argument* arguments_end() const noexcept final
+	{
+		return _signature.argument_definitions.empty() ? nullptr : &_signature.argument_definitions.back() + 1;
+	}
+
+private:
+	Dynamic_function_signature _signature;
+	bool _is_vararg = false;
+};
+
+template<typename Return, typename... Arguments>
+class Definition_invokable_helper : public Definition_invokable_base, public Definition_real_base
+{
+public:
+	constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
+	  util::type_traits::type_container<Arguments...>>::value;
+
+	Definition_invokable_helper(const std::type_info& info) noexcept : _index{ info }
+	{
+		_fill_arguments<0, Arguments...>();
+	}
+	Definition_invokable_helper(const Definition_invokable_helper& copy) noexcept : _index{ copy._index }
+	{
+		_fill_arguments<0, Arguments...>();
+	}
+	~Definition_invokable_helper() noexcept = default;
 	const Definition_base* return_type() const noexcept override
 	{
 		return &_return_type;

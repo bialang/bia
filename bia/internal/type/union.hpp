@@ -56,7 +56,7 @@ public:
 			n              = util::compare(std::distance(union_begin(), union_end()),
                         std::distance(ptr->union_begin(), ptr->union_end()));
 			for (auto i = union_begin(), j = ptr->union_begin(); n == 0 && i != union_end(); ++i, ++j) {
-				n = util::compare(*i, *j);
+				n = (*i)->compare(*j);
 			}
 		}
 		return n;

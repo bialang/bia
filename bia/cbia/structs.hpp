@@ -12,7 +12,7 @@ struct Signature
 {
 	thread::lock::Mutex mutex;
 	std::size_t use_count;
-	member::function::Signature signature;
+	// member::function::Signature signature;
 };
 
 } // namespace cbia

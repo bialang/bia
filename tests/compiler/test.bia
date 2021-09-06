@@ -1,1 +1,1 @@
-print("Ich", "bin", 22, "Jahre", "alt")
+dynamic(0777, 34)

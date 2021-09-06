@@ -4,7 +4,7 @@
 #include <bia/bytecode/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
 #include <bia/error/contract_violation.hpp>
-// #include <bia/member/function/dynamic.hpp>
+#include <bia/member/function/context.hpp>
 #include <bia/member/function/varargs.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/simple_allocator.hpp>
@@ -179,11 +179,23 @@ try {
 	context.global_namespace().put_invokable(util::from_cstring("variant"),
 	                                         [](util::Variant<std::int64_t, std::string> arg) {
 		                                         if (arg.is_type<std::int64_t>()) {
-			                                         std::cout << "<int> " << arg.get<std::int64_t>() << std::endl;
+			                                         std::cout << "<int> " << arg.get<std::int64_t>() << "\n";
 		                                         } else {
-			                                         std::cout << "<str> " << arg.get<std::string>() << std::endl;
+			                                         std::cout << "<str> " << arg.get<std::string>() << "\n";
 		                                         }
 	                                         });
+
+	member::function::Signature signature{ context.global_namespace().type_system().definition_of<void>() };
+	// signature.argument_definitions.push_back(
+	//   { context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>() });
+	signature.argument_definitions.push_back(
+	  { context.global_namespace().type_system().definition_of<member::function::Varargs<std::int64_t>>() });
+	context.global_namespace().put_invokable(
+	  util::from_cstring("dynamic"),
+	  [](member::function::Context& context) {
+		  std::cout << "Hello world! - " << context.get_argument<std::int64_t>(0) << "\n";
+	  },
+	  signature);
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::Standard::utf_8);
@@ -233,14 +245,15 @@ try {
 	for (int i = 0; i < 5; ++i) {
 		std::cout << "%" << std::setw(4) << std::setfill(' ') << std::hex << i * 2 * sizeof(std::size_t) << ": 0x"
 		          << std::setw(16) << std::setfill('0') << std::hex
-		          << base_frame.load<std::size_t>(i * 2 * sizeof(std::size_t)) << std::endl;
+		          << base_frame.load<std::size_t>(i * 2 * sizeof(std::size_t)) << "\n";
 	}
 	std::cout << "==========STACK==========\n";
 } catch (const bia::error::Exception& e) {
 	std::cerr << "Exception from main: " << e.code() << "\n\twhat: " << e.what()
 	          << "\n\tcondition: " << e.code().default_error_condition().message()
 	          << "\n\tfrom: " << e.source_location() << std::endl;
-} catch (const bia::error::Contract_violation& e) {
-	std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
-	          << std::endl;
+} /* catch (const bia::error::Contract_violation& e) {
+  std::cerr << "Contract violation from main\n\twhat: " << e.what() << "\n\tfrom: " << e.source_location()
+            << std::endl;
 }
+ */
