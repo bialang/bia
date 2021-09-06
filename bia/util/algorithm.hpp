@@ -58,7 +58,7 @@ constexpr std::size_t aligned(std::size_t size, std::size_t alignment) noexcept
 	return size + (size % alignment ? (alignment - size % alignment) : 0);
 }
 
-constexpr bool is_aligned(const void* ptr, std::size_t alignment) noexcept
+inline bool is_aligned(const void* ptr, std::size_t alignment) noexcept
 {
 	return reinterpret_cast<std::intptr_t>(ptr) % alignment == 0;
 }

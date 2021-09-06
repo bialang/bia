@@ -3,7 +3,9 @@
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
-bia::tokenizer::token::Error_info bia::tokenizer::token::parse::string(Parameter& param)
+using namespace bia;
+
+error::Bia tokenizer::token::parse::string(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (param.reader.read() != '"') {

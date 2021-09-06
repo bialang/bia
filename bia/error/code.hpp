@@ -219,7 +219,11 @@ inline const std::error_category& condition_category() noexcept
 		std::string message(int condition) const override
 		{
 			switch (static_cast<Condition>(condition)) {
+			case Condition::lexer: return "lexing error";
 			case Condition::compiler: return "compilation error";
+			case Condition::bvm: return "virtual machine error";
+			case Condition::runtime: return "runtime error";
+			case Condition::implementation: return "implementation error";
 			default: return "(unrecognized error condition)";
 			}
 		}

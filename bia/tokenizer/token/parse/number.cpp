@@ -11,7 +11,7 @@ using namespace bia::tokenizer::token;
 
 /// Extracts the string from the code which can be parsed by one of the standard conversion functions. Returns
 /// the number string, it's desired type, the base and an error.
-inline std::tuple<std::string, Token::Number::Type, int, Error_info> extract_number(Parameter& param)
+inline std::tuple<std::string, Token::Number::Type, int, error::Bia> extract_number(Parameter& param)
 {
 	using Type        = Token::Number::Type;
 	const auto ranger = param.begin_range();
@@ -211,8 +211,8 @@ inline error::Code convert_integral(Type& value, const std::string& str, int bas
 	return error::Code::success;
 }
 
-inline Error_info convert(Parameter& param, const std::string& str, Token::Number::Type type, int base,
-                          bia::tokenizer::Range range)
+inline error::Bia convert(Parameter& param, const std::string& str, Token::Number::Type type, int base,
+                          error::Bia_range range)
 {
 	using Type = Token::Number::Type;
 	// convert
@@ -249,7 +249,7 @@ inline Error_info convert(Parameter& param, const std::string& str, Token::Numbe
 	return {};
 }
 
-Error_info parse::number(Parameter& param)
+error::Bia parse::number(Parameter& param)
 {
 	const auto ranger    = param.begin_range();
 	const auto extracted = extract_number(param);

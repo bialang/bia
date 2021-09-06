@@ -4,14 +4,16 @@
 #include "reader.hpp"
 #include "token/receiver.hpp"
 
+#include <bia/error/bia_error.hpp>
+
 namespace bia {
 namespace tokenizer {
 
 class Lexer
 {
 public:
-	virtual ~Lexer()                                            = default;
-	virtual void lex(Reader& reader, token::Receiver& receiver) = 0;
+	virtual ~Lexer()                                                  = default;
+	virtual error::Bia lex(Reader& reader, token::Receiver& receiver) = 0;
 };
 
 } // namespace tokenizer

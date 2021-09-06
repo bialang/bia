@@ -1,8 +1,9 @@
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-Error_info parse::assign_stmt(Parameter& param)
+error::Bia parse::assign_stmt(Parameter& param)
 {
 	param.bundle.emplace_back(Token::Statement_type::assign_statement, param.begin_range().range());
 	if (const auto err = identifier(param)) {

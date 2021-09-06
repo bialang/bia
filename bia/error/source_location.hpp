@@ -10,6 +10,7 @@
 namespace bia {
 namespace error {
 
+/// Describes the location in the C++ source code.
 class Source_location
 {
 public:

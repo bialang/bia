@@ -1,9 +1,10 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-inline Error_info small_stmt(Parameter& param)
+inline error::Bia small_stmt(Parameter& param)
 {
 	if (const auto err =
 	      parse::any_of(param, parse::drop_stmt, parse::decl_stmt, parse::assign_stmt, parse::return_stmt,
@@ -19,12 +20,12 @@ inline Error_info small_stmt(Parameter& param)
 	return {};
 }
 
-inline Error_info compound_stmt(Parameter& param)
+inline error::Bia compound_stmt(Parameter& param)
 {
 	return parse::any_of(param, parse::if_stmt, parse::while_stmt, parse::scope_stmt);
 }
 
-Error_info parse::root(Parameter& param)
+error::Bia parse::root(Parameter& param)
 {
 	if (const auto err = parse::any_of(param, small_stmt, compound_stmt)) {
 		return err;
@@ -33,7 +34,7 @@ Error_info parse::root(Parameter& param)
 	return {};
 }
 
-Error_info parse::batch(Parameter& param)
+error::Bia parse::batch(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (param.reader.read() != '{') {
@@ -43,7 +44,7 @@ Error_info parse::batch(Parameter& param)
 	const auto index = param.bundle.size();
 	param.bundle.emplace_back();
 
-	Error_info root_err{};
+	error::Bia root_err{};
 	while (true) {
 		spacer(param);
 		const auto old = param.backup();

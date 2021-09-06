@@ -3,6 +3,7 @@
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/util/finally.hpp>
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
 struct comparator
@@ -48,7 +49,7 @@ struct comparator
 	}
 };
 
-Error_info parse::identifier(Parameter& param)
+error::Bia parse::identifier(Parameter& param)
 {
 	using namespace string::encoding;
 	const char* values[]{ "as",   "break",  "continue", "defer", "drop",   "else", "error", "false",

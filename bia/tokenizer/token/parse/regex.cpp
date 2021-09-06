@@ -1,8 +1,9 @@
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-Error_info parse::regex(Parameter& param)
+error::Bia parse::regex(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (param.reader.read() != 'r') {

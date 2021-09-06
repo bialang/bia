@@ -1,9 +1,10 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-Error_info parse::member_access(Parameter& param)
+error::Bia parse::member_access(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	auto cp           = param.reader.read();
@@ -20,7 +21,7 @@ Error_info parse::member_access(Parameter& param)
 	return parse::identifier(param);
 }
 
-inline Error_info argument_list(Parameter& param)
+inline error::Bia argument_list(Parameter& param)
 {
 	Parameter::State old;
 	for (bool first = true; true; first = false) {
@@ -45,7 +46,7 @@ inline Error_info argument_list(Parameter& param)
 	return {};
 }
 
-Error_info parse::member_invocation(Parameter& param)
+error::Bia parse::member_invocation(Parameter& param)
 {
 	auto ranger = param.begin_range();
 	if (param.reader.read() != '(') {
@@ -65,7 +66,7 @@ Error_info parse::member_invocation(Parameter& param)
 	return {};
 }
 
-Error_info parse::member_subscript(Parameter& param)
+error::Bia parse::member_subscript(Parameter& param)
 {
 	return param.make_error(error::Code::expected_member_access, param.begin_range().range());
 }

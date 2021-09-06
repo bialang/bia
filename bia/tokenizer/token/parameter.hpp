@@ -2,9 +2,9 @@
 #define BIA_TOKENIZER_TOKEN_PARAMETER_HPP_
 
 #include "../reader.hpp"
-#include "error_info.hpp"
 #include "token.hpp"
 
+#include <bia/error/bia_error.hpp>
 #include <bia/resource/manager.hpp>
 #include <vector>
 
@@ -17,7 +17,7 @@ struct Parameter
 	class Ranger
 	{
 	public:
-		Range range() const noexcept
+		error::Bia_range range() const noexcept
 		{
 			return { _start, _parent->reader.location() };
 		}
@@ -25,7 +25,7 @@ struct Parameter
 	private:
 		friend class Parameter;
 		Parameter* _parent;
-		Location _start;
+		error::Bia_location _start;
 
 		Ranger(Parameter& parent) noexcept : _parent{ &parent }, _start{ parent.reader.location() }
 		{}
@@ -61,14 +61,14 @@ struct Parameter
 	{
 		return { *this };
 	}
-	Error_info make_error(error::Code code, Range range)
+	error::Bia make_error(error::Code code, error::Bia_range range)
 	{
-		Error_info err{};
+		error::Bia err{};
 		err.code  = code;
 		err.range = range;
 		return err;
 	}
-	void set_optional_error(Error_info err)
+	void set_optional_error(error::Bia err)
 	{}
 };
 

@@ -1,9 +1,10 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+using namespace bia;
 using namespace bia::tokenizer::token;
 
-Error_info parse::if_stmt(Parameter& param)
+error::Bia parse::if_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, "if").second || spacer(param)) {
@@ -35,7 +36,7 @@ Error_info parse::if_stmt(Parameter& param)
 	return {};
 }
 
-Error_info parse::else_if_stmt(Parameter& param)
+error::Bia parse::else_if_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, "else").second || spacer(param) || !any_of(param, "if").second || spacer(param)) {
@@ -52,7 +53,7 @@ Error_info parse::else_if_stmt(Parameter& param)
 	return {};
 }
 
-Error_info parse::else_stmt(Parameter& param)
+error::Bia parse::else_stmt(Parameter& param)
 {
 	const auto ranger = param.begin_range();
 	if (!any_of(param, "else").second || spacer(param)) {
