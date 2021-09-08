@@ -36,9 +36,15 @@ public:
 		return compare(other) == 0;
 	}
 	std::size_t size() const noexcept override
-	{}
+	{
+		// TODO
+		return 0;
+	}
 	std::size_t alignment() const noexcept override
-	{}
+	{
+		// TODO
+		return 0;
+	}
 	int flags() const noexcept override
 	{
 		return 0;

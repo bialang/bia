@@ -189,13 +189,17 @@ try {
 
 	member::function::Signature signature{ context.global_namespace().type_system().definition_of<void>() };
 	// signature.argument_definitions.push_back(
-	//   { context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>() });
-	signature.argument_definitions.push_back(
-	  { context.global_namespace().type_system().definition_of<member::function::Varargs<std::int64_t>>() });
+	//   { context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>()
+	//   });
+	signature.vararg_definition = internal::type::Argument{
+		context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>()
+	};
 	context.global_namespace().put_invokable(
 	  util::from_cstring("dynamic"),
 	  [](member::function::Context& context) {
-		  std::cout << "Hello world! - " << context.get_argument<std::int64_t>(0) << "\n";
+		  std::cout << "Hello world! - "
+		            << context.get_argument<util::Variant<std::int64_t, std::string>>(0).get<0>()
+		            << context.get_argument<util::Variant<std::int64_t, std::string>>(1).get<0>() << std::endl;
 	  },
 	  signature);
 

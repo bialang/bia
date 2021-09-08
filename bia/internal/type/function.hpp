@@ -5,6 +5,7 @@
 
 #include <array>
 #include <bia/util/gsl.hpp>
+#include <bia/util/optional.hpp>
 #include <bia/util/type_traits/is_varargs_invokable.hpp>
 #include <limits>
 #include <tuple>
@@ -25,13 +26,7 @@ namespace type {
 
 template<typename Type>
 class Definition<member::function::Varargs<Type>> : public Definition<Type>
-{
-public:
-	int flags() const noexcept override
-	{
-		return Definition::flags() | Definition_base::flag_vararg;
-	}
-};
+{};
 
 struct Argument
 {
@@ -87,6 +82,7 @@ struct Dynamic_function_signature
 {
 	util::Not_null<const Definition_base*> return_definition;
 	std::vector<Argument> argument_definitions;
+	util::Optional<Argument> vararg_definition;
 };
 
 struct Dynamic_function
@@ -98,16 +94,9 @@ class Definition<Dynamic_function> : public Definition_invokable_base
 public:
 	Definition(Dynamic_function_signature signature) : _signature{ std::move(signature) }
 	{
-		for (const auto& argument : signature.argument_definitions) {
-			if (argument.definition->flags() & flag_vararg) {
-				if (_is_vararg) {
-					// TODO throw right exception
-					BIA_ASSERT(false);
-				}
-				_is_vararg = true;
-			}
+		if (_signature.vararg_definition.has_value()) {
+			_signature.argument_definitions.push_back(*_signature.vararg_definition);
 		}
-		BIA_LOG(INFO, "Is varargs={}", _is_vararg);
 	}
 	unsigned int ordinal() const noexcept override
 	{
@@ -119,21 +108,22 @@ public:
 	}
 	bool is_vararg_index(std::size_t index) const noexcept override
 	{
-		return _is_vararg && index == _signature.argument_definitions.size() - 1;
+		return _signature.vararg_definition.has_value() && index == _signature.argument_definitions.size() - 1;
 	}
 	std::size_t argument_lower_count() const noexcept override
 	{
-		return _signature.argument_definitions.size() - (_is_vararg ? 1 : 0);
+		return _signature.argument_definitions.size() - (_signature.vararg_definition.has_value() ? 1 : 0);
 	}
 	std::size_t argument_upper_count() const noexcept override
 	{
-		return _is_vararg ? std::numeric_limits<std::size_t>::max() : _signature.argument_definitions.size();
+		return _signature.vararg_definition.has_value() ? std::numeric_limits<std::size_t>::max()
+		                                                : _signature.argument_definitions.size();
 	}
 	const Argument* argument_at(std::size_t index) const noexcept override
 	{
 		if (index < _signature.argument_definitions.size()) {
 			return &_signature.argument_definitions[index];
-		} else if (_is_vararg) {
+		} else if (_signature.vararg_definition.has_value()) {
 			return &_signature.argument_definitions.back();
 		}
 		return nullptr;
@@ -149,7 +139,6 @@ public:
 
 private:
 	Dynamic_function_signature _signature;
-	bool _is_vararg = false;
 };
 
 template<typename Return, typename... Arguments>

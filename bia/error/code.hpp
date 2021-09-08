@@ -108,6 +108,7 @@ enum class Code
 enum class Condition
 {
 	success,
+	usage,
 	lexer,
 	compiler,
 	bvm,
@@ -128,7 +129,9 @@ inline const std::error_category& code_category() noexcept
 		}
 		std::error_condition default_error_condition(int code) const noexcept override
 		{
-			if (code >= 50 && code < 150) {
+			if (code > 0 && code < 50) {
+				return make_error_condition(Condition::usage);
+			} else if (code >= 50 && code < 150) {
 				return make_error_condition(Condition::lexer);
 			} else if (code >= 150 && code < 200) {
 				return make_error_condition(Condition::compiler);
@@ -219,6 +222,7 @@ inline const std::error_category& condition_category() noexcept
 		std::string message(int condition) const override
 		{
 			switch (static_cast<Condition>(condition)) {
+			case Condition::usage: return "usage error";
 			case Condition::lexer: return "lexing error";
 			case Condition::compiler: return "compilation error";
 			case Condition::bvm: return "virtual machine error";

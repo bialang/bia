@@ -30,19 +30,16 @@ public:
 	}
 	std::size_t size() const noexcept override
 	{
+		// TODO optimize
 		std::size_t max = 0;
 		for (auto it = union_begin(); it != union_end(); ++it) {
 			max = util::max(max, (*it)->size());
 		}
-		return max;
+		return util::aligned(Framer<std::size_t>::size(), alignof(std::max_align_t)) + max;
 	}
 	std::size_t alignment() const noexcept override
 	{
-		std::size_t max = 1;
-		for (auto it = union_begin(); it != union_end(); ++it) {
-			max = util::max(max, (*it)->alignment());
-		}
-		return max;
+		return Framer<std::size_t>::alignment();
 	}
 	int flags() const noexcept override
 	{

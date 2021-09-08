@@ -28,7 +28,6 @@ public:
 		flag_arithmetic = 0x02,
 		/// The definition is an unsigned integer.
 		flag_unsigned = 0x04,
-		flag_vararg   = 0x08,
 	};
 
 	virtual ~Definition_base()                                              = default;
