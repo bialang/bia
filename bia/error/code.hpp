@@ -16,6 +16,7 @@ enum class Code
 	bad_utf_sequence,
 	bad_unicode,
 
+	// bad usage
 	out_of_stack,
 	bad_stack_alignment,
 	bad_narrowing,
@@ -24,12 +25,12 @@ enum class Code
 	null_argument,
 	argument_count_mismatch,
 	bad_operation,
-
-	// bad usage
 	empty_optional,
 	empty_variant,
 	bad_variant_index,
 	undefined_definition,
+	no_return_set,
+	bad_return_type,
 
 	// lexing errors
 	expected_opening_curly_bracket = 50,
@@ -159,6 +160,8 @@ inline const std::error_category& code_category() noexcept
 			case Code::empty_variant: return "accessing empty variant";
 			case Code::bad_variant_index: return "bad variant index";
 			case Code::undefined_definition: return "definition of C++ type is undefined";
+			case Code::no_return_set: return "no return value was set";
+			case Code::bad_return_type: return "bad return type";
 			// case code::expected_curly_bracket:
 			// case code::expected_flow_control:
 			// case code::expected_in:

@@ -4,6 +4,8 @@
 #include "base.hpp"
 #include "context.hpp"
 
+#include <bia/error/exception.hpp>
+#include <bia/internal/type/void.hpp>
 #include <functional>
 
 namespace bia {
@@ -21,7 +23,10 @@ public:
 	{
 		Context context{ _signature, frame };
 		_invokable(context);
-		BIA_LOG(INFO, "Dynamic function exit, return set: {}", context.return_is_set());
+		if (!context.return_is_set() &&
+		    internal::type::Definition<void>{}.compare(_signature.return_definition) != 0) {
+			BIA_THROW(error::Code::no_return_set);
+		}
 	}
 
 private:

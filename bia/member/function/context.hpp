@@ -40,7 +40,7 @@ public:
 	{
 		internal::type::Definition<typename std::decay<Type>::type> definition{};
 		if (!_signature.return_definition->is_assignable(&definition)) {
-			BIA_ASSERT(false);
+			BIA_THROW(error::Code::bad_return_type);
 		}
 		_frame.store(0, std::forward<Type>(value));
 		_return_set = true;

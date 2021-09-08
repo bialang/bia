@@ -187,7 +187,7 @@ try {
 		                                         }
 	                                         });
 
-	member::function::Signature signature{ context.global_namespace().type_system().definition_of<void>() };
+	member::function::Signature signature{ context.global_namespace().type_system().definition_of<int>() };
 	// signature.argument_definitions.push_back(
 	//   { context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>()
 	//   });
@@ -200,6 +200,7 @@ try {
 		  std::cout << "Hello world! - "
 		            << context.get_argument<util::Variant<std::int64_t, std::string>>(0).get<0>()
 		            << context.get_argument<util::Variant<std::int64_t, std::string>>(1).get<0>() << std::endl;
+			context.set_return(61);
 	  },
 	  signature);
 
