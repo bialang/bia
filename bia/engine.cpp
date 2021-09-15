@@ -19,8 +19,13 @@
 
 using namespace bia;
 
-Engine::Engine() : _gc{ std::make_shared<memory::Simple_allocator>() }, _context{ _gc }
-{}
+Engine::Engine()
+    : Object_builder_base{ this, nullptr }, _gc{ std::make_shared<memory::Simple_allocator>() }, _context{
+	      _gc
+      }
+{
+	_typed_object = Pointer{ &_context.global_namespace(), [](internal::Typed_object*) {} };
+}
 
 internal::Context& Engine::context() noexcept
 {
@@ -40,6 +45,7 @@ void Engine::run(std::istream& code)
 	lexer.lex(reader, compiler);
 
 	if (compiler.errors().size()) {
+		BIA_LOG(ERROR, "Compiler error");
 		return;
 	}
 
@@ -52,7 +58,7 @@ void Engine::run(std::istream& code)
 
 	// _gc.register_stack(stack);
 
-#if BIA_DEVELOPER_DISASSEMBLY
+#if BIA_DEVELOPER && BIA_DEVELOPER_DISASSEMBLY
 	// print disassembly
 	instructions.seekg(0, std::ios::beg);
 	bytecode::disassemble(instructions, std::cout);

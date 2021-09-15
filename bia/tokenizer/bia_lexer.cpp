@@ -18,7 +18,7 @@ error::Bia Bia_lexer::lex(Reader& reader, token::Receiver& receiver)
 	std::vector<token::Token> bundle;
 	token::Parameter param{ reader, _manager, bundle };
 
-	for (; !reader.eof(); token::parse::spacer(param)) {
+	for (token::parse::spacer(param); !reader.eof(); token::parse::spacer(param)) {
 		// match single statements
 		if (const auto err = token::parse::root(param)) {
 			// return err;

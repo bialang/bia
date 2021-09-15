@@ -22,7 +22,7 @@ public:
 		std::swap(_offset, move._offset);
 		move._frame = memory::Frame<true>{ { nullptr, +0 }, _frame.gc() };
 	}
-	virtual ~Object() noexcept
+	~Object() noexcept
 	{
 		_clear();
 	}

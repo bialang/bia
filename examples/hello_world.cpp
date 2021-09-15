@@ -3,13 +3,8 @@
 #include <sstream>
 #include <vector>
 
-struct Vector : bia::memory::gc::Base
-{
-	std::vector<std::string> value;
-
-	Vector(std::vector<std::string>&& value) noexcept : value{ std::move(value) }
-	{}
-};
+typedef bia::memory::gc::Container<std::vector<std::string>> Vector;
+typedef bia::memory::gc::GC_able<Vector*> Pointer;
 
 namespace bia {
 
@@ -20,23 +15,19 @@ struct internal::type::Framer<
 {
 	constexpr static std::size_t size() noexcept
 	{
-		return sizeof(std::vector<std::string>);
+		return Framer<Pointer>::size();
 	}
 	constexpr static std::size_t alignment() noexcept
 	{
-		return alignof(std::vector<std::string>);
+		return Framer<Pointer>::alignment();
 	}
 	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, std::vector<std::string> value)
 	{
-		new (buffer.data()) std::vector<std::string>{ std::move(value) };
+		Framer<Pointer>::frame(gc, buffer, gc.create<Vector>(std::move(value)));
 	}
-	static const std::vector<std::string>& unframe(util::Span<const util::Byte*> buffer)
+	static std::vector<std::string>& unframe(util::Span<const util::Byte*> buffer)
 	{
-		return *reinterpret_cast<const std::vector<std::string>*>(buffer.data());
-	}
-	static void destory(util::Span<const util::Byte*> buffer)
-	{
-		
+		return Framer<Pointer>::unframe(buffer)->value;
 	}
 };
 
@@ -56,19 +47,26 @@ int main(int argc, char** argv)
 		std::cout << "Enter a string twice...\n";
 		std::string s;
 		std::vector<std::string> ss;
-		for (int i = 0; i < 1; ++i) {
+		for (int i = 0; i < 2; ++i) {
 			std::getline(std::cin, s);
 			ss.push_back(s);
 		}
 		return ss;
 	});
+	engine.function("append",
+	                [](std::vector<std::string>& ss, const std::string& value) { ss.push_back(value); });
+
+	auto args = engine.object("args");
+	args.variable("count", std::ptrdiff_t{ argc });
+	args.variable("program", std::string{ argv[0] });
+	args.finish();
 
 	std::stringstream code;
 	code << u8R"(
 
-let args = read()
-print(read(), 9)
-print(args, 45)
+		let input = read()
+		append(input, args.program)
+		print(input, args.count)
 
 	)";
 	engine.run(code);
