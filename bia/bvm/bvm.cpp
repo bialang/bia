@@ -8,7 +8,7 @@
 #include <bia/bytecode/operation.hpp>
 #include <bia/error/exception.hpp>
 #include <bia/member/function/base.hpp>
-#include <bia/member/object/base.hpp>
+#include <bia/member/object.hpp>
 #include <vector>
 
 using namespace bia;
@@ -27,7 +27,8 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 	Instruction_pointer ip{ instructions };
 	bool test_register = false;
 	std::vector<memory::Frame<true>> namespaces;
-	namespaces.push_back(context.global_namespace().globals());
+	namespaces.push_back({});
+	namespaces.push_back(context.global_namespace().frame());
 
 	while (ip) {
 		const auto op = ip.fetch_and_decode();
@@ -56,18 +57,34 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			}
 			break;
 		}
-		case Op_code::get: {
-			const auto destination = ip.read<Address>();
+		case Op_code::load_object: {
+			const auto destination = ip.read<std::uint16_t>();
 			const auto source      = ip.read<Address>();
-			const auto index       = ip.read<std::uint32_t>();
-			frame.load<memory::gc::GC_able<member::object::Base*>>(source)->store_to(
-			  index, memory::Frame<true>{ frame, destination });
+			namespaces[0] = frame.load<memory::gc::GC_able<member::Object*>>(source)->frame();
 			break;
 		}
 		case Op_code::load_from_namespace: {
 			const auto destination = ip.read<Address>();
 			const auto source      = ip.read<Address>();
-			frame.store(destination, namespaces[0].load<std::intptr_t>(source));
+			const auto index       = ip.read<std::uint16_t>();
+			switch (op.size) {
+			case Size::bit_8: frame.store(destination, namespaces[index].load<std::uint8_t>(source)); break;
+			case Size::bit_16: frame.store(destination, namespaces[index].load<std::uint16_t>(source)); break;
+			case Size::bit_32: frame.store(destination, namespaces[index].load<std::uint32_t>(source)); break;
+			case Size::bit_64: frame.store(destination, namespaces[index].load<std::uint64_t>(source)); break;
+			}
+			break;
+		}
+		case Op_code::copy_to_namespace: {
+			const auto destination = ip.read<Address>();
+			const auto source      = ip.read<Address>();
+			const auto index       = ip.read<std::uint32_t>();
+			switch (op.size) {
+			case Size::bit_8: namespaces[index].store(destination, frame.load<std::uint8_t>(source)); break;
+			case Size::bit_16: namespaces[index].store(destination, frame.load<std::uint16_t>(source)); break;
+			case Size::bit_32: namespaces[index].store(destination, frame.load<std::uint32_t>(source)); break;
+			case Size::bit_64: namespaces[index].store(destination, frame.load<std::uint64_t>(source)); break;
+			}
 			break;
 		}
 		case Op_code::copy: {
@@ -78,17 +95,6 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			case Size::bit_16: frame.store(destination, frame.load<std::uint16_t>(source)); break;
 			case Size::bit_32: frame.store(destination, frame.load<std::uint32_t>(source)); break;
 			case Size::bit_64: frame.store(destination, frame.load<std::uint64_t>(source)); break;
-			}
-			break;
-		}
-		case Op_code::copy_to_namespace: {
-			const auto destination = ip.read<Address>();
-			const auto source      = ip.read<Address>();
-			switch (op.size) {
-			case Size::bit_8: namespaces[0].store(destination, frame.load<std::uint8_t>(source)); break;
-			case Size::bit_16: namespaces[0].store(destination, frame.load<std::uint16_t>(source)); break;
-			case Size::bit_32: namespaces[0].store(destination, frame.load<std::uint32_t>(source)); break;
-			case Size::bit_64: namespaces[0].store(destination, frame.load<std::uint64_t>(source)); break;
 			}
 			break;
 		}

@@ -22,11 +22,11 @@ enum class Default_int_size
 	size_64 = 64,
 };
 
-struct Local_variable : internal::Global_variable
+struct Local_variable : internal::type::Variable
 {};
 
 /// A symbol is either a variable or a type.
-typedef util::Variant<internal::Global_variable, Local_variable, const internal::type::Definition_base*>
+typedef util::Variant<internal::type::Variable, Local_variable, const internal::type::Definition_base*>
   Symbol;
 
 class Manager

@@ -34,6 +34,10 @@ struct internal::type::Framer<
 	{
 		return *reinterpret_cast<const std::vector<std::string>*>(buffer.data());
 	}
+	static void destory(util::Span<const util::Byte*> buffer)
+	{
+		
+	}
 };
 
 } // namespace bia

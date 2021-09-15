@@ -13,10 +13,14 @@
 #include <bia/tokenizer/bia_lexer.hpp>
 #include <bia/util/finally.hpp>
 #include <catch.hpp>
+#include <cstdio>
+#include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+
+extern char** environ;
 
 using namespace bia;
 
@@ -187,6 +191,15 @@ try {
 		                                         }
 	                                         });
 
+	internal::Typed_object obj{ context.global_namespace().type_system(), gc };
+	for (char** s = environ; *s; ++s) {
+		char* p = std::strchr(*s, '=');
+		if (p) {
+			obj.put_value(std::string{ *s, p - *s }, std::string{ p + 1 });
+		}
+	}
+	context.global_namespace().put_object(util::from_cstring("env"), std::move(obj));
+
 	member::function::Signature signature{ context.global_namespace().type_system().definition_of<int>() };
 	// signature.argument_definitions.push_back(
 	//   { context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>()
@@ -200,7 +213,7 @@ try {
 		  std::cout << "Hello world! - "
 		            << context.get_argument<util::Variant<std::int64_t, std::string>>(0).get<0>()
 		            << context.get_argument<util::Variant<std::int64_t, std::string>>(1).get<0>() << std::endl;
-			context.set_return(61);
+		  context.set_return(61);
 	  },
 	  signature);
 

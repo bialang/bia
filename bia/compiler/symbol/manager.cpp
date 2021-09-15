@@ -75,7 +75,7 @@ void Manager::free_temporary(Local_variable variable)
 
 bool Manager::promote_temporary(const resource::View& name, const Local_variable& variable)
 {
-	if (_symbols.find({ name }) != _symbols.end() || !_global_namespace.global({ name }).empty()) {
+	if (_symbols.find({ name }) != _symbols.end() || !_global_namespace.symbol({ name }).empty()) {
 		return false;
 	}
 	const auto it = _symbols.insert(std::make_pair(name, variable)).first;
@@ -90,11 +90,11 @@ Symbol Manager::symbol(const internal::String_key& name)
 		return it->second;
 	}
 
-	const auto symbol = _global_namespace.global(name);
+	const auto symbol = _global_namespace.symbol(name);
 	if (symbol.is_type<const internal::type::Definition_base*>()) {
 		return symbol.get<const internal::type::Definition_base*>();
-	} else if (symbol.is_type<internal::Global_variable>()) {
-		return symbol.get<internal::Global_variable>();
+	} else if (symbol.is_type<internal::type::Variable>()) {
+		return symbol.get<internal::type::Variable>();
 	}
 	return {};
 }

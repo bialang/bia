@@ -8,16 +8,23 @@
 #include <bia/error/exception.hpp>
 #include <bia/member/object/base.hpp>
 #include <bia/util/optional.hpp>
+#include <bia/util/variant.hpp>
 #include <map>
 
 namespace bia {
 namespace internal {
 namespace type {
 
-struct Member
+struct Variable
 {
-	const Definition_base* definition;
+	enum Flag
+	{
+		flag_mutable = 0x1
+	};
+
 	std::size_t offset;
+	const type::Definition_base* definition;
+	int flags;
 };
 
 struct Dynamic_object
@@ -27,7 +34,8 @@ template<>
 class Definition<Dynamic_object> : public Definition_base
 {
 public:
-	typedef std::map<String_key, Member, String_comparator> Map;
+	typedef util::Variant<Variable, const type::Definition_base*> Symbol;
+	typedef std::map<String_key, Symbol, String_comparator> Map;
 
 	Definition(Map members) noexcept : _members{ std::move(members) }
 	{}
@@ -66,13 +74,13 @@ public:
 	{
 		return 37;
 	}
-	util::Optional<Member> get_member(const String_key& name) const
+	Symbol get_member(const String_key& name) const
 	{
 		const auto it = _members.find(name);
 		if (it != _members.end()) {
 			return it->second;
 		}
-		return util::nullopt;
+		return {};
 	}
 
 private:

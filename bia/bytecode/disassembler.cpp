@@ -80,6 +80,11 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 			output << ", ";
 			address(output, arg1);
 		};
+		const auto object_operation = [&](const char* name) {
+			address_operation(name);
+			const auto index = read<std::uint16_t>(input);
+			output << ", " << index;
+		};
 
 		switch (op.op_code) {
 		case Op_code::store: {
@@ -106,21 +111,18 @@ void bytecode::disassemble(std::istream& input, std::ostream& output)
 			constant(output, index);
 			break;
 		}
-		case Op_code::get: {
-			const auto destination = read<Address>(input);
+		case Op_code::load_object: {
+			const auto destination = read<std::uint16_t>(input);
 			const auto source      = read<Address>(input);
-			const auto index       = read<std::uint32_t>(input);
-			out(output, "get");
-			address(output, destination);
+			out(output, "load_obj");
+			constant(output, destination);
 			output << ", ";
 			address(output, source);
-			output << ", ";
-			constant(output, index);
 			break;
 		}
-		case Op_code::load_from_namespace: address_operation("load_ns"); break;
+		case Op_code::load_from_namespace: object_operation("load_ns"); break;
+		case Op_code::copy_to_namespace: object_operation("copy_ns"); break;
 		case Op_code::copy: address_operation("copy"); break;
-		case Op_code::copy_to_namespace: address_operation("copy_ns"); break;
 		case Op_code::add: address_operation("add"); break;
 		case Op_code::fadd: address_operation("fadd"); break;
 		case Op_code::sub: address_operation("sub"); break;

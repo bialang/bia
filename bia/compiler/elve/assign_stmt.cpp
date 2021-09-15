@@ -10,7 +10,7 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 {
 	BIA_EXPECTS(!tokens.empty() && tokens.front().value == Token::Statement_type::assign_statement);
 
-	util::Optional<internal::Variable_base> destination;
+	util::Optional<internal::type::Variable> destination;
 	bool global = false;
 
 	{
@@ -20,13 +20,13 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 		} else {
 			if (tmp.is_type<symbol::Local_variable>()) {
 				destination = tmp.get<symbol::Local_variable>();
-			} else if (tmp.is_type<internal::Global_variable>()) {
-				destination = tmp.get<internal::Global_variable>();
+			} else if (tmp.is_type<internal::type::Variable>()) {
+				destination = tmp.get<internal::type::Variable>();
 				global      = true;
 			} else {
 				param.errors.add_error(error::Code::symbol_not_a_value, tokens.subspan(1, 1));
 			}
-			if (destination.has_value() && !(destination->flags & internal::Variable_base::flag_mutable)) {
+			if (destination.has_value() && !(destination->flags & internal::type::Variable::flag_mutable)) {
 				param.errors.add_error(error::Code::symbol_immutable, tokens.subspan(1, 1));
 			}
 		}
@@ -44,7 +44,7 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 				                       tokens.subspan(+0, tokens.size() - expr.first.size()));
 			} else if (global) {
 				param.instructor.write<bytecode::Op_code::copy_to_namespace>(
-				  bytecode::Size::bit_32, destination->offset, expr.second->offset);
+				  bytecode::Size::bit_32, destination->offset, expr.second->offset, 1);
 			} else {
 				// TODO size
 				param.instructor.write<bytecode::Op_code::copy>(bytecode::Size::bit_32, destination->offset,

@@ -51,7 +51,8 @@ std::pair<Tokens, util::Optional<symbol::Local_variable>>
   member_invocation(Parameter& param, Tokens tokens, util::Optional<symbol::Local_variable> function,
                     Tokens function_tokens);
 std::pair<Tokens, util::Optional<symbol::Local_variable>>
-  member_access(Parameter& param, Tokens tokens, symbol::Local_variable member, Tokens member_tokens);
+  member_access(Parameter& param, Tokens tokens, util::Optional<symbol::Local_variable> member,
+                Tokens member_tokens);
 
 std::pair<Tokens, const internal::type::Definition_base*> type_definition(Parameter& param, Tokens tokens);
 

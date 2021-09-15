@@ -1,2 +1,1 @@
-let x = dynamic(0777, 34)
-print("You returned:", x)
+print(env.PATH, env.SHELL)

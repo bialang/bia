@@ -69,6 +69,20 @@ public:
 	virtual ~Base() = default;
 };
 
+template<typename Type>
+struct Container : Base
+{
+	Type value;
+
+	template<typename Other = Type,
+	         typename       = typename std::enable_if<std::is_default_constructible<Other>::value>::type>
+	Container() noexcept(std::is_nothrow_default_constructible<Other>::value)
+	{}
+	template<typename Other>
+	Container(Other&& other) : value{std::forward<Other>(other)}
+	{}
+};
+
 struct String : Base
 {
 	std::string string;

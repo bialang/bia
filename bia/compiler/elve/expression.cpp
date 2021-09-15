@@ -238,7 +238,7 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 		} // member access
 		else if (optor == Operator::member_access || optor == Operator::nullable_member_access) {
 			util::Optional<symbol::Local_variable> result;
-			std::tie(tokens, result) = member_access(param, tokens, *lhs, lhs_tokens);
+			std::tie(tokens, result) = member_access(param, tokens, lhs, lhs_tokens);
 			if (result) {
 				lhs = result;
 			}

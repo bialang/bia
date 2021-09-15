@@ -4,6 +4,7 @@
 #include "definition.hpp"
 #include "function.hpp"
 #include "integral.hpp"
+#include "object.hpp"
 #include "union.hpp"
 #include "void.hpp"
 

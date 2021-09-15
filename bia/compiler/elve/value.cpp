@@ -95,10 +95,10 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>> identifier_valu
 			param.instructor.write<Op_code::copy>(s, variable->offset + copied, source.offset + copied);
 			copied += size_to_bits(s) / 8;
 		}
-	} else if (identifier.is_type<internal::Global_variable>()) {
-		variable = param.symbols.create_temporary(identifier.get<internal::Global_variable>().definition);
+	} else if (identifier.is_type<internal::type::Variable>()) {
+		variable = param.symbols.create_temporary(identifier.get<internal::type::Variable>().definition);
 		param.instructor.write<bytecode::Op_code::load_from_namespace>(
-		  Size::bit_64, variable->offset, identifier.get<internal::Global_variable>().offset);
+		  Size::bit_64, variable->offset, identifier.get<internal::type::Variable>().offset, 1);
 	} else {
 		param.errors.add_error(error::Code::symbol_not_a_value, tokens.subspan(+0, 1));
 	}

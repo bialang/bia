@@ -17,8 +17,8 @@ namespace bia {
 namespace bytecode {
 
 template<Op_code op_code>
-using is_with_2_operands = std::integral_constant<bool, (op_code >= Op_code::load_from_namespace &&
-                                                         op_code <= Op_code::ugreater_equal_than)>;
+using is_with_2_operands =
+  std::integral_constant<bool, (op_code >= Op_code::copy && op_code <= Op_code::ugreater_equal_than)>;
 
 template<Op_code op_code>
 using is_branch_operation =
@@ -38,12 +38,21 @@ public:
 		util::portable::write(_output, index);
 	}
 	template<Op_code op_code>
-	typename std::enable_if<(op_code == Op_code::get)>::type write(Address destination, Address source,
-	                                                               std::uint32_t index)
+	typename std::enable_if<(op_code == Op_code::load_object)>::type write(std::uint16_t destination,
+	                                                                       Address source)
 	{
 		_write_op_code<op_code>();
 		util::portable::write(_output, destination);
 		util::portable::write(_output, source);
+	}
+	template<Op_code op_code>
+	typename std::enable_if<(op_code == Op_code::load_from_namespace ||
+	                         op_code == Op_code::copy_to_namespace)>::type
+	  write(Size size, Address first, Address second, std::uint16_t index)
+	{
+		_write_op_code<op_code>(size);
+		util::portable::write(_output, first);
+		util::portable::write(_output, second);
 		util::portable::write(_output, index);
 	}
 	template<Op_code op_code>

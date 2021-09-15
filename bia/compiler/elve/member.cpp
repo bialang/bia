@@ -29,7 +29,6 @@ inline Tokens push_arguments(Parameter& param, Tokens tokens,
 
 		// varargs requires a size
 		if (function_definition && function_definition->is_vararg_index(argument_count)) {
-			BIA_LOG(INFO, "Setting vararg to {}", argument_count);
 			arguments_at_vararg = argument_count;
 			pushed.push_back(param.symbols.create_temporary(
 			  param.context.global_namespace().type_system().definition_of<std::ptrdiff_t>()));
@@ -80,7 +79,6 @@ inline Tokens push_arguments(Parameter& param, Tokens tokens,
 
 	// update size of varargs
 	if (vararg_size.has_value()) {
-		BIA_LOG(INFO, "dogin {}", argument_count);
 		const auto pos = param.instructor.output().tellp();
 		param.instructor.output().seekp(vararg_size_pos);
 		param.instructor.write<bytecode::Op_code::store>(
@@ -133,20 +131,31 @@ std::pair<Tokens, util::Optional<symbol::Local_variable>>
 }
 
 std::pair<Tokens, util::Optional<symbol::Local_variable>>
-  member_access(Parameter& param, Tokens tokens, symbol::Local_variable object, Tokens object_tokens)
+  member_access(Parameter& param, Tokens tokens, util::Optional<symbol::Local_variable> object,
+                Tokens object_tokens)
 {
 	BIA_ASSERT(tokens.front().value == Operator::member_access);
-	if (!dynamic_cast<const type::Definition<type::Dynamic_object>*>(object.definition)) {
-		param.errors.add_error(error::Code::not_an_object, object_tokens);
-	} else if (auto member = static_cast<const type::Definition<type::Dynamic_object>*>(object.definition)
-	                           ->get_member(tokens[1].value.get<Token::Identifier>().memory)) {
-		param.symbols.free_temporary(object);
-		auto result = param.symbols.create_temporary(member->definition);
-		// TODO
-		param.instructor.write<Op_code::get>(result.offset, object.offset, member->offset);
-		return { tokens.subspan(2), result };
-	} else {
-		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
+	if (object.has_value()) {
+		if (!dynamic_cast<const type::Definition<type::Dynamic_object>*>(object->definition)) {
+			param.errors.add_error(error::Code::not_an_object, object_tokens);
+		} else {
+			const auto symbol = static_cast<const type::Definition<type::Dynamic_object>*>(object->definition)
+			                      ->get_member(tokens[1].value.get<Token::Identifier>().memory);
+			if (symbol.is_type<internal::type::Variable>()) {
+				const auto variable = symbol.get<internal::type::Variable>();
+				param.symbols.free_temporary(*object);
+				auto result = param.symbols.create_temporary(variable.definition);
+				// TODO
+				param.instructor.write<Op_code::load_object>(0, object->offset);
+				param.instructor.write<Op_code::load_from_namespace>(Size::bit_64, result.offset, variable.offset, 0);
+				return { tokens.subspan(2), result };
+			} else if (symbol.is_type<const type::Definition_base*>()) {
+				// TODO implement this
+				BIA_ASSERT(false);
+			} else {
+				param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
+			}
+		}
 	}
 	return { tokens.subspan(2), {} };
 }

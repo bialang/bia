@@ -24,6 +24,7 @@ template<>
 class Frame<false>
 {
 public:
+	Frame() noexcept = default;
 	Frame(util::Span<util::Byte*> space) noexcept : _space{ space }
 	{
 		BIA_EXPECTS(util::is_aligned(_space.begin(), alignof(std::max_align_t)));
@@ -56,6 +57,10 @@ public:
 		}
 		return Framer::unframe({ position, Framer::size() });
 	}
+	util::Span<util::Byte*> underlying_memory() noexcept
+	{
+		return _space;
+	}
 
 protected:
 	util::Span<util::Byte*> _space;
@@ -65,10 +70,13 @@ template<>
 class Frame<true> : public Frame<false>
 {
 public:
-	Frame(util::Span<util::Byte*> space, gc::GC& gc) noexcept : Frame<false>{ space }, _gc{ gc }
+	Frame() noexcept = default;
+	Frame(util::Span<util::Byte*> space, gc::GC& gc) noexcept : Frame<false>{ space }, _gc{ &gc }
 	{}
 	Frame(Frame& parent, std::size_t offset) : Frame<false>{ parent, offset }, _gc{ parent._gc }
 	{}
+	Frame(const Frame& copy) noexcept = default;
+	~Frame() noexcept                 = default;
 	template<typename Type>
 	std::size_t store(std::int32_t offset, const Type& value)
 	{
@@ -81,12 +89,22 @@ public:
 		} else if (position < _space.begin() || position + Framer::size() > _space.end()) {
 			BIA_THROW(error::Code::out_of_stack);
 		}
-		Framer::frame(_gc, { position, Framer::size() }, value);
+		Framer::frame(*_gc, { position, Framer::size() }, value);
 		return Framer::size();
+	}
+	gc::GC& gc() noexcept
+	{
+		return *_gc;
+	}
+	Frame& operator=(const Frame& copy) noexcept
+	{
+		Frame<false>::operator=(copy);
+		_gc                   = copy._gc;
+		return *this;
 	}
 
 private:
-	gc::GC& _gc;
+	gc::GC* _gc = nullptr;
 };
 
 } // namespace memory

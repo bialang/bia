@@ -13,12 +13,13 @@ enum class Op_code : std::uint8_t
 	store,
 
 	load_resource,
-	
-	get,
+
+	load_object,
 
 	load_from_namespace,
-	copy,
 	copy_to_namespace,
+
+	copy,
 	add,
 	fadd,
 	sub,
