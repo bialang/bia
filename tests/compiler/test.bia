@@ -1,2 +1,3 @@
 import io
-io.print("hi")
+import sys
+io.print("hi", sys.int_size)

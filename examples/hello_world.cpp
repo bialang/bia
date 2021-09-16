@@ -31,16 +31,22 @@ int main(int argc, char** argv)
 	args.variable("program", std::string{ argv[0] });
 	args.finish();
 
-	auto sys = engine.module("sys");
-	sys.function("exit", &std::exit);
-	sys.finish();
+	// auto sys = engine.module("sys");
+	// sys.function("exit", &std::exit);
+	// sys.finish();
+
+	engine.use_bsl();
 
 	std::stringstream code;
 	code << u8R"(
 
-		let input = read()
-		append(input, args.program)
-		print(input, args.count)
+		// let input = read()
+		// append(input, args.program)
+		// print(input, args.count)
+		import io
+		import sys
+		import math
+		io.print("hi", "ich", 34, sys.int_size, math.pi)
 
 	)";
 	engine.run(code);

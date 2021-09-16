@@ -69,3 +69,19 @@ void Engine::run(std::istream& code)
 	// _gc.unregister_stack(stack);
 	_gc.run();
 }
+
+void Engine::use_bsl()
+{
+	make_available("io", bsl::io);
+	make_available("sys", bsl::sys);
+	make_available("os", bsl::os);
+	make_available("math", bsl::math);
+}
+
+void Engine::make_available(std::string name, bsl::Module_definition definition)
+{
+	BIA_EXPECTS(static_cast<bool>(definition));
+	auto builder = module(std::move(name));
+	definition(*builder._typed_object);
+	builder.finish();
+}

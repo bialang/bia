@@ -61,9 +61,17 @@ public:
 		if (n == 0) {
 			const auto ptr = static_cast<const Definition*>(other.get());
 			n              = util::compare(_members.size(), ptr->_members.size());
-			for (auto it = _members.begin(); n == 0 && it != _members.end(); ++it) {
-				// TODO implement this
-				BIA_ASSERT(false);
+			for (auto it = _members.begin(), jt = ptr->_members.begin(); n == 0 && it != _members.end();
+			     ++it, ++jt) {
+				if ((n = internal::compare(it->first, jt->first)) == 0) {
+					if ((n = util::compare(it->second.index(), jt->second.index())) == 0) {
+						if (it->second.is_type<Variable>()) {
+							n = it->second.get<Variable>().definition->compare(jt->second.get<Variable>().definition);
+						} else if (it->second.is_type<const Definition_base*>()) {
+							n = it->second.get<const Definition_base*>()->compare(jt->second.get<const Definition_base*>());
+						}
+					}
+				}
 			}
 		}
 		return n;

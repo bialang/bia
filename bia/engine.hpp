@@ -7,6 +7,7 @@
 
 #include <istream>
 #include <memory>
+#include <bia/bsl/modules.hpp>
 #include <string>
 #include <utility>
 
@@ -22,6 +23,8 @@ public:
 	internal::Context& context() noexcept;
 	/// Compiles and runs the given Bia code.
 	void run(std::istream& code);
+	void use_bsl();
+	void make_available(std::string name, bsl::Module_definition definition);
 	using Object_builder_base::module;
 
 private:

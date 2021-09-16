@@ -36,6 +36,7 @@ public:
 	Object_builder object(const std::string& name, bool immutable = true);
 
 protected:
+	friend Engine;
 	typedef std::shared_ptr<internal::Typed_object> Pointer;
 
 	Engine* _engine;

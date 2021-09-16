@@ -1,5 +1,6 @@
 //#define CATCH_CONFIG_MAIN
 
+#include <bia/bsl/modules.hpp>
 #include <bia/bvm/bvm.hpp>
 #include <bia/bytecode/disassembler.hpp>
 #include <bia/compiler/compiler.hpp>
@@ -62,22 +63,6 @@ inline void print_error(const std::vector<util::Span<const char*>>& lines, const
 		std::cerr << '~';
 	}
 	std::cerr << std::endl;
-}
-
-template<std::size_t Index, typename Variant>
-inline void do_print(const Variant& value)
-{
-	std::cout << "<empty>";
-}
-
-template<std::size_t Index, typename, typename... Others, typename Variant>
-inline void do_print(const Variant& value)
-{
-	if (value.index() == Index) {
-		std::cout << value.template get<Index>();
-	} else {
-		do_print<Index + 1, Others...>(value);
-	}
 }
 
 // TEST_CASE("simple compiling", "[compiler]")
@@ -151,38 +136,20 @@ try {
 
 	{
 		internal::Typed_object io{ context.global_namespace().type_system(), gc };
-		io.put_invokable(
-		  util::from_cstring("print_vector"), +[](const std::vector<std::string>& ss) {
-			  for (const auto& s : ss) {
-				  std::cout << s << " ";
-			  }
-			  std::cout << "\n";
-		  });
-		io.put_invokable(
-		  util::from_cstring("read_three"), +[] {
-			  std::string s;
-			  std::vector<std::string> ss;
-			  for (int i = 0; i < 3; ++i) {
-				  std::getline(std::cin, s);
-				  ss.push_back(s);
-			  }
-			  return ss;
-		  });
-		io.put_invokable(
-		  util::from_cstring("print"),
-		  [](member::function::Varargs<
-		     util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
-		                   std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>>
-		       args) {
-			  BIA_LOG(DEBUG, "Trying to print {} arguments", args.size());
-			  for (std::size_t i = 0; i < args.size(); ++i) {
-				  do_print<0, bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
-				           std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>(args.at(i));
-				  std::cout << " ";
-			  }
-			  std::cout << "\n";
-		  });
+		bsl::io(io);
 		context.global_namespace().put_import(util::from_cstring("io"), std::move(io));
+	}
+
+	{
+		internal::Typed_object sys{ context.global_namespace().type_system(), gc };
+		bsl::sys(sys);
+		context.global_namespace().put_import(util::from_cstring("sys"), std::move(sys));
+	}
+
+	{
+		internal::Typed_object os{ context.global_namespace().type_system(), gc };
+		bsl::os(os);
+		context.global_namespace().put_import(util::from_cstring("os"), std::move(os));
 	}
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
