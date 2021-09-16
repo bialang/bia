@@ -18,12 +18,14 @@ The roadmap for this project can be found on [Trello](https://trello.com/b/PFVmL
 ## Embedded Example
 
 ``` cpp
+#include <bia/engine.hpp>
+
 // create a simple engine with the default settings and allocator
-bia::engine engine;
+bia::Engine engine;
 
 // register a function and the io module
-engine.function("hello_world", +[] { std::cout << "Hello, World - C++\n"; });
-engine.module<bia::bsl::io>("io", engine.gc());
+engine.function("hello_world", [] { std::cout << "Hello, World - C++\n"; });
+engine.use_bsl();
 
 // bia script
 std::stringstream code;
