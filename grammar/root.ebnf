@@ -7,7 +7,7 @@ scope_stmt ::= "scope" batch
 
 return_stmt ::= "return" multi_expression?
 yield_stmt ::= "yield" multi_expression?
-import_stmt ::= "import" string ("as" identifier)?
+import_stmt ::= "import" (identifier ("as" identifier)? | string "as" identifier)
 flow_ctrl_stmt ::= ("break" | "continue") identifier?
 defer_stmt ::= "defer" (single_expression | batch)
 

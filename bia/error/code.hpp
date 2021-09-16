@@ -41,6 +41,7 @@ enum class Code
 	expected_return,
 	expected_yield,
 	expected_defer,
+	expected_as,
 	expected_flow_control,
 	expected_type_declaration,
 	expected_type_definition,
@@ -90,6 +91,7 @@ enum class Code
 	symbol_defined_in_different_scope,
 	number_overflow,
 	number_underflow,
+	undefined_module,
 
 	// bvm errors
 	bad_opcode = 200,
@@ -197,6 +199,10 @@ inline const std::error_category& code_category() noexcept
 			case Code::not_an_object: return "not an object";
 			case Code::unsupported_operator: return "unsupported operator";
 			case Code::symbol_defined_in_different_scope: return "symbol was defined in different scope";
+			case Code::number_overflow: return "number overflow";
+			case Code::number_underflow: return "number underflow";
+			case Code::undefined_module: return "module is undefined";
+
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:

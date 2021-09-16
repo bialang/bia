@@ -96,43 +96,13 @@ try {
 	// define user defined types
 	context.global_namespace().put_invokable(util::from_cstring("hello_world"),
 	                                         static_cast<void (*)()>([] { puts("Hello, world!"); }));
-	context.global_namespace().put_invokable(
-	  util::from_cstring("print"),
-	  [](member::function::Varargs<
-	     util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
-	                   std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>>
-	       args) {
-		  BIA_LOG(DEBUG, "Trying to print {} arguments", args.size());
-		  for (std::size_t i = 0; i < args.size(); ++i) {
-			  do_print<0, bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t, std::uint32_t,
-			           std::int64_t, std::uint64_t, float, double, std::string>(args.at(i));
-			  std::cout << " ";
-		  }
-		  std::cout << "\n";
-	  });
 	context.global_namespace().put_invokable(util::from_cstring("to_string"),
 	                                         [](std::ptrdiff_t value) { return std::to_string(value); });
 	context.global_namespace().put_invokable(util::from_cstring("fto_string"),
 	                                         [](double value) { return std::to_string(value); });
 	context.global_namespace().put_invokable(
 	  util::from_cstring("compare"), [](const std::string& a, const std::string& b) { return a.compare(b); });
-	context.global_namespace().put_invokable(
-	  util::from_cstring("print_vector"), +[](const std::vector<std::string>& ss) {
-		  for (const auto& s : ss) {
-			  std::cout << s << " ";
-		  }
-		  std::cout << "\n";
-	  });
-	context.global_namespace().put_invokable(
-	  util::from_cstring("read_three"), +[] {
-		  std::string s;
-		  std::vector<std::string> ss;
-		  for (int i = 0; i < 3; ++i) {
-			  std::getline(std::cin, s);
-			  ss.push_back(s);
-		  }
-		  return ss;
-	  });
+
 	context.global_namespace().put_invokable(
 	  util::from_cstring("test"), +[](bool value) { std::cout << (value ? "true" : "false") << "\n"; });
 	context.global_namespace().put_value(util::from_cstring("file"), std::string{ __FILE__ }, false);
@@ -178,6 +148,42 @@ try {
 		  context.set_return(61);
 	  },
 	  signature);
+
+	{
+		internal::Typed_object io{ context.global_namespace().type_system(), gc };
+		io.put_invokable(
+		  util::from_cstring("print_vector"), +[](const std::vector<std::string>& ss) {
+			  for (const auto& s : ss) {
+				  std::cout << s << " ";
+			  }
+			  std::cout << "\n";
+		  });
+		io.put_invokable(
+		  util::from_cstring("read_three"), +[] {
+			  std::string s;
+			  std::vector<std::string> ss;
+			  for (int i = 0; i < 3; ++i) {
+				  std::getline(std::cin, s);
+				  ss.push_back(s);
+			  }
+			  return ss;
+		  });
+		io.put_invokable(
+		  util::from_cstring("print"),
+		  [](member::function::Varargs<
+		     util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
+		                   std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>>
+		       args) {
+			  BIA_LOG(DEBUG, "Trying to print {} arguments", args.size());
+			  for (std::size_t i = 0; i < args.size(); ++i) {
+				  do_print<0, bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
+				           std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>(args.at(i));
+				  std::cout << " ";
+			  }
+			  std::cout << "\n";
+		  });
+		context.global_namespace().put_import(util::from_cstring("io"), std::move(io));
+	}
 
 	compiler::Compiler compiler{ allocator, output, resource_output, context };
 	auto encoder = string::encoding::get_encoder(string::encoding::Standard::utf_8);

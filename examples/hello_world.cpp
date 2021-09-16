@@ -31,6 +31,10 @@ int main(int argc, char** argv)
 	args.variable("program", std::string{ argv[0] });
 	args.finish();
 
+	auto sys = engine.module("sys");
+	sys.function("exit", &std::exit);
+	sys.finish();
+
 	std::stringstream code;
 	code << u8R"(
 

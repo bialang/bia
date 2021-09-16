@@ -58,9 +58,9 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			break;
 		}
 		case Op_code::load_object: {
-			const auto destination = ip.read<std::uint16_t>();
-			const auto source      = ip.read<Address>();
-			namespaces[0] = frame.load<memory::gc::GC_able<member::Object*>>(source)->frame();
+			const auto destination  = ip.read<std::uint16_t>();
+			const auto source       = ip.read<Address>();
+			namespaces[destination] = frame.load<memory::gc::GC_able<member::Object*>>(source)->frame();
 			break;
 		}
 		case Op_code::load_from_namespace: {

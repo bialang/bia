@@ -58,20 +58,28 @@ public:
 		_symbols.insert(std::make_pair(util::from_cstring("float64"), _type_system.definition_of<double>()));
 
 		_symbols.insert(std::make_pair(util::from_cstring("string"), _type_system.definition_of<std::string>()));
-
-		// Global_variable variable{};
-		// auto obj        = _gc.create<member::Object>(_gc, 16);
-		// variable.offset = store(obj);
-		// obj->frame().store(0, std::ptrdiff_t{ 61 });
-		// type::Definition<type::Dynamic_object>::Map map;
-		// type::Member mem{};
-		// mem.definition = _type_system.definition_of<std::ptrdiff_t>();
-		// mem.offset     = 0;
-		// map.insert({ util::from_cstring("value"), mem });
-		// variable.definition =
-		//   _type_system.register_definition(type::Definition<type::Dynamic_object>{ std::move(map) });
-		// _symbols.insert({ util::from_cstring("obj"), variable });
 	}
+	void put_import(String_key name, Typed_object object)
+	{
+		if (_modules.find(name) != _modules.end()) {
+			// TODO change error code
+			BIA_THROW(error::Code::symbol_already_declared);
+		}
+
+		type::Variable variable{};
+		auto tmp            = finish_typed_object(std::move(object));
+		variable.offset     = store(_gc.create<member::Object>(std::move(tmp.first)));
+		variable.definition = tmp.second;
+		_modules.insert({ std::move(name), variable });
+	}
+	util::Optional<type::Variable> get_module(const String_key& name) const noexcept
+	{
+		const auto it = _modules.find(name);
+		return it == _modules.end() ? util::Optional<type::Variable>{} : it->second;
+	}
+
+private:
+	std::map<String_key, type::Variable> _modules;
 };
 
 } // namespace internal

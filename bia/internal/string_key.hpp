@@ -77,4 +77,17 @@ inline std::ostream& operator<<(std::ostream& output, const String_key& key)
 } // namespace internal
 } // namespace bia
 
+namespace std {
+
+template<>
+struct less<bia::internal::String_key>
+{
+	bool operator()(const bia::internal::String_key& left, const bia::internal::String_key& right) const
+	{
+		return bia::internal::compare(left, right) < 0;
+	}
+};
+
+} // namespace std
+
 #endif

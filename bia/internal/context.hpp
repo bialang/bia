@@ -2,10 +2,12 @@
 #define BIA_INTERNAL_CONTEXT_HPP_
 
 #include "namespace.hpp"
+#include "string_key.hpp"
 #include "type/function.hpp"
 #include "type/string.hpp"
 #include "type/system.hpp"
 #include "type/void.hpp"
+#include "typed_object.hpp"
 
 #include <bia/error/exception.hpp>
 #include <bia/member/function/static.hpp>

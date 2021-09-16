@@ -104,6 +104,12 @@ public:
 	{
 		return _gc;
 	}
+	friend std::pair<member::Object, const type::Definition_base*> finish_typed_object(Typed_object&& object)
+	{
+		const auto definition = object._type_system.register_definition(
+		  internal::type::Definition<internal::type::Dynamic_object>{ std::move(object._symbols) });
+		return { std::move(object), definition };
+	}
 
 protected:
 	internal::type::System& _type_system;

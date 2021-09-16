@@ -42,6 +42,7 @@ protected:
 	Pointer _typed_object;
 
 	Object_builder_base(Engine* engine, Pointer typed_object) noexcept;
+	Object_builder module(const std::string& name);
 };
 
 class Object_builder : public Object_builder_base
@@ -53,10 +54,11 @@ private:
 	friend Object_builder_base;
 
 	std::string _name;
+	bool _module;
 	bool _immutable;
 	Pointer _parent;
 
-	Object_builder(Engine* engine, Pointer typed_object, std::string name, bool immutable,
+	Object_builder(Engine* engine, Pointer typed_object, std::string name, bool module, bool immutable,
 	               Pointer parent) noexcept;
 };
 

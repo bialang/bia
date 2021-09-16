@@ -22,6 +22,7 @@ public:
 	internal::Context& context() noexcept;
 	/// Compiles and runs the given Bia code.
 	void run(std::istream& code);
+	using Object_builder_base::module;
 
 private:
 	memory::gc::GC _gc;
