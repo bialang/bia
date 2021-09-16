@@ -2,8 +2,10 @@
 #define BIA_INTERNAL_TYPE_FRAMER_HPP_
 
 #include <bia/memory/gc/gc.hpp>
+#include <bia/memory/gc/types.hpp>
 #include <bia/util/algorithm.hpp>
 #include <bia/util/gsl.hpp>
+#include <bia/util/type_traits/is_variant.hpp>
 #include <bia/util/variant.hpp>
 #include <cstddef>
 #include <cstdint>
@@ -44,28 +46,28 @@ struct Framer<Type, typename std::enable_if<std::is_trivial<Type>::value>::type>
 
 template<typename Type>
 struct Framer<
-  Type, typename std::enable_if<std::is_same<typename std::decay<Type>::type, std::string>::value>::type>
+  Type, typename std::enable_if<!std::is_trivial<typename std::decay<Type>::type>::value &&
+                                !util::type_traits::Is_variant<typename std::decay<Type>::type>::value>::type>
 {
+	typedef typename std::decay<Type>::type Value;
+	typedef memory::gc::Container<Value> Container;
+	typedef memory::gc::GC_able<Container*> Pointer;
+
 	constexpr static std::size_t size() noexcept
 	{
-		return sizeof(memory::gc::GC_able<memory::gc::String*>);
+		return Framer<Pointer>::size();
 	}
 	constexpr static std::size_t alignment() noexcept
 	{
-		return alignof(memory::gc::GC_able<memory::gc::String*>);
+		return Framer<Pointer>::alignment();
 	}
-	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, std::string value)
+	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, Value value)
 	{
-		BIA_EXPECTS(buffer.size_bytes() == size());
-		BIA_EXPECTS(util::is_aligned(buffer.data(), alignment()));
-		*reinterpret_cast<memory::gc::GC_able<memory::gc::String*>*>(buffer.data()) =
-		  gc.create<memory::gc::String>(std::move(value));
+		Framer<Pointer>::frame(gc, buffer, gc.create<Container>(std::move(value)));
 	}
-	static const std::string& unframe(util::Span<const util::Byte*> buffer)
+	static Value& unframe(util::Span<const util::Byte*> buffer)
 	{
-		BIA_EXPECTS(buffer.size_bytes() == size());
-		BIA_EXPECTS(util::is_aligned(buffer.data(), alignment()));
-		return (*reinterpret_cast<const memory::gc::GC_able<memory::gc::String*>*>(buffer.data()))->string;
+		return Framer<Pointer>::unframe(buffer)->value;
 	}
 };
 

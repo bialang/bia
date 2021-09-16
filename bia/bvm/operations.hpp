@@ -110,12 +110,12 @@ struct Equality
 	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
 	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return left->string == right->string;
+		return left->value == right->value;
 	}
 	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
 	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return std::regex_match(right->string, left->pattern);
+		return std::regex_match(right->value, left->value);
 	}
 };
 
@@ -130,12 +130,12 @@ struct Inequality
 	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
 	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return left->string != right->string;
+		return left->value != right->value;
 	}
 	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
 	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return !std::regex_match(right->string, left->pattern);
+		return !std::regex_match(right->value, left->value);
 	}
 };
 
@@ -184,12 +184,12 @@ struct Inside_of
 	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
 	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return right->string.find(left->string) != std::string::npos;
+		return right->value.find(left->value) != std::string::npos;
 	}
 	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
 	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
 	{
-		return std::regex_search(right->string, left->pattern);
+		return std::regex_search(right->value, left->value);
 	}
 };
 

@@ -24,44 +24,6 @@ extern char** environ;
 
 using namespace bia;
 
-struct Vector : bia::memory::gc::Base
-{
-	std::vector<std::string> value;
-
-	Vector(std::vector<std::string>&& value) noexcept : value{ std::move(value) }
-	{}
-};
-
-namespace bia {
-namespace internal {
-namespace type {
-
-template<typename Type>
-struct Framer<Type, typename std::enable_if<
-                      std::is_same<typename std::decay<Type>::type, std::vector<std::string>>::value>::type>
-{
-	constexpr static std::size_t size() noexcept
-	{
-		return sizeof(memory::gc::GC_able<Vector*>);
-	}
-	constexpr static std::size_t alignment() noexcept
-	{
-		return alignof(memory::gc::GC_able<Vector*>);
-	}
-	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, std::vector<std::string> value)
-	{
-		*reinterpret_cast<memory::gc::GC_able<Vector*>*>(buffer.data()) = gc.create<Vector>(std::move(value));
-	}
-	static const std::vector<std::string>& unframe(util::Span<const util::Byte*> buffer)
-	{
-		return (*reinterpret_cast<const memory::gc::GC_able<Vector*>*>(buffer.data()))->value;
-	}
-};
-
-} // namespace type
-} // namespace internal
-} // namespace bia
-
 #define IN_FILE "../../tests/compiler/test.bia"
 
 inline std::vector<util::Span<const char*>> split_lines(const std::string& code)

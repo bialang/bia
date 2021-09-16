@@ -96,12 +96,7 @@ public:
 	{
 		return *_gc;
 	}
-	Frame& operator=(const Frame& copy) noexcept
-	{
-		Frame<false>::operator=(copy);
-		_gc                   = copy._gc;
-		return *this;
-	}
+	Frame& operator=(const Frame& copy) noexcept = default;
 
 private:
 	gc::GC* _gc = nullptr;

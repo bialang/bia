@@ -10,11 +10,11 @@ namespace util {
 namespace type_traits {
 
 template<typename Type>
-struct is_variant : std::false_type
+struct Is_variant : std::false_type
 {};
 
 template<typename... Types>
-struct is_variant<Variant<Types...>> : std::true_type
+struct Is_variant<Variant<Types...>> : std::true_type
 {};
 
 } // namespace type_traits

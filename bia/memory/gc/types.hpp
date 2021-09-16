@@ -83,21 +83,8 @@ struct Container : Base
 	{}
 };
 
-struct String : Base
-{
-	std::string string;
-
-	String(std::string&& string) noexcept : string{ std::move(string) }
-	{}
-};
-
-struct Regex : Base
-{
-	std::regex pattern;
-
-	Regex(std::regex&& pattern) noexcept : pattern{ std::move(pattern) }
-	{}
-};
+typedef Container<std::string> String;
+typedef Container<std::regex> Regex;
 
 } // namespace gc
 } // namespace memory

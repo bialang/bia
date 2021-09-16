@@ -3,36 +3,6 @@
 #include <sstream>
 #include <vector>
 
-typedef bia::memory::gc::Container<std::vector<std::string>> Vector;
-typedef bia::memory::gc::GC_able<Vector*> Pointer;
-
-namespace bia {
-
-template<typename Type>
-struct internal::type::Framer<
-  Type, typename std::enable_if<
-          std::is_same<typename std::decay<Type>::type, std::vector<std::string>>::value>::type>
-{
-	constexpr static std::size_t size() noexcept
-	{
-		return Framer<Pointer>::size();
-	}
-	constexpr static std::size_t alignment() noexcept
-	{
-		return Framer<Pointer>::alignment();
-	}
-	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, std::vector<std::string> value)
-	{
-		Framer<Pointer>::frame(gc, buffer, gc.create<Vector>(std::move(value)));
-	}
-	static std::vector<std::string>& unframe(util::Span<const util::Byte*> buffer)
-	{
-		return Framer<Pointer>::unframe(buffer)->value;
-	}
-};
-
-} // namespace bia
-
 int main(int argc, char** argv)
 {
 	bia::Engine engine;

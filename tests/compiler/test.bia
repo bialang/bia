@@ -1,1 +1,3 @@
+hello_world()
+print("hi")
 print(env.PATH, env.SHELL)

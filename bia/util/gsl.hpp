@@ -111,17 +111,17 @@ public:
 		_data = nullptr;
 		_size = 0;
 	}
-	Span(Iterable begin, size_type count)
+	Span(Iterable begin, size_type count) noexcept
 	{
 		_data = begin;
 		_size = count;
 	}
-	Span(Iterable begin, Iterable end)
+	Span(Iterable begin, Iterable end) noexcept
 	{
 		_data = begin;
 		_size = std::distance(begin, end);
 	}
-	Span(const Span& copy) = default;
+	Span(const Span& copy) noexcept = default;
 	bool empty() const noexcept
 	{
 		return !_size;
@@ -134,11 +134,11 @@ public:
 	{
 		return _size * sizeof(value_type);
 	}
-	Iterable begin() const
+	Iterable begin() const noexcept
 	{
 		return _data;
 	}
-	Iterable end() const
+	Iterable end() const noexcept
 	{
 		return _data + _size;
 	}
@@ -178,11 +178,11 @@ public:
 		}
 		return _data[index];
 	}
-	reference operator[](size_type index) const
+	reference operator[](size_type index) const noexcept
 	{
 		return _data[index];
 	}
-	Span& operator=(const Span& copy) = default;
+	Span& operator=(const Span& copy) noexcept = default;
 	bool operator==(Iterable other) const noexcept
 	{
 		return _data == other;
@@ -199,7 +199,7 @@ private:
 
 /// Creates a span from the constant string. The span includes the terminating zero character.
 template<std::size_t N>
-inline Span<const char*> from_cstring(const char (&string)[N])
+inline Span<const char*> from_cstring(const char (&string)[N]) noexcept
 {
 	return { string, N };
 }
