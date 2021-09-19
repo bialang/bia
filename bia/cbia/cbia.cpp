@@ -1,127 +1,174 @@
-#include <bia/bvm/bvm.hpp>
 #include <bia/cbia.h>
-#include <bia/compiler/compiler.hpp>
-#include <bia/internal/context.hpp>
-#include <bia/memory/frame.hpp>
-#include <bia/memory/gc/gc.hpp>
-#include <bia/memory/simple_allocator.hpp>
-#include <bia/memory/stack.hpp>
-#include <bia/string/encoding/encoder.hpp>
-#include <bia/tokenizer/bia_lexer.hpp>
-#include <bia/util/finally.hpp>
-#include <bia/util/memory_streambuf.hpp>
-#include <istream>
+#include <bia/engine.hpp>
 #include <sstream>
-#include <typeinfo>
 
 using namespace bia;
 
-struct Bytecode
-{
-	std::string instructions;
-	std::string resources;
-};
-
-bia_context_t bia_context_new()
+bia_engine_t bia_engine_new()
 try {
-	return new internal::Context{ *new memory::gc::GC{ std::make_shared<memory::Simple_allocator>() } };
+	return new Engine{};
 } catch (...) {
 	return nullptr;
 }
 
-void bia_context_free(bia_context_t context)
+void bia_engine_free(bia_engine_t engine)
 try {
-	const auto ctx = static_cast<internal::Context*>(context);
-	const auto gc  = &ctx->global_namespace().gc();
-	delete ctx;
-	delete gc;
+	delete static_cast<Engine*>(engine);
 } catch (...) {
 }
 
-int bia_context_put_function(bia_context_t context, const char* name, bia_signature_t signature,
-                             bia_function_t function, void* argument, bool immutable)
+int bia_engine_put_function(bia_engine_t engine, const char* name, bia_signature_t signature,
+                            bia_function_t function, void* argument, bool immutable)
 try {
-	static_cast<internal::Context*>(context)->global_namespace().put_invokable(
-	  std::string{ name }, [function, argument] { function(argument); }, immutable);
+	static_cast<Engine*>(engine)->function(
+	  name, [function, argument](member::function::Context& context) { function(&context, argument); },
+	  *static_cast<member::function::Signature*>(signature), immutable);
 	return BIA_OK;
 } catch (...) {
 	return -1;
 }
 
-bia_definition_t bia_standard_definition(bia_standard_definition_t type)
-{
-	switch (type) {
-	case BIA_DEF_VOID: return &typeid(void);
-	case BIA_DEF_CHAR: return &typeid(char);
-	case BIA_DEF_UNSIGNED_CHAR: return &typeid(unsigned char);
-	case BIA_DEF_SIGNED_CHAR: return &typeid(signed char);
-	case BIA_DEF_SHORT_INT: return &typeid(short int);
-	case BIA_DEF_UNSIGNED_SHORT_INT: return &typeid(unsigned short int);
-	case BIA_DEF_INT: return &typeid(int);
-	case BIA_DEF_UNSIGNED_INT: return &typeid(unsigned int);
-	case BIA_DEF_LONG_INT: return &typeid(long int);
-	case BIA_DEF_UNSIGNED_LONG_INT: return &typeid(unsigned long int);
-	case BIA_DEF_LONG_LONG_INT: return &typeid(long long int);
-	case BIA_DEF_UNSIGNED_LONG_LONG_INT: return &typeid(unsigned long long int);
-	case BIA_DEF_FLOAT: return &typeid(float);
-	case BIA_DEF_DOUBLE: return &typeid(double);
-	case BIA_DEF_LONG_DOUBLE: return &typeid(long double);
-	}
-	return nullptr;
-}
-
-bia_err_t bia_compile(bia_context_t context, bia_bytecode_t* out, const char* code, size_t size)
+template<typename Type>
+inline int function_context_get(bia_function_context_t context, size_t index, Type* out)
 try {
-	const auto ctx = static_cast<internal::Context*>(context);
-	std::stringstream instructions;
-	std::stringstream resources;
-	tokenizer::Bia_lexer lexer{ ctx->global_namespace().gc().allocator() };
-	compiler::Compiler compiler{ ctx->global_namespace().gc().allocator(), instructions, resources, *ctx };
-	util::Memory_streambuf code_buffer{ { reinterpret_cast<const util::Byte*>(code), size } };
-	std::istream input{ &code_buffer };
-	auto encoder      = string::encoding::get_encoder(string::encoding::Standard::utf_8);
-	auto free_encoder = util::finallay([&] { string::encoding::free_encoder(encoder); });
-	tokenizer::Reader reader{ input, *encoder };
-
-	lexer.lex(reader, compiler);
-
-	if (compiler.errors().size()) {
-		return BIA_ERR_UNKNOWN;
-	}
-
-	*out = new Bytecode{ instructions.str(), resources.str() };
-
+	*out = static_cast<member::function::Context*>(context)->get_argument<Type>(index);
 	return BIA_OK;
 } catch (...) {
 	return BIA_ERR_UNKNOWN;
 }
 
-void bia_bytecode_free(bia_bytecode_t bytecode)
-try {
-	delete static_cast<Bytecode*>(bytecode);
-} catch (...) {
+int bia_function_context_get_char(bia_function_context_t context, size_t index, char* out)
+{
+	return function_context_get(context, index, out);
 }
 
-bia_err_t bia_run(bia_context_t context, bia_bytecode_t bytecode)
+int bia_function_context_get_uchar(bia_function_context_t context, size_t index, unsigned char* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_schar(bia_function_context_t context, size_t index, signed char* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_short(bia_function_context_t context, size_t index, short int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_ushort(bia_function_context_t context, size_t index, unsigned short int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_int(bia_function_context_t context, size_t index, int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_uint(bia_function_context_t context, size_t index, unsigned int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_long(bia_function_context_t context, size_t index, long int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_ulong(bia_function_context_t context, size_t index, unsigned long int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_llong(bia_function_context_t context, size_t index, long long int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_ullong(bia_function_context_t context, size_t index, unsigned long long int* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_float(bia_function_context_t context, size_t index, float* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_double(bia_function_context_t context, size_t index, double* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_long_double(bia_function_context_t context, size_t index, long double* out)
+{
+	return function_context_get(context, index, out);
+}
+
+int bia_function_context_get_string(bia_function_context_t context, size_t index, char** out)
 try {
-	const auto ctx   = static_cast<internal::Context*>(context);
-	const auto bcode = static_cast<Bytecode*>(bytecode);
+	const auto str = static_cast<member::function::Context*>(context)->get_argument<std::string>(index);
+	*out           = static_cast<char*>(std::malloc(str.size() + 1));
+	std::memcpy(*out, str.c_str(), str.size() + 1);
+	return BIA_OK;
+} catch (...) {
+	return BIA_ERR_UNKNOWN;
+}
 
-	memory::Stack stack{ ctx->global_namespace().gc().allocator(), 1024 };
-	memory::Frame<true> frame{ stack._memory, ctx->global_namespace().gc() };
-	auto resources = resource::deserialize(
-	  { reinterpret_cast<const util::Byte*>(bcode->resources.data()), bcode->resources.size() },
-	  ctx->global_namespace().gc());
+bia_definition_t bia_standard_definition(bia_engine_t engine, bia_standard_definition_t type)
+try {
+	auto& type_system = static_cast<Engine*>(engine)->context().global_namespace().type_system();
+	switch (type) {
+	case BIA_DEF_VOID: return type_system.definition_of<void>();
+	case BIA_DEF_CHAR: return type_system.definition_of<char>();
+	case BIA_DEF_UNSIGNED_CHAR: return type_system.definition_of<unsigned char>();
+	case BIA_DEF_SIGNED_CHAR: return type_system.definition_of<signed char>();
+	case BIA_DEF_SHORT_INT: return type_system.definition_of<short int>();
+	case BIA_DEF_UNSIGNED_SHORT_INT: return type_system.definition_of<unsigned short int>();
+	case BIA_DEF_INT: return type_system.definition_of<int>();
+	case BIA_DEF_UNSIGNED_INT: return type_system.definition_of<unsigned int>();
+	case BIA_DEF_LONG_INT: return type_system.definition_of<long int>();
+	case BIA_DEF_UNSIGNED_LONG_INT: return type_system.definition_of<unsigned long int>();
+	case BIA_DEF_LONG_LONG_INT: return type_system.definition_of<long long int>();
+	case BIA_DEF_UNSIGNED_LONG_LONG_INT: return type_system.definition_of<unsigned long long int>();
+	case BIA_DEF_FLOAT: return type_system.definition_of<float>();
+	case BIA_DEF_DOUBLE: return type_system.definition_of<double>();
+	case BIA_DEF_LONG_DOUBLE: return type_system.definition_of<long double>();
+	case BIA_DEF_STRING: return type_system.definition_of<std::string>();
+	}
+	return nullptr;
+} catch (...) {
+	return nullptr;
+}
 
-	// ctx->global_namespace().gc().register_stack(stack);
+bia_signature_t bia_signature_new(bia_definition_t return_definition, bia_definition_t vararg_definition)
+try {
+	const auto ptr =
+	  new member::function::Signature{ static_cast<const internal::type::Definition_base*>(return_definition) };
+	if (vararg_definition) {
+		ptr->vararg_definition.emplace(static_cast<const internal::type::Definition_base*>(vararg_definition));
+	}
+	return ptr;
+} catch (...) {
+	return nullptr;
+}
 
-	bvm::execute(
-	  { reinterpret_cast<const util::Byte*>(bcode->instructions.data()), bcode->instructions.size() }, frame,
-	  resources, *ctx);
+int bia_signature_push_argument(bia_signature_t signature, bia_definition_t definition)
+try {
+	static_cast<member::function::Signature*>(signature)->argument_definitions.push_back(
+	  { static_cast<const internal::type::Definition_base*>(definition) });
+	return BIA_OK;
+} catch (...) {
+	return BIA_ERR_UNKNOWN;
+}
 
-	// ctx->global_namespace().gc().unregister_stack(stack);
-	ctx->global_namespace().gc().run();
-
+bia_err_t bia_run(bia_engine_t engine, const char* code, size_t size)
+try {
+	std::stringstream ss;
+	ss.write(code, size);
+	static_cast<Engine*>(engine)->run(ss);
 	return BIA_OK;
 } catch (...) {
 	return BIA_ERR_UNKNOWN;

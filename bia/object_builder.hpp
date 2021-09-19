@@ -28,6 +28,11 @@ public:
 	{
 		_typed_object->put_invokable(name, std::forward<Invokable>(invokable), immutable);
 	}
+	void function(const std::string& name, member::function::Dynamic_invokable invokable,
+	              member::function::Signature signature, bool immutable = true)
+	{
+		_typed_object->put_invokable(name, std::move(invokable), std::move(signature), immutable);
+	}
 	template<typename Type>
 	void variable(const std::string& name, Type&& value, bool immutable = true)
 	{

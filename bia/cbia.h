@@ -33,20 +33,21 @@ extern "C"
 		BIA_DEF_FLOAT,
 		BIA_DEF_DOUBLE,
 		BIA_DEF_LONG_DOUBLE,
+		BIA_DEF_STRING,
 	} bia_standard_definition_t;
 
-	typedef void* bia_context_t;
-	typedef void* bia_bytecode_t;
+	typedef void* bia_engine_t;
 	typedef const void* bia_definition_t;
 	typedef void* bia_signature_t;
-	typedef void (*bia_function_t)(void*);
+	typedef void* bia_function_context_t;
+	typedef void (*bia_function_t)(bia_function_context_t, void*);
 
-	bia_context_t bia_context_new();
-	void bia_context_free(bia_context_t context);
+	bia_engine_t bia_engine_new();
+	void bia_engine_free(bia_engine_t engine);
 	/**
 	 * Registers a new function for the function which will be globally available inside the Bia code.
 	 *
-	 * @param context The machine context.
+	 * @param engine Bia's engine.
 	 * @param name The name of the function. Any existing global value will be overwritten.
 	 * @param signature The signature of the function. Dynamically typed functions are not possible.
 	 * @param function The function callback.
@@ -54,22 +55,33 @@ extern "C"
 	 * @param immutable Whether the Bia code is allowed to overwrite the value.
 	 * @returns An error code.
 	 */
-	int bia_context_put_function(bia_context_t context, const char* name, bia_signature_t signature,
-	                             bia_function_t function, void* argument, bool immutable);
+	int bia_engine_put_function(bia_engine_t engine, const char* name, bia_signature_t signature,
+	                            bia_function_t function, void* argument, bool immutable);
+
+	int bia_function_context_get_char(bia_function_context_t context, size_t index, char* out);
+	int bia_function_context_get_uchar(bia_function_context_t context, size_t index, unsigned char* out);
+	int bia_function_context_get_schar(bia_function_context_t context, size_t index, signed char* out);
+	int bia_function_context_get_short(bia_function_context_t context, size_t index, short int* out);
+	int bia_function_context_get_ushort(bia_function_context_t context, size_t index, unsigned short int* out);
+	int bia_function_context_get_int(bia_function_context_t context, size_t index, int* out);
+	int bia_function_context_get_uint(bia_function_context_t context, size_t index, unsigned int* out);
+	int bia_function_context_get_long(bia_function_context_t context, size_t index, long int* out);
+	int bia_function_context_get_ulong(bia_function_context_t context, size_t index, unsigned long int* out);
+	int bia_function_context_get_llong(bia_function_context_t context, size_t index, long long int* out);
+	int bia_function_context_get_ullong(bia_function_context_t context, size_t index, unsigned long long int* out);
+	int bia_function_context_get_float(bia_function_context_t context, size_t index, float* out);
+	int bia_function_context_get_double(bia_function_context_t context, size_t index, double* out);
+	int bia_function_context_get_long_double(bia_function_context_t context, size_t index, long double* out);
+	/// Retrieves a string from the given index. The returned memory must be freed seperatly by calling free().
+	int bia_function_context_get_string(bia_function_context_t context, size_t index, char** out);
 
 	/// Retrieves the definition for a standard type. Returns null, if an error occurred.
-	bia_definition_t bia_standard_definition(bia_standard_definition_t type);
+	bia_definition_t bia_standard_definition(bia_engine_t engine, bia_standard_definition_t type);
 
-	/// Creates a new signature object with no parameters and a void return.
-	bia_signature_t bia_signature_new();
-	int bia_signature_set_return(bia_signature_t signature, bia_definition_t definition);
-	int bia_signature_set_argument(bia_signature_t signature, int index, bia_definition_t definition);
+	bia_signature_t bia_signature_new(bia_definition_t return_definition, bia_definition_t vararg_definition);
+	int bia_signature_push_argument(bia_signature_t signature, bia_definition_t definition);
 
-	bia_err_t bia_compile(bia_context_t context, bia_bytecode_t* out, const char* code, size_t size);
-
-	void bia_bytecode_free(bia_bytecode_t bytecode);
-
-	bia_err_t bia_run(bia_context_t context, bia_bytecode_t bytecode);
+	bia_err_t bia_run(bia_engine_t engine, const char* code, size_t size);
 #ifdef __cplusplus
 }
 #endif
