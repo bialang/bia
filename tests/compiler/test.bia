@@ -1,3 +1,4 @@
+let aa = 0
+let x = 0
 import io
-import sys
-io.print("hi", sys.int_size)
+io.print(x)

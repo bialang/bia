@@ -3,6 +3,7 @@
 
 #include "errors.hpp"
 #include "symbol/manager.hpp"
+#include "warnings.hpp"
 
 #include <bia/bytecode/instructor.hpp>
 #include <bia/internal/context.hpp>
@@ -24,15 +25,20 @@ public:
 
 	Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator, std::ostream& instructions,
 	         std::ostream& resource, internal::Context& context) noexcept;
+	void finish();
 	void receive(util::Span<const Token*> tokens, resource::Manager& manager) override;
 	const Errors& errors() const noexcept;
+	const Warnings& warnings() const noexcept;
 
 private:
 	bytecode::Instructor _instructor;
 	symbol::Manager _symbols;
 	resource::Serializer _serializer;
 	Errors _errors;
+	Warnings _warnings;
 	internal::Context& _context;
+
+	
 };
 
 } // namespace compiler

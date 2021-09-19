@@ -12,7 +12,24 @@ Compiler::Compiler(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
     : _instructor{ instructions }, _symbols{ allocator, context.global_namespace(),
 	                                           symbol::Default_int_size::size_32 },
       _serializer{ resource }, _context{ context }
-{}
+{
+	// global scope
+	_symbols.open_scope();
+}
+
+void Compiler::finish()
+{
+	BIA_EXPECTS(_symbols.open_scopes() == 1);
+	Flow_controller flow_controller;
+	elve::Parameter params{
+		_instructor,     _symbols,
+		_serializer,     _errors,
+		_warnings,       _context,
+		flow_controller, sizeof(std::ptrdiff_t) == 8 ? bytecode::Size::bit_64 : bytecode::Size::bit_32
+	};
+	// close global scope
+	elve::close_scope(params);
+}
 
 void Compiler::receive(util::Span<const Token*> tokens, resource::Manager& manager)
 {
@@ -20,13 +37,12 @@ void Compiler::receive(util::Span<const Token*> tokens, resource::Manager& manag
 	              "unsupported std::ptrdiff_t size");
 
 	Flow_controller flow_controller;
-	elve::Parameter params{ _instructor,
-		                      _symbols,
-		                      _serializer,
-		                      _errors,
-		                      _context,
-		                      flow_controller,
-		                      sizeof(std::ptrdiff_t) == 8 ? bytecode::Size::bit_64 : bytecode::Size::bit_32 };
+	elve::Parameter params{
+		_instructor,     _symbols,
+		_serializer,     _errors,
+		_warnings,       _context,
+		flow_controller, sizeof(std::ptrdiff_t) == 8 ? bytecode::Size::bit_64 : bytecode::Size::bit_32
+	};
 	while (!tokens.empty()) {
 		tokens = elve::root(params, tokens);
 	}
@@ -35,4 +51,9 @@ void Compiler::receive(util::Span<const Token*> tokens, resource::Manager& manag
 const Errors& Compiler::errors() const noexcept
 {
 	return _errors;
+}
+
+const Warnings& Compiler::warnings() const noexcept
+{
+	return _warnings;
 }

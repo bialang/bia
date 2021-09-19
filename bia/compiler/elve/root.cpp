@@ -45,6 +45,15 @@ elve::Tokens elve::batch(Parameter& param, Tokens tokens)
 	while (i--) {
 		tokens = root(param, tokens);
 	}
-	param.symbols.close_scope();
+	close_scope(param);
 	return tokens;
+}
+
+void elve::close_scope(Parameter& param)
+{
+	for (const auto& local : param.symbols.close_scope()) {
+		if (!local.used) {
+			param.warnings.add(error::Code::unused_variable, local.declare_range);
+		}
+	}
 }

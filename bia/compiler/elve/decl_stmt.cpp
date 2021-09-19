@@ -38,8 +38,8 @@ elve::Tokens elve::decl_stmt(Parameter& param, Tokens tokens)
 				expr.second->definition = desired_type;
 			}
 			expr.second->flags = flags;
-			if (!param.symbols.promote_temporary(variable_token.value.get<Token::Identifier>().memory,
-			                                     *expr.second)) {
+			if (!param.symbols.promote_temporary(variable_token.value.get<Token::Identifier>().memory, *expr.second,
+			                                     { &variable_token, 1 })) {
 				param.errors.add_error(error::Code::symbol_already_declared, { &variable_token, 1 });
 				param.symbols.free_temporary(*expr.second);
 			}

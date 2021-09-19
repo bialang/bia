@@ -171,6 +171,7 @@ try {
 		BIA_LOG(ERROR, "Lexing failed");
 	}
 
+	compiler.finish();
 	if (compiler.errors().size() > 0) {
 		code.clear();
 		code.seekg(0, std::ios::end);
@@ -185,6 +186,21 @@ try {
 		BIA_LOG(ERROR, "Compilation failed with {} error{}", compiler.errors().size(),
 		        compiler.errors().size() > 1 ? "s" : "");
 		failed = true;
+	}
+
+	if (compiler.warnings().size() > 0) {
+		code.clear();
+		code.seekg(0, std::ios::end);
+		std::string str;
+		str.resize(code.tellg());
+		code.seekg(0, std::ios::beg);
+		code.read(&str[0], str.size());
+		const auto lines = split_lines(str);
+		for (auto warn : compiler.warnings()) {
+			print_error(lines, warn);
+		}
+		BIA_LOG(WARN, "Compilation finished with {} warning{}", compiler.warnings().size(),
+		        compiler.warnings().size() > 1 ? "s" : "");
 	}
 
 	if (failed) {

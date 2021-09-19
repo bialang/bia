@@ -4,6 +4,7 @@
 #include "../errors.hpp"
 #include "../flow_controller.hpp"
 #include "../symbol/manager.hpp"
+#include "../warnings.hpp"
 
 #include <bia/bytecode/instructor.hpp>
 #include <bia/internal/context.hpp>
@@ -25,6 +26,7 @@ struct Parameter
 	symbol::Manager& symbols;
 	resource::Serializer& serializer;
 	Errors& errors;
+	Warnings& warnings;
 	internal::Context& context;
 	Flow_controller& flow_controller;
 	bytecode::Size int_size;
@@ -34,6 +36,7 @@ typedef util::Span<const tokenizer::token::Token*> Tokens;
 
 Tokens root(Parameter& param, Tokens tokens);
 Tokens batch(Parameter& param, Tokens tokens);
+void close_scope(Parameter& param);
 
 Tokens decl_stmt(Parameter& param, Tokens tokens);
 Tokens drop_stmt(Parameter& param, Tokens tokens);

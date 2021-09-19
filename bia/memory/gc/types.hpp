@@ -20,6 +20,12 @@ struct GC_able
 
 	Type pointer;
 
+	GC_able() noexcept = default;
+	template<typename Other, typename = typename std::enable_if<std::is_assignable<Type&, Other>::value>::type>
+	GC_able(Other&& other) noexcept(std::is_nothrow_assignable<Type&, Other>::value)
+	{
+		pointer = other;
+	}
 	bool is_object() const noexcept
 	{
 		return reinterpret_cast<std::intptr_t>(pointer) & 0x1;
@@ -61,7 +67,17 @@ struct GC_able
 		static_assert(util::type_traits::Is_static_castable<Type, Other>::value, "cannot cast to type");
 		return static_cast<Other>(get());
 	}
+	bool operator==(std::nullptr_t) const noexcept
+	{
+		return get() == nullptr;
+	}
+	bool operator!=(std::nullptr_t) const noexcept
+	{
+		return get() != nullptr;
+	}
 };
+
+static_assert(std::is_trivial<GC_able<void*>>::value, "Implementation error: GC_able must be trivial");
 
 class Base
 {
@@ -79,7 +95,7 @@ struct Container : Base
 	Container() noexcept(std::is_nothrow_default_constructible<Other>::value)
 	{}
 	template<typename Other>
-	Container(Other&& other) : value{std::forward<Other>(other)}
+	Container(Other&& other) : value{ std::forward<Other>(other) }
 	{}
 };
 

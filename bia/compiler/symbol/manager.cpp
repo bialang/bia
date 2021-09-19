@@ -15,8 +15,6 @@ Manager::Manager(util::Not_null<std::shared_ptr<memory::Allocator>> allocator,
     : _global_namespace{ global_namespace }
 {
 	_default_int_size = default_int_size;
-	// there is always a global scope
-	_scopes.emplace_back();
 	// _introduce_native_types();
 }
 
@@ -25,14 +23,24 @@ void Manager::open_scope()
 	_scopes.emplace_back();
 }
 
-void Manager::close_scope()
+std::vector<Local_variable> Manager::close_scope()
 {
-	BIA_EXPECTS(_scopes.size() > 1);
+	BIA_EXPECTS(_scopes.size() > 0);
+	std::vector<Local_variable> locals;
 	auto& scope = _scopes.back();
-	for (auto i = scope.rbegin(); i != scope.rend(); ++i) {
-		_drop(*i);
+	for (auto it = scope.rbegin(); it != scope.rend(); ++it) {
+		if ((*it)->second.is_type<Local_variable>()) {
+			locals.push_back((*it)->second.get<Local_variable>());
+		}
+		_drop(*it);
 	}
 	_scopes.pop_back();
+	return locals;
+}
+
+std::size_t Manager::open_scopes() const noexcept
+{
+	return _scopes.size();
 }
 
 error::Code Manager::drop_symbol(const internal::String_key& name)
@@ -73,12 +81,14 @@ void Manager::free_temporary(Local_variable variable)
 	}
 }
 
-bool Manager::promote_temporary(const resource::View& name, const Local_variable& variable)
+bool Manager::promote_temporary(const resource::View& name, Local_variable variable,
+                                util::Span<const tokenizer::token::Token*> tokens)
 {
 	if (_symbols.find({ name }) != _symbols.end() || !_global_namespace.symbol({ name }).empty()) {
 		return false;
 	}
-	const auto it = _symbols.insert(std::make_pair(name, variable)).first;
+	variable.declare_range = { tokens.front().range.start, tokens.back().range.end };
+	const auto it          = _symbols.insert(std::make_pair(name, std::move(variable))).first;
 	_scopes.back().push_back(it);
 	return true;
 }
@@ -87,7 +97,14 @@ Symbol Manager::symbol(const internal::String_key& name)
 {
 	const auto it = _symbols.find(name);
 	if (it != _symbols.end()) {
-		return it->second;
+		if (it->second.is_type<internal::type::Variable>()) {
+			return it->second.get<internal::type::Variable>();
+		} else if (it->second.is_type<Local_variable>()) {
+			return &it->second.get<Local_variable>();
+		} else if (it->second.is_type<const internal::type::Definition_base*>()) {
+			return it->second.get<const internal::type::Definition_base*>();
+		}
+		BIA_ASSERT(false);
 	}
 
 	const auto symbol = _global_namespace.symbol(name);
@@ -114,40 +131,6 @@ void Manager::_decline_declared(const resource::View& name)
 	BIA_EXPECTS(d != _declared.end());
 	_declared.erase(d);
 }
-
-// void Manager::_introduce_native_types()
-// {
-// 	using namespace internal::type;
-
-// 	if (_default_int_size == Default_int_size::size_32) {
-// 		_symbols.insert(
-// 		  std::make_pair(util::from_cstring("int"),
-// 		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32,
-// true)))); 		_symbols.insert( 		  std::make_pair(util::from_cstring("uint"),
-// 		                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::u32,
-// true)))); 	} else { 		BIA_ASSERT(false);
-// 	}
-
-// 	_symbols.insert(
-// 	  std::make_pair(util::from_cstring("void"), static_cast<Definition*>(_type_system.create_type<Void>())));
-
-// 	_symbols.insert(
-// 	  std::make_pair(util::from_cstring("bool"), static_cast<Definition*>(_type_system.create_type<Bool>())));
-
-// 	_symbols.insert(
-// 	  std::make_pair(util::from_cstring("int32"),
-// 	                 static_cast<Definition*>(_type_system.create_type<Integer>(Integer::Size::i32, false))));
-
-// 	_symbols.insert(std::make_pair(
-// 	  util::from_cstring("float32"),
-// 	  static_cast<Definition*>(_type_system.create_type<Floating_point>(Floating_point::Size::f32))));
-
-// 	_symbols.insert(std::make_pair(util::from_cstring("string"),
-// 	                               static_cast<Definition*>(_type_system.create_type<String>())));
-// 	_symbols.insert(
-// 	  std::make_pair(util::from_cstring("regex"),
-// static_cast<Definition*>(_type_system.create_type<Regex>())));
-// }
 
 void Manager::_drop(map_type::const_iterator it)
 {

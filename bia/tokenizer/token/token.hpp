@@ -159,6 +159,7 @@ struct Token
 	{}
 	Token(Token&& move) : value{ std::move(move.value) }, range{ std::move(move.range) }
 	{}
+	~Token() noexcept = default;
 	Token& operator=(const Token& copy)
 	{
 		value = copy.value;

@@ -20,8 +20,10 @@ elve::Tokens elve::import_stmt(Parameter& param, Tokens tokens)
 			// TODO adjust size
 			param.instructor.write<bytecode::Op_code::load_from_namespace>(bytecode::Size::bit_64, variable.offset,
 			                                                               module->offset, 1);
-			variable.flags = 0;
-			param.symbols.promote_temporary(tokens[has_as ? 3 : 1].value.get<Token::Identifier>().memory, variable);
+			variable.flags             = 0;
+			const auto variable_tokens = tokens.subspan(has_as ? 3 : 1, 1);
+			param.symbols.promote_temporary(variable_tokens.front().value.get<Token::Identifier>().memory, variable,
+			                                variable_tokens);
 		} else {
 			param.errors.add_error(error::Code::undefined_module, tokens.subspan(1, 1));
 		}

@@ -9,20 +9,39 @@ using namespace bia::memory::gc;
 GC::GC(util::Not_null<std::shared_ptr<Allocator>> allocator) : _allocator{ std::move(allocator.get()) }
 {}
 
+GC::~GC() noexcept
+{
+	BIA_LOG(DEBUG, "Freeing {} missed pointers.", _pointers.size());
+	// free all pointers
+	for (auto ptr : _pointers) {
+		_sweep(ptr);
+	}
+}
+
 GC_able<void*> GC::allocate(std::size_t size)
 {
-	auto ptr = _allocator->allocate(size);
+	std::is_trivial<GC_able<void*>>::value;
+	const auto ptr = _allocator->allocate(size);
 	BIA_LOG(TRACE, "GC allocated ptr={}", ptr);
-	std::lock_guard<std::mutex> _{ _mutex };
-	_pointers.push_back(ptr);
+	try {
+		std::lock_guard<std::mutex> _{ _mutex };
+		_pointers.push_back(ptr);
+	} catch (...) {
+		BIA_LOG(CRITICAL, "Failed to append newly create GC able object to the pointers list.");
+		_allocator->deallocate(ptr);
+		throw;
+	}
 	return { ptr };
 }
 
 void GC::run()
 {
-	BIA_LOG(DEBUG, "starting GC cycle");
+	BIA_LOG(DEBUG, "Starting GC cycle");
 	std::lock_guard<std::mutex> _{ _mutex };
 	std::set<void*> reachable;
+#if BIA_LOG_IS_ENABLED(DEBUG)
+	const auto start = std::chrono::high_resolution_clock::now();
+#endif
 
 	// marking phase
 	for (const auto& root : _roots) {
@@ -38,18 +57,13 @@ void GC::run()
 
 	// sweep
 	std::size_t reclaimed = 0;
-	for (auto i = _pointers.begin(); i != _pointers.end();) {
-		if (reachable.find(*i) == reachable.end()) {
-			GC_able<void*> ptr{ *i };
-			BIA_LOG(TRACE, "sweeping ptr={} (object: {})", ptr.get(), ptr.is_object());
-			if (ptr.is_object()) {
-				static_cast<Base*>(ptr)->~Base();
-			}
-			_allocator->deallocate(ptr);
-			i = _pointers.erase(i);
+	for (auto it = _pointers.begin(); it != _pointers.end();) {
+		if (reachable.find(*it) == reachable.end()) {
+			_sweep(*it);
+			it = _pointers.erase(it);
 			reclaimed++;
 		} else {
-			++i;
+			++it;
 		}
 	}
 
@@ -67,7 +81,7 @@ void GC::register_stack(Stack& stack)
 void GC::unregister_stack(Stack& stack)
 {
 	std::lock_guard<std::mutex> _{ _mutex };
-	for(auto i = _roots.begin(); i != _roots.end(); ++i) {
+	for (auto i = _roots.begin(); i != _roots.end(); ++i) {
 		if (*i == &stack) {
 			_roots.erase(i);
 			break;
@@ -78,4 +92,13 @@ void GC::unregister_stack(Stack& stack)
 bia::util::Not_null<std::shared_ptr<bia::memory::Allocator>> GC::allocator() noexcept
 {
 	return _allocator;
+}
+
+void GC::_sweep(util::Not_null<GC_able<void*>> ptr)
+{
+	BIA_LOG(TRACE, "Sweeping ptr={} (object: {})", ptr.get().get(), ptr.get().is_object());
+	if (ptr.get().is_object()) {
+		static_cast<Base*>(ptr.get())->~Base();
+	}
+	_allocator->deallocate(ptr.get());
 }

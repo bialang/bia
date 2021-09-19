@@ -18,8 +18,10 @@ elve::Tokens elve::assign_stmt(Parameter& param, Tokens tokens)
 		if (tmp.empty()) {
 			param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(1, 1));
 		} else {
-			if (tmp.is_type<symbol::Local_variable>()) {
-				destination = tmp.get<symbol::Local_variable>();
+			if (tmp.is_type<symbol::Local_variable*>()) {
+				auto variable = tmp.get<symbol::Local_variable*>();
+				variable->used = true;
+				destination = *variable;
 			} else if (tmp.is_type<internal::type::Variable>()) {
 				destination = tmp.get<internal::type::Variable>();
 				global      = true;

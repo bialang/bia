@@ -79,11 +79,12 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>> identifier_valu
 	const auto identifier = param.symbols.symbol(tokens.front().value.get<Token::Identifier>().memory);
 	if (identifier.empty()) {
 		param.errors.add_error(error::Code::undefined_symbol, tokens.subspan(+0, 1));
-	} else if (identifier.is_type<symbol::Local_variable>()) {
-		const auto& source = identifier.get<symbol::Local_variable>();
-		variable           = param.symbols.create_temporary(source.definition);
+	} else if (identifier.is_type<symbol::Local_variable*>()) {
+		const auto source = identifier.get<symbol::Local_variable*>();
+		source->used      = true;
+		variable          = param.symbols.create_temporary(source->definition);
 		// copy all bits
-		for (std::size_t copied = 0, size = source.definition->size(); copied < size;) {
+		for (std::size_t copied = 0, size = source->definition->size(); copied < size;) {
 			Size s = Size::bit_8;
 			if (size >= 8) {
 				s = Size::bit_64;
@@ -92,7 +93,7 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>> identifier_valu
 			} else if (size >= 2) {
 				s = Size::bit_16;
 			}
-			param.instructor.write<Op_code::copy>(s, variable->offset + copied, source.offset + copied);
+			param.instructor.write<Op_code::copy>(s, variable->offset + copied, source->offset + copied);
 			copied += size_to_bits(s) / 8;
 		}
 	} else if (identifier.is_type<internal::type::Variable>()) {

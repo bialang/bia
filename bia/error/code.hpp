@@ -93,8 +93,11 @@ enum class Code
 	number_underflow,
 	undefined_module,
 
+	// compilation warnings
+	unused_variable = 200,
+
 	// bvm errors
-	bad_opcode = 200,
+	bad_opcode = 250,
 	bad_offset_option,
 	bad_constant_option,
 	bad_resource_option,
@@ -102,9 +105,9 @@ enum class Code
 	bad_member_destination_option,
 
 	// runtime errors
-	module_not_found = 250,
+	module_not_found = 300,
 
-	bad_switch_value = 300,
+	bad_switch_value = 350,
 	why_did_this_happen,
 };
 
@@ -114,6 +117,7 @@ enum class Condition
 	usage,
 	lexer,
 	compiler,
+	compiler_warning,
 	bvm,
 	runtime,
 	implementation,
@@ -139,8 +143,10 @@ inline const std::error_category& code_category() noexcept
 			} else if (code >= 150 && code < 200) {
 				return make_error_condition(Condition::compiler);
 			} else if (code >= 200 && code < 250) {
-				return make_error_condition(Condition::bvm);
+				return make_error_condition(Condition::compiler_warning);
 			} else if (code >= 250 && code < 300) {
+				return make_error_condition(Condition::bvm);
+			} else if (code >= 300 && code < 350) {
 				return make_error_condition(Condition::runtime);
 			}
 			return error_category::default_error_condition(code);
@@ -203,6 +209,8 @@ inline const std::error_category& code_category() noexcept
 			case Code::number_underflow: return "number underflow";
 			case Code::undefined_module: return "module is undefined";
 
+			case Code::unused_variable: return "unused variable";
+
 			case Code::bad_opcode: return "bad opcode";
 			// case code::bad_offset_option:
 			// case code::bad_constant_option:
@@ -234,6 +242,7 @@ inline const std::error_category& condition_category() noexcept
 			case Condition::usage: return "usage error";
 			case Condition::lexer: return "lexing error";
 			case Condition::compiler: return "compilation error";
+			case Condition::compiler_warning: return "compiler warning";
 			case Condition::bvm: return "virtual machine error";
 			case Condition::runtime: return "runtime error";
 			case Condition::implementation: return "implementation error";
