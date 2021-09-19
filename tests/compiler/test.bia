@@ -1,4 +1,16 @@
-let aa = 0
-let x = 0
+
 import io
-io.print(x)
+
+// io.print("----and----")
+// io.print(true and true)
+// io.print(true and true)
+// io.print(true and false)
+// io.print(false and false)
+
+// io.print("----or----")
+// io.print(true or true)
+// io.print(false or true)
+// io.print(true or false)
+// io.print(false or false)
+
+io.print(true and (false or false) or false and true)

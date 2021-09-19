@@ -191,6 +191,7 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 	}
 	lhs_tokens = lhs_tokens.left(tokens.begin());
 
+	bool last_cond_was_and = false;
 	while (has_right_hand_size(tokens)) {
 		const auto optor           = tokens.front().value.get<Operator>();
 		const auto optor_tokens    = tokens.subspan(+0, 1);
@@ -212,21 +213,26 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 
 		// logical chaining
 		if (optor == Operator::logical_and || optor == Operator::logical_or) {
-			BIA_ASSERT(false);
-			// if (last_cond_was_and && optor == Operator::logical_or) {
-			// 	jumper.mark(Jumper::Destination::end);
-			// 	jumper.clear(Jumper::Destination::end);
-			// 	last_cond_was_and = false;
-			// } else if (optor == Operator::logical_and) {
-			// 	last_cond_was_and = true;
-			// }
+			if (!dynamic_cast<const type::Definition<bool>*>(lhs->definition)) {
+				param.errors.add_error(error::Code::not_boolean, lhs_tokens);
+			} else if (last_cond_was_and && optor == Operator::logical_or) {
+				jumper.mark(Jumper::Destination::end);
+				jumper.clear(Jumper::Destination::end);
+				last_cond_was_and = false;
+			} else if (optor == Operator::logical_and) {
+				last_cond_was_and = true;
+			}
 
-			// param.instructor.write<bytecode::Op_code::truthy, std::int32_t>(lhs->location.offset);
-			// param.symbols.free_temporary(*lhs);
-			// jumper.jump(optor == Operator::logical_and ? Jumper::Type::if_false : Jumper::Type::if_true,
-			//             Jumper::Destination::end);
-			// std::tie(tokens, lhs) = single_expression_impl(param, tokens.subspan(1), jumper, optor_precedence);
-			// continue;
+			param.instructor.write<bytecode::Op_code::test>(lhs->offset);
+			param.symbols.free_temporary(*lhs);
+			jumper.jump(optor == Operator::logical_and ? Jumper::Type::if_false : Jumper::Type::if_true,
+			            Jumper::Destination::end);
+			const auto old_tokens = tokens.subspan(1);
+			std::tie(tokens, lhs) = single_expression_impl(param, old_tokens, jumper, optor_precedence);
+			if (!dynamic_cast<const type::Definition<bool>*>(lhs->definition)) {
+				param.errors.add_error(error::Code::not_boolean, old_tokens.left(tokens.begin()));
+			}
+			continue;
 		} // function call
 		else if (optor == Operator::function_call_open || optor == Operator::nullable_function_call_open) {
 			util::Optional<symbol::Local_variable> result;

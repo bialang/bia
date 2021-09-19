@@ -18,6 +18,6 @@ void bia::bsl::sys(internal::Typed_object& object)
 		  "little"
 #endif
 	  });
-	object.put_value(util::from_cstring("int_size"), sizeof(std::ptrdiff_t) * 8);
+	object.put_value(util::from_cstring("int_size"), static_cast<std::ptrdiff_t>(sizeof(std::ptrdiff_t) * 8));
 	object.put_value(util::from_cstring("version"), std::string{ BIA_LANG_VERSION });
 }

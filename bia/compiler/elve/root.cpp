@@ -51,9 +51,10 @@ elve::Tokens elve::batch(Parameter& param, Tokens tokens)
 
 void elve::close_scope(Parameter& param)
 {
-	for (const auto& local : param.symbols.close_scope()) {
-		if (!local.used) {
-			param.warnings.add(error::Code::unused_variable, local.declare_range);
+	const auto locals = param.symbols.close_scope();
+	for (auto it = locals.rbegin(); it != locals.rend(); ++it) {
+		if (!it->used) {
+			param.warnings.add(error::Code::unused_variable, it->declare_range);
 		}
 	}
 }
