@@ -73,7 +73,7 @@ TEST_CASE("type_index", "[type_traits][util]")
 	REQUIRE(type_index<int, float, int>::value == 1);
 	REQUIRE(type_index<int, float, int, double>::value == 1);
 	REQUIRE(type_index<int, float, double, int, int>::value == 2);
-	REQUIRE((type_index<int, float, double, short, char>::value == type_index<>::npos));
+	REQUIRE((type_index<int, float, double, short, char>::value == npos));
 }
 
 TEST_CASE("is_invokable", "[type_traits][util]")

@@ -24,3 +24,5 @@ foreach(dir ${dirs})
 		endif()
 	endif()
 endforeach()
+
+set_property(TARGET bia_test PROPERTY CXX_STANDARD 17)

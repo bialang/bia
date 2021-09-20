@@ -23,6 +23,7 @@ inline std::shared_ptr<Parameter> create_parameter(T&&... values)
 	auto bndl    = std::make_shared<std::vector<Token>>();
 	auto manager = std::make_shared<bia::resource::Manager>(std::make_shared<bia::memory::Simple_allocator>());
 	int dummy[sizeof...(values)] = { (*input << values, 0)... };
+	static_cast<void>(dummy);
 	return { new Parameter{ *reader, *manager, *bndl }, [input, reader, manager, enc, bndl](Parameter* ptr) {
 		        delete ptr;
 		        free_encoder(enc);

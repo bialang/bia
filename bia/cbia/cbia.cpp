@@ -17,19 +17,111 @@ try {
 } catch (...) {
 }
 
-int bia_engine_put_function(bia_engine_t engine, const char* name, bia_signature_t signature,
-                            bia_function_t function, void* argument, bool immutable)
+bia_err_t bia_engine_use_bsl(bia_engine_t engine)
+try {
+	static_cast<Engine*>(engine)->use_bsl();
+	return BIA_OK;
+} catch (...) {
+	return BIA_ERR_UNKNOWN;
+}
+
+bia_err_t bia_engine_put_function(bia_engine_t engine, const char* name, bia_signature_t signature,
+                                  bia_function_t function, void* argument, bool immutable)
 try {
 	static_cast<Engine*>(engine)->function(
 	  name, [function, argument](member::function::Context& context) { function(&context, argument); },
 	  *static_cast<member::function::Signature*>(signature), immutable);
 	return BIA_OK;
 } catch (...) {
-	return -1;
+	return BIA_ERR_UNKNOWN;
 }
 
 template<typename Type>
-inline int function_context_get(bia_function_context_t context, size_t index, Type* out)
+inline bia_err_t function_context_return(bia_function_context_t context, Type value)
+try {
+	static_cast<member::function::Context*>(context)->set_return(value);
+	return BIA_OK;
+} catch (...) {
+	return BIA_ERR_UNKNOWN;
+}
+
+bia_err_t bia_function_context_return_char(bia_function_context_t context, char value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_uchar(bia_function_context_t context, unsigned char value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_schar(bia_function_context_t context, signed char value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_short(bia_function_context_t context, short int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_ushort(bia_function_context_t context, unsigned short int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_int(bia_function_context_t context, int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_uint(bia_function_context_t context, unsigned int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_long(bia_function_context_t context, long int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_ulong(bia_function_context_t context, unsigned long int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_llong(bia_function_context_t context, long long int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_ullong(bia_function_context_t context, unsigned long long int value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_float(bia_function_context_t context, float value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_double(bia_function_context_t context, double value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_long_double(bia_function_context_t context, long double value)
+{
+	return function_context_return(context, value);
+}
+
+bia_err_t bia_function_context_return_string(bia_function_context_t context, const char* value)
+{
+	return function_context_return(context, std::string{ value });
+}
+
+template<typename Type>
+inline bia_err_t function_context_get(bia_function_context_t context, size_t index, Type* out)
 try {
 	*out = static_cast<member::function::Context*>(context)->get_argument<Type>(index);
 	return BIA_OK;
@@ -37,77 +129,79 @@ try {
 	return BIA_ERR_UNKNOWN;
 }
 
-int bia_function_context_get_char(bia_function_context_t context, size_t index, char* out)
+bia_err_t bia_function_context_get_char(bia_function_context_t context, size_t index, char* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_uchar(bia_function_context_t context, size_t index, unsigned char* out)
+bia_err_t bia_function_context_get_uchar(bia_function_context_t context, size_t index, unsigned char* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_schar(bia_function_context_t context, size_t index, signed char* out)
+bia_err_t bia_function_context_get_schar(bia_function_context_t context, size_t index, signed char* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_short(bia_function_context_t context, size_t index, short int* out)
+bia_err_t bia_function_context_get_short(bia_function_context_t context, size_t index, short int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_ushort(bia_function_context_t context, size_t index, unsigned short int* out)
+bia_err_t bia_function_context_get_ushort(bia_function_context_t context, size_t index,
+                                          unsigned short int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_int(bia_function_context_t context, size_t index, int* out)
+bia_err_t bia_function_context_get_int(bia_function_context_t context, size_t index, int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_uint(bia_function_context_t context, size_t index, unsigned int* out)
+bia_err_t bia_function_context_get_uint(bia_function_context_t context, size_t index, unsigned int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_long(bia_function_context_t context, size_t index, long int* out)
+bia_err_t bia_function_context_get_long(bia_function_context_t context, size_t index, long int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_ulong(bia_function_context_t context, size_t index, unsigned long int* out)
+bia_err_t bia_function_context_get_ulong(bia_function_context_t context, size_t index, unsigned long int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_llong(bia_function_context_t context, size_t index, long long int* out)
+bia_err_t bia_function_context_get_llong(bia_function_context_t context, size_t index, long long int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_ullong(bia_function_context_t context, size_t index, unsigned long long int* out)
+bia_err_t bia_function_context_get_ullong(bia_function_context_t context, size_t index,
+                                          unsigned long long int* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_float(bia_function_context_t context, size_t index, float* out)
+bia_err_t bia_function_context_get_float(bia_function_context_t context, size_t index, float* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_double(bia_function_context_t context, size_t index, double* out)
+bia_err_t bia_function_context_get_double(bia_function_context_t context, size_t index, double* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_long_double(bia_function_context_t context, size_t index, long double* out)
+bia_err_t bia_function_context_get_long_double(bia_function_context_t context, size_t index, long double* out)
 {
 	return function_context_get(context, index, out);
 }
 
-int bia_function_context_get_string(bia_function_context_t context, size_t index, char** out)
+bia_err_t bia_function_context_get_string(bia_function_context_t context, size_t index, char** out)
 try {
 	const auto str = static_cast<member::function::Context*>(context)->get_argument<std::string>(index);
 	*out           = static_cast<char*>(std::malloc(str.size() + 1));
@@ -155,7 +249,7 @@ try {
 	return nullptr;
 }
 
-int bia_signature_push_argument(bia_signature_t signature, bia_definition_t definition)
+bia_err_t bia_signature_push_argument(bia_signature_t signature, bia_definition_t definition)
 try {
 	static_cast<member::function::Signature*>(signature)->argument_definitions.push_back(
 	  { static_cast<const internal::type::Definition_base*>(definition) });

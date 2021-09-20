@@ -2,12 +2,13 @@
 #define BIA_ENGINE_HPP_
 
 #include "internal/context.hpp"
+#include "member/function/varargs.hpp"
 #include "memory/gc/gc.hpp"
 #include "object_builder.hpp"
 
+#include <bia/bsl/modules.hpp>
 #include <istream>
 #include <memory>
-#include <bia/bsl/modules.hpp>
 #include <string>
 #include <utility>
 
@@ -31,6 +32,9 @@ private:
 	memory::gc::GC _gc;
 	internal::Context _context;
 };
+
+template<typename Type>
+using Varargs = member::function::Varargs<Type>;
 
 } // namespace bia
 

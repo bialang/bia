@@ -7,8 +7,8 @@ using namespace bia::string::encoding;
 template<typename Type>
 inline void test_encoding(Encoder* enc, const Type* string, const char32_t* characters)
 {
-	bia::util::Memory_streambuf buffer{ { reinterpret_cast<const bia::util::byte_type*>(string),
-		                                  std::char_traits<Type>::length(string) } };
+	bia::util::Memory_streambuf buffer{ { reinterpret_cast<const bia::util::Byte*>(string),
+		                                    std::char_traits<Type>::length(string) } };
 	std::istream input{ &buffer };
 
 	while (*characters) {

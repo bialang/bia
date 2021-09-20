@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
-option(BIA_LOG_ENABLE "Whether the Bia library should make internal logs to the default logger." OFF)
 set(BIA_UTIL_CONTRACT_BEHAVIOR "abort"
 	CACHE STRING "How a contract violation should end {throw, abort, none}.")
 set_property(CACHE BIA_UTIL_CONTRACT_BEHAVIOR
@@ -15,20 +14,19 @@ set(BIA_RESOURCE_PAGE_SIZE 256
 add_library(bia)
 
 # logging
-if(BIA_LOG_ENABLE)
+set(BIA_LOG_NAME "bialang-logger"
+	CACHE STRING "The name of the default logger.")
+set(BIA_LOG_PATTERN "(%^%L%$) %s:%#@%!: %v"
+	CACHE STRING "The defaul logging pattern. For more information look here: https://github.com/gabime/spdlog/wiki/3.-Custom-formatting#pattern-flags")
+set(BIA_LOG_LEVEL "OFF"
+	CACHE STRING "The logging level (CIRITICAL, ERROR, WARN, INFO, DEBUG, TRACE, OFF)")
+set_property(CACHE BIA_LOG_LEVEL
+	PROPERTY STRINGS "CRITICAL" "ERROR" "WARN" "INFO" "DEBUG" "TRACE" "OFF")
+if(NOT BIA_LOG_LEVEL STREQUAL "OFF")
 	find_package(spdlog REQUIRED)
 	list(APPEND BIA_DEPENDENCIES spdlog)
 	target_link_libraries(bia
 		PUBLIC spdlog::spdlog)
-
-	set(BIA_LOG_NAME "bialang-logger"
-		CACHE STRING "The name of the default logger.")
-	set(BIA_LOG_PATTERN "(%^%L%$) %s:%#@%!: %v"
-		CACHE STRING "The defaul logging pattern. For more information look here: https://github.com/gabime/spdlog/wiki/3.-Custom-formatting#pattern-flags")
-	set(BIA_LOG_LEVEL "INFO"
-		CACHE STRING "The logging level (CIRITICAL, ERROR, WARN, INFO, DEBUG, TRACE)")
-	set_property(CACHE BIA_LOG_LEVEL
-		PROPERTY STRINGS "CRITICAL" "ERROR" "WARN" "INFO" "DEBUG" "TRACE")
 endif()
 
 # test endianess
@@ -93,8 +91,8 @@ add_library(bia::bia ALIAS bia)
 # install
 include(CMakePackageConfigHelpers)
 
-set(INCLUDE_INSTALL_DIR "include")
-set(LIBRARY_INSTALL_DIR "lib")
+set(INCLUDE_INSTALL_DIR include)
+set(LIBRARY_INSTALL_DIR lib)
 
 configure_package_config_file("bia-config.cmake.in"
 	"${CMAKE_CURRENT_BINARY_DIR}/bia-config.cmake"
