@@ -109,6 +109,7 @@ enum class Code
 
 	bad_switch_value = 350,
 	why_did_this_happen,
+	gc_required,
 };
 
 enum class Condition
@@ -220,6 +221,7 @@ inline const std::error_category& code_category() noexcept
 			case Code::module_not_found: return "module was not found";
 			case Code::bad_switch_value: return "a bad switch value";
 			case Code::why_did_this_happen: return "How could this happen to me, I've made my mistakes";
+			case Code::gc_required: return "required a GC";
 			default: return "(unrecognized error code)";
 			}
 		}

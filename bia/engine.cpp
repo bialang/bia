@@ -103,7 +103,7 @@ void Engine::run(std::istream& code)
 	const auto ins = instructions.str();
 	const auto res = resource_output.str();
 	memory::Stack stack{ _gc.allocator(), 1024 };
-	memory::Frame<true> frame{ stack._memory, _gc };
+	memory::Frame<true> frame{ stack._memory, &_gc };
 	auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, _gc);
 

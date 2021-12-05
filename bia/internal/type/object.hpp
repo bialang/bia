@@ -6,7 +6,7 @@
 #include "framer.hpp"
 
 #include <bia/error/exception.hpp>
-#include <bia/member/object.hpp>
+#include <bia/member/object/base.hpp>
 #include <bia/util/optional.hpp>
 #include <bia/util/variant.hpp>
 #include <map>
@@ -45,11 +45,11 @@ public:
 	}
 	std::size_t size() const noexcept override
 	{
-		return sizeof(memory::gc::GC_able<member::Object*>);
+		return sizeof(memory::gc::GC_able<member::object::Base*>);
 	}
 	std::size_t alignment() const noexcept override
 	{
-		return alignof(memory::gc::GC_able<member::Object*>);
+		return alignof(memory::gc::GC_able<member::object::Base*>);
 	}
 	int flags() const noexcept override
 	{

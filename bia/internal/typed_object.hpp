@@ -7,7 +7,7 @@
 
 #include <bia/member/function/creator.hpp>
 #include <bia/member/function/dynamic.hpp>
-#include <bia/member/object.hpp>
+#include <bia/member/object/object.hpp>
 #include <bia/memory/frame.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
@@ -23,7 +23,7 @@
 namespace bia {
 namespace internal {
 
-class Typed_object : public member::Object
+class Typed_object : public member::object::Object
 {
 public:
 	Typed_object(internal::type::System& type_system, memory::gc::GC& gc)
@@ -84,7 +84,7 @@ public:
 		// TODO optimize used memory
 		variable.definition = _type_system.register_definition(
 		  internal::type::Definition<internal::type::Dynamic_object>{ std::move(object._symbols) });
-		variable.offset = store(_gc.create<member::Object>(std::move(object)));
+		variable.offset = store(_gc.create<member::object::Object>(std::move(object)));
 		variable.flags  = immutable ? 0 : type::Variable::flag_mutable;
 		_symbols.insert({ name, variable });
 	}
@@ -104,7 +104,7 @@ public:
 	{
 		return _gc;
 	}
-	friend std::pair<member::Object, const type::Definition_base*> finish_typed_object(Typed_object&& object)
+	friend std::pair<member::object::Object, const type::Definition_base*> finish_typed_object(Typed_object&& object)
 	{
 		const auto definition = object._type_system.register_definition(
 		  internal::type::Definition<internal::type::Dynamic_object>{ std::move(object._symbols) });

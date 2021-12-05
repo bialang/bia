@@ -15,7 +15,7 @@ bia::resource::Resources bia::resource::deserialize(util::Span<const util::Byte*
 		BIA_ASSERT(length <= data.size());
 		if (type == Type::string) {
 			resources.push_back(
-			  gc.create<memory::gc::String>(std::string{ reinterpret_cast<const char*>(data.data()), length }));
+			  gc.create<member::object::String>(std::string{ reinterpret_cast<const char*>(data.data()), length }));
 		} else if (type == Type::regex) {
 			// TODO check size
 			resources.push_back(

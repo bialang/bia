@@ -8,7 +8,8 @@
 #include <bia/bytecode/operation.hpp>
 #include <bia/error/exception.hpp>
 #include <bia/member/function/base.hpp>
-#include <bia/member/object.hpp>
+#include <bia/member/object/base.hpp>
+#include <bia/member/object/string.hpp>
 #include <vector>
 
 using namespace bia;
@@ -47,8 +48,8 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 			const auto destination = ip.read<Address>();
 			const auto index       = ip.read<std::uint32_t>();
 			const auto& resource   = resources.at(index);
-			if (resource.is_type<memory::gc::GC_able<memory::gc::String*>>()) {
-				frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::String*>>());
+			if (resource.is_type<memory::gc::GC_able<member::object::String*>>()) {
+				frame.store(destination, resource.get<memory::gc::GC_able<member::object::String*>>());
 			} else if (resource.is_type<memory::gc::GC_able<memory::gc::Regex*>>()) {
 				frame.store(destination, resource.get<memory::gc::GC_able<memory::gc::Regex*>>());
 			} else {
@@ -60,7 +61,7 @@ void bvm::execute(util::Span<const util::Byte*> instructions, memory::Frame<true
 		case Op_code::load_object: {
 			const auto destination  = ip.read<std::uint16_t>();
 			const auto source       = ip.read<Address>();
-			namespaces[destination] = frame.load<memory::gc::GC_able<member::Object*>>(source)->frame();
+			namespaces[destination] = frame.load<memory::gc::GC_able<member::object::Base*>>(source)->frame();
 			break;
 		}
 		case Op_code::load_from_namespace: {

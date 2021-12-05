@@ -5,6 +5,7 @@
 #include "function.hpp"
 #include "integral.hpp"
 #include "object.hpp"
+#include "string.hpp"
 #include "union.hpp"
 #include "void.hpp"
 

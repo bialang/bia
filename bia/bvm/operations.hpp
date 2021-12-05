@@ -1,6 +1,7 @@
 #ifndef BIA_BVM_OPERATIONS_HPP_
 #define BIA_BVM_OPERATIONS_HPP_
 
+#include <bia/member/object/string.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
 #include <cmath>
@@ -107,15 +108,15 @@ struct Equality
 		static_assert(std::is_pod<Type>::value, "Type must be POD");
 		return left == right;
 	}
-	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
-	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	bool operator()(memory::gc::GC_able<member::object::String*> left,
+	                memory::gc::GC_able<member::object::String*> right) const noexcept
 	{
-		return left->value == right->value;
+		return left->value() == right->value();
 	}
 	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
-	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	                memory::gc::GC_able<member::object::String*> right) const noexcept
 	{
-		return std::regex_match(right->value, left->value);
+		return std::regex_match(right->value(), left->value);
 	}
 };
 
@@ -127,15 +128,15 @@ struct Inequality
 		static_assert(std::is_pod<Type>::value, "Type must be POD");
 		return left != right;
 	}
-	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
-	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	bool operator()(memory::gc::GC_able<member::object::String*> left,
+	                memory::gc::GC_able<member::object::String*> right) const noexcept
 	{
-		return left->value != right->value;
+		return left->value() != right->value();
 	}
 	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
-	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	                memory::gc::GC_able<member::object::String*> right) const noexcept
 	{
-		return !std::regex_match(right->value, left->value);
+		return !std::regex_match(right->value(), left->value);
 	}
 };
 
@@ -181,15 +182,15 @@ struct Greater_equality
 
 struct Inside_of
 {
-	bool operator()(memory::gc::GC_able<memory::gc::String*> left,
-	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	bool operator()(memory::gc::GC_able<member::object::String*> left,
+	                memory::gc::GC_able<member::object::String*> right) const noexcept
 	{
-		return right->value.find(left->value) != std::string::npos;
+		return right->value().find(left->value()) != std::string::npos;
 	}
 	bool operator()(memory::gc::GC_able<memory::gc::Regex*> left,
-	                memory::gc::GC_able<memory::gc::String*> right) const noexcept
+	                memory::gc::GC_able<member::object::String*> right) const noexcept
 	{
-		return std::regex_search(right->value, left->value);
+		return std::regex_search(right->value(), left->value);
 	}
 };
 

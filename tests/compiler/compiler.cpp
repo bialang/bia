@@ -215,12 +215,14 @@ try {
 	bytecode::disassemble(output, std::cout);
 
 	memory::Stack stack{ allocator, 1024 };
-	memory::Frame<true> base_frame{ stack._memory, gc };
+	memory::Frame<true> base_frame{ stack._memory, &gc };
 	const auto resources =
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);
 	{
+#if BIA_LOG_IS_ENABLED(INFO)
 		const auto start = std::chrono::high_resolution_clock::now();
+#endif
 		bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources,
 		             context);
 		BIA_LOG(INFO, "Execution took {}", std::chrono::high_resolution_clock::now() - start);

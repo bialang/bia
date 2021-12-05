@@ -1,6 +1,7 @@
 #ifndef BIA_INTERNAL_TYPE_FRAMER_HPP_
 #define BIA_INTERNAL_TYPE_FRAMER_HPP_
 
+#include <bia/error/exception.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
 #include <bia/util/algorithm.hpp>
@@ -22,6 +23,8 @@ struct Framer;
 template<typename Type>
 struct Framer<Type, typename std::enable_if<std::is_trivial<Type>::value>::type>
 {
+	constexpr static bool requires_gc = false;
+
 	constexpr static std::size_t size() noexcept
 	{
 		return sizeof(Type);
@@ -30,7 +33,7 @@ struct Framer<Type, typename std::enable_if<std::is_trivial<Type>::value>::type>
 	{
 		return alignof(Type);
 	}
-	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, Type value)
+	static void frame(memory::gc::GC*, util::Span<util::Byte*> buffer, Type value)
 	{
 		BIA_EXPECTS(buffer.size_bytes() == size());
 		BIA_EXPECTS(util::is_aligned(buffer.data(), alignment()));
@@ -49,6 +52,7 @@ struct Framer<
   Type, typename std::enable_if<!std::is_trivial<typename std::decay<Type>::type>::value &&
                                 !util::type_traits::Is_variant<typename std::decay<Type>::type>::value>::type>
 {
+	constexpr static bool requires_gc = true;
 	typedef typename std::decay<Type>::type Value;
 	typedef memory::gc::Container<Value> Container;
 	typedef memory::gc::GC_able<Container*> Pointer;
@@ -61,9 +65,12 @@ struct Framer<
 	{
 		return Framer<Pointer>::alignment();
 	}
-	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, Value value)
+	static void frame(memory::gc::GC* gc, util::Span<util::Byte*> buffer, Value value)
 	{
-		Framer<Pointer>::frame(gc, buffer, gc.create<Container>(std::move(value)));
+		if (!gc) {
+			BIA_THROW(error::Code::gc_required);
+		}
+		Framer<Pointer>::frame(gc, buffer, gc->create<Container>(std::move(value)));
 	}
 	static Value& unframe(util::Span<const util::Byte*> buffer)
 	{
@@ -75,6 +82,7 @@ template<typename... Types>
 struct Framer<util::Variant<Types...>, void>
 {
 public:
+	constexpr static bool requires_gc = util::any(Framer<Types>::requires_gc...);
 	constexpr static std::size_t index_size =
 	  util::aligned(Framer<std::size_t>::size(), alignof(std::max_align_t));
 	// util::aligned(Framer<std::size_t>::size(), util::max(Framer<Types>::alignment()...));
@@ -87,9 +95,12 @@ public:
 	{
 		return Framer<std::size_t>::alignment();
 	}
-	static void frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, util::Variant<Types...> value)
+	static void frame(memory::gc::GC* gc, util::Span<util::Byte*> buffer, util::Variant<Types...> value)
 	{
 		BIA_EXPECTS(util::is_aligned(buffer.data(), Framer<std::size_t>::alignment()));
+		if (requires_gc && !gc) {
+			BIA_THROW(error::Code::gc_required);
+		}
 		Framer<std::size_t>::frame(gc, buffer.subspan(+0, Framer<std::size_t>::size()), value.index());
 		if (value.has_value()) {
 			_frame<0, Types...>(gc, buffer.subspan(index_size), value);
@@ -107,10 +118,10 @@ public:
 
 private:
 	template<std::size_t Index>
-	static void _frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, util::Variant<Types...>& value)
+	static void _frame(memory::gc::GC* gc, util::Span<util::Byte*> buffer, util::Variant<Types...>& value)
 	{}
 	template<std::size_t Index, typename Type, typename... Others>
-	static void _frame(memory::gc::GC& gc, util::Span<util::Byte*> buffer, util::Variant<Types...>& value)
+	static void _frame(memory::gc::GC* gc, util::Span<util::Byte*> buffer, util::Variant<Types...>& value)
 	{
 		if (Index == value.index()) {
 			BIA_ASSERT(buffer.size() >= Framer<Type>::size());

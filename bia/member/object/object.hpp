@@ -1,7 +1,8 @@
-#ifndef BIA_MEMBER_OBJECT_HPP_
-#define BIA_MEMBER_OBJECT_HPP_
+#ifndef BIA_MEMBER_OBJECT_OBJECT_HPP_
+#define BIA_MEMBER_OBJECT_OBJECT_HPP_
 
-#include <bia/memory/frame.hpp>
+#include "base.hpp"
+
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
 #include <bia/util/algorithm.hpp>
@@ -9,12 +10,13 @@
 
 namespace bia {
 namespace member {
+namespace object {
 
-class Object : public memory::gc::Base
+class Object : public Base
 {
 public:
 	Object(memory::gc::GC& gc, std::size_t size)
-	    : _frame{ { static_cast<util::Byte*>(gc.allocator()->checked_allocate(size).get()), size }, gc }
+	    : _frame{ { static_cast<util::Byte*>(gc.allocator()->checked_allocate(size).get()), size }, &gc }
 	{}
 	Object(const Object& copy) = delete;
 	Object(Object&& move) noexcept : _frame{ move._frame }
@@ -26,7 +28,7 @@ public:
 	{
 		_clear();
 	}
-	memory::Frame<true> frame() noexcept
+	memory::Frame<true> frame() noexcept override
 	{
 		return _frame;
 	}
@@ -61,11 +63,12 @@ private:
 	void _clear() noexcept
 	{
 		if (_frame.underlying_memory().data()) {
-			_frame.gc().allocator()->deallocate(_frame.underlying_memory().data());
+			_frame.gc()->allocator()->deallocate(_frame.underlying_memory().data());
 		}
 	}
 };
 
+} // namespace object
 } // namespace member
 } // namespace bia
 

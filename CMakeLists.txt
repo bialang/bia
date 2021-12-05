@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(BUILD_SHARED_LIBS "Builds the Bia library as a shared library." ON)
-option(BIA_BUILD_EXAMPLES "Builds the example programs." ON)
+option(BIA_BUILD_EXAMPLES "Builds the example programs." OFF)
 option(BIA_ENABLE_DEV_BACKTRACING "Enables C++ backtracing. Intended for development." OFF)
 option(BIA_ENABLE_SANITIZER "Enables the use of sanitizers." OFF)
 option(BIA_DEVELOPER "Enables developer mode." OFF)

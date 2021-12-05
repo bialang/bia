@@ -8,7 +8,7 @@
 
 #include <bia/member/function/creator.hpp>
 #include <bia/member/function/dynamic.hpp>
-#include <bia/member/object.hpp>
+#include <bia/member/object/object.hpp>
 #include <bia/memory/frame.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
@@ -68,7 +68,7 @@ public:
 
 		type::Variable variable{};
 		auto tmp            = finish_typed_object(std::move(object));
-		variable.offset     = store(_gc.create<member::Object>(std::move(tmp.first)));
+		variable.offset     = store(_gc.create<member::object::Object>(std::move(tmp.first)));
 		variable.definition = tmp.second;
 		_modules.insert({ std::move(name), variable });
 	}

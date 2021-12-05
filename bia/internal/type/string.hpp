@@ -1,13 +1,31 @@
 #ifndef BIA_INTERNAL_TYPE_STRING_HPP_
 #define BIA_INTERNAL_TYPE_STRING_HPP_
 
+#include "integral.hpp"
 #include "object.hpp"
-
-#include <bia/memory/gc/types.hpp>
 
 namespace bia {
 namespace internal {
 namespace type {
+
+template<>
+class Definition<std::string> : public Definition<Dynamic_object>
+{
+public:
+	Definition() : Definition<Dynamic_object>{ _make_map() }
+	{}
+
+private:
+	static Map _make_map()
+	{
+		static Definition<std::ptrdiff_t> int_definition{};
+		Map map;
+		Variable variable{};
+		variable.definition = &int_definition;
+		map.insert({ util::from_cstring("length"), variable });
+		return map;
+	}
+};
 
 // class String : public Object
 // {

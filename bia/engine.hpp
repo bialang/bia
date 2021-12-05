@@ -5,6 +5,7 @@
 #include "member/function/varargs.hpp"
 #include "memory/gc/gc.hpp"
 #include "object_builder.hpp"
+#include "primitives.hpp"
 
 #include <bia/bsl/modules.hpp>
 #include <istream>

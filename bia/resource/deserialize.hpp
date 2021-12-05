@@ -3,6 +3,7 @@
 
 #include "serializer.hpp"
 
+#include <bia/member/object/string.hpp>
 #include <bia/memory/gc/gc.hpp>
 #include <bia/memory/gc/types.hpp>
 #include <bia/util/gsl.hpp>
@@ -14,7 +15,7 @@
 namespace bia {
 namespace resource {
 
-typedef util::Variant<memory::gc::GC_able<memory::gc::String*>, memory::gc::GC_able<memory::gc::Regex*>>
+typedef util::Variant<memory::gc::GC_able<member::object::String*>, memory::gc::GC_able<memory::gc::Regex*>>
   Resource;
 typedef std::vector<Resource> Resources;
 

@@ -99,7 +99,6 @@ struct Container : Base
 	{}
 };
 
-typedef Container<std::string> String;
 typedef Container<std::regex> Regex;
 
 } // namespace gc

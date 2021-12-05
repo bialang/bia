@@ -35,6 +35,19 @@ constexpr Type max(Type value, Type other, Others... others) noexcept
 	return value > max(other, others...) ? value : max(other, others...);
 }
 
+
+template<typename Type>
+constexpr bool any(Type value)
+{
+	return value;
+}
+
+template<typename Type, typename... Others>
+constexpr bool any(Type value, Type other, Others... others) noexcept
+{
+	return value ? true : any(other, others...);
+}
+
 constexpr int sum() noexcept
 {
 	return 0;

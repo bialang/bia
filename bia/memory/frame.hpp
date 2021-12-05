@@ -27,11 +27,11 @@ public:
 	Frame() noexcept = default;
 	Frame(util::Span<util::Byte*> space) noexcept : _space{ space }
 	{
-		BIA_EXPECTS(util::is_aligned(_space.begin(), alignof(std::max_align_t)));
+		// BIA_EXPECTS(util::is_aligned(_space.begin(), alignof(std::max_align_t)));
 	}
 	Frame(const Frame& parent, std::size_t offset) : _space{ parent._space.subspan(offset) }
 	{
-		BIA_EXPECTS(util::is_aligned(_space.begin(), alignof(std::max_align_t)));
+		// BIA_EXPECTS(util::is_aligned(_space.begin(), alignof(std::max_align_t)));
 	}
 	/**
 	 * Loads a frameable type.
@@ -71,7 +71,7 @@ class Frame<true> : public Frame<false>
 {
 public:
 	Frame() noexcept = default;
-	Frame(util::Span<util::Byte*> space, gc::GC& gc) noexcept : Frame<false>{ space }, _gc{ &gc }
+	Frame(util::Span<util::Byte*> space, gc::GC* gc) noexcept : Frame<false>{ space }, _gc{ gc }
 	{}
 	Frame(Frame& parent, std::size_t offset) : Frame<false>{ parent, offset }, _gc{ parent._gc }
 	{}
@@ -89,12 +89,12 @@ public:
 		} else if (position < _space.begin() || position + Framer::size() > _space.end()) {
 			BIA_THROW(error::Code::out_of_stack);
 		}
-		Framer::frame(*_gc, { position, Framer::size() }, value);
+		Framer::frame(_gc, { position, Framer::size() }, value);
 		return Framer::size();
 	}
-	gc::GC& gc() noexcept
+	gc::GC* gc() noexcept
 	{
-		return *_gc;
+		return _gc;
 	}
 	Frame& operator=(const Frame& copy) noexcept = default;
 
