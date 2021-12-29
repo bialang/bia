@@ -1,6 +1,6 @@
 #include <bia/internal/type/definition.hpp>
 #include <bia/internal/type/integral.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 #include <cstdint>
 #include <type_traits>
 

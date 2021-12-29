@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_ENABLE_BENCHMARKING
 
 #include <bia/string/encoding/unicode.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 using namespace bia::string::encoding;
 

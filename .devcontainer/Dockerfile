@@ -1,3 +1,4 @@
-FROM gcc:11
+FROM archlinux
 
-RUN apt-get update && apt-get install -y git cmake libspdlog-dev gdb
+RUN pacman -Syq --noconfirm python-pip clang git git-lfs openssh cmake ninja gcc gdb nodejs yarn
+RUN pip install cmakelang

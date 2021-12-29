@@ -9,7 +9,7 @@
 #include <bia/util/type_traits/is_varargs_invokable.hpp>
 #include <bia/util/type_traits/size_of.hpp>
 #include <bia/util/type_traits/type_index.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 using namespace bia::util;
 using namespace bia::util::type_traits;

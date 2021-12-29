@@ -1,5 +1,5 @@
 #include <bia/util/portable/stream.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 #include <cstdint>
 #include <sstream>
 

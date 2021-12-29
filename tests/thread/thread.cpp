@@ -2,7 +2,7 @@
 
 #include <bia/thread/config.hpp>
 #include <bia/thread/thread.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 using namespace bia::thread;
 

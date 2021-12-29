@@ -4,7 +4,7 @@
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/resource/manager.hpp>
 #include <bia/util/gsl.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 using namespace bia;
 

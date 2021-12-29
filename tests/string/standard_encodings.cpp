@@ -1,6 +1,6 @@
 ﻿#include <bia/string/encoding/encoder.hpp>
 #include <bia/util/memory_streambuf.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 
 using namespace bia::string::encoding;
 

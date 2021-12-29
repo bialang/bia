@@ -3,7 +3,7 @@
 #include <bia/tokenizer/token/parse/any_of.hpp>
 #include <bia/tokenizer/token/parse/tokens.hpp>
 #include <bia/util/finally.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 #include <iostream>
 #include <memory>
 #include <sstream>

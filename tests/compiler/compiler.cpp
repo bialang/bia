@@ -13,7 +13,7 @@
 #include <bia/string/encoding/unicode.hpp>
 #include <bia/tokenizer/bia_lexer.hpp>
 #include <bia/util/finally.hpp>
-#include <catch.hpp>
+#include <catch2/catch.hpp>
 #include <cstdio>
 #include <cstring>
 #include <fstream>
