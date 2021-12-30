@@ -37,8 +37,6 @@ private:
 	Errors _errors;
 	Warnings _warnings;
 	internal::Context& _context;
-
-	
 };
 
 } // namespace compiler

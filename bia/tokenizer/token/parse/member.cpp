@@ -24,8 +24,11 @@ error::Bia parse::member_access(Parameter& param)
 inline error::Bia argument_list(Parameter& param)
 {
 	Parameter::State old;
-	for (bool first = true; true; first = false) {
+
+	// positionals
+	for (bool first = true, doing_positionals = true; true; first = false) {
 		old = param.backup();
+		// read comma
 		if (!first) {
 			parse::spacer(param);
 			const auto ranger = param.begin_range();
@@ -35,11 +38,34 @@ inline error::Bia argument_list(Parameter& param)
 			param.bundle.emplace_back(Token::Control::comma, ranger.range());
 			parse::spacer(param);
 		}
-		if (const auto err = parse::single_expression(param)) {
-			if (first) {
-				break;
+
+		// try named
+		{
+			const auto tmp = param.backup();
+			if (const auto err = parse::identifier(param)) {
+				if (!doing_positionals) {
+					return err;
+				}
+				param.restore(tmp);
+				goto gt_not_named;
 			}
-			return err;
+
+			parse::spacer(param);
+			const auto ranger = param.begin_range();
+			if (param.reader.read() != '=') {
+				if (!doing_positionals) {
+					return param.make_error(error::Code::expected_assignment, ranger.range());
+				}
+				param.restore(tmp);
+				goto gt_not_named;
+			}
+			parse::spacer(param);
+			doing_positionals = false;
+		}
+
+	gt_not_named:
+		if (const auto err = parse::single_expression(param)) {
+			break;
 		}
 	}
 	param.restore(old);

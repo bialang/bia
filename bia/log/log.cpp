@@ -1,7 +1,7 @@
 #include "log.hpp"
 
-#if BIA_LOG_IS_ENABLED(ANY)
-#include <spdlog/sinks/stdout_color_sinks.h>
+#if BIA_LOG_LEVEL != BIA_LOG_LEVEL_OFF
+#	include <spdlog/sinks/stdout_color_sinks.h>
 
 std::shared_ptr<spdlog::logger> bia::log::get_default_logger() noexcept
 {

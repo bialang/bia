@@ -26,21 +26,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(BUILD_SHARED_LIBS "Builds the Bia library as a shared library." ON)
 option(BIA_BUILD_EXAMPLES "Builds the example programs." OFF)
-option(BIA_ENABLE_DEV_BACKTRACING "Enables C++ backtracing. Intended for development." OFF)
-option(BIA_ENABLE_SANITIZER "Enables the use of sanitizers." OFF)
 option(BIA_DEVELOPER "Enables developer mode." OFF)
 option(BIA_DEVELOPER_DISASSEMBLY "Enables the disassembly output for the bytecode." ON)
+option(BIA_DEVELOPER_SANITIZER "Enables the global use of sanitizers." OFF)
 
-if(BIA_ENABLE_SANITIZER)
-  set(CMAKE_CXX_FLAGS_DEBUG
-      "${CMAKE_CXX_FLAGS_DEBUG} -g -O1 -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address"
-  )
-  set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -g -fsanitize=address")
-endif()
-
-# backtracing
-if(BIA_ENABLE_DEV_BACKTRACING)
-  add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/backward-cpp")
+if(BIA_DEVELOPER AND BIA_ENABLE_SANITIZER)
+  add_compile_options(-g -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address)
+  add_link_options(-g -fsanitize=address)
 endif()
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
@@ -53,7 +45,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
-# examples
+# Examples
 if(BIA_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()

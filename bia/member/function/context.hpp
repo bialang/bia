@@ -25,9 +25,9 @@ public:
 		// load parameter count
 		if (_signature.vararg_definition.has_value()) {
 			// subtract the size of the hidden vararg count variable, because it will automatically included
-			const std::int32_t offset = _calculate_offset(_signature.argument_definitions.empty()
+			const std::int32_t offset = _calculate_offset(_signature.positionals.empty()
 			                                                ? 0
-			                                                : _signature.argument_definitions.size() - 1) -
+			                                                : _signature.positionals.size() - 1) -
 			                            util::aligned(sizeof(std::ptrdiff_t), alignof(std::max_align_t));
 			_vararg_count = _frame.load<std::ptrdiff_t>(offset);
 			BIA_ASSERT(_vararg_count >= 0);
@@ -53,12 +53,12 @@ public:
 	template<typename Type>
 	Type get_argument(std::size_t index)
 	{
-		if (index >= _signature.argument_definitions.size() + _vararg_count) {
+		if (index >= _signature.positionals.size() + _vararg_count) {
 			BIA_THROW(error::Code::out_of_bounds);
 		}
 		internal::type::Definition<typename std::decay<Type>::type> definition{};
-		if (!definition.is_assignable(index < _signature.argument_definitions.size()
-		                                ? _signature.argument_definitions[index].definition
+		if (!definition.is_assignable(index < _signature.positionals.size()
+		                                ? _signature.positionals[index].definition
 		                                : _signature.vararg_definition->definition)) {
 			BIA_ASSERT(false);
 		}
@@ -70,7 +70,7 @@ public:
 	}
 	std::size_t size() const noexcept
 	{
-		return _signature.argument_definitions.size() + vararg_argument_count();
+		return _signature.positionals.size() + vararg_argument_count();
 	}
 
 private:
@@ -82,13 +82,13 @@ private:
 	std::int32_t _calculate_offset(std::size_t index) const
 	{
 		std::int32_t offset = util::aligned(sizeof(memory::gc::GC_able<void*>), alignof(std::max_align_t));
-		for (std::size_t i = 0; i < index && i < _signature.argument_definitions.size(); ++i) {
+		for (std::size_t i = 0; i < index && i < _signature.positionals.size(); ++i) {
 			offset +=
-			  util::aligned(_signature.argument_definitions[i].definition->size(), alignof(std::max_align_t));
+			  util::aligned(_signature.positionals[i].definition->size(), alignof(std::max_align_t));
 		}
 		if (_signature.vararg_definition.has_value()) {
 			offset += util::aligned(sizeof(std::ptrdiff_t), alignof(std::max_align_t));
-			for (auto i = _signature.argument_definitions.size(); i < index; ++i) {
+			for (auto i = _signature.positionals.size(); i < index; ++i) {
 				offset += util::aligned(_signature.vararg_definition->definition->size(), alignof(std::max_align_t));
 			}
 		}

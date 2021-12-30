@@ -32,9 +32,9 @@ struct Is_varargs_compatible_container : std::false_type
 {};
 
 template<typename Type, typename... Types>
-struct Is_varargs_compatible_container<type_container<Type, Types...>>
+struct Is_varargs_compatible_container<Type_container<Type, Types...>>
     : std::conditional<Is_varargs<Type>::value, std::integral_constant<bool, sizeof...(Types) == 0>,
-                       Is_varargs_compatible_container<type_container<Types...>>>::type
+                       Is_varargs_compatible_container<Type_container<Types...>>>::type
 {};
 
 template<typename Invokable>

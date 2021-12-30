@@ -19,7 +19,7 @@ template<typename Invokeable, typename... Arguments>
 inline
   typename std::enable_if<util::type_traits::Invokable_info<typename std::decay<Invokeable>::type>::is_static,
                           memory::gc::GC_able<Base*>>::type
-  create(memory::gc::GC& gc, Invokeable&& function, util::type_traits::type_container<Arguments...>)
+  create(memory::gc::GC& gc, Invokeable&& function, util::type_traits::Type_container<Arguments...>)
 {
 	return {
 		gc.create<Static<typename util::type_traits::Invokable_info<typename std::decay<Invokeable>::type>::Return,
@@ -31,7 +31,7 @@ template<typename Invokeable, typename... Arguments>
 inline
   typename std::enable_if<util::type_traits::Invokable_info<typename std::decay<Invokeable>::type>::is_functor,
                           memory::gc::GC_able<Base*>>::type
-  create(memory::gc::GC& gc, Invokeable&& function, util::type_traits::type_container<Arguments...>)
+  create(memory::gc::GC& gc, Invokeable&& function, util::type_traits::Type_container<Arguments...>)
 {
 	return { gc.create<Functor<typename std::decay<Invokeable>::type>>(std::forward<Invokeable>(function)) };
 }

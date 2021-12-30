@@ -144,8 +144,28 @@ struct Token
 		assign_statement,
 	};
 
+	struct Sequence
+	{
+		enum class Type
+		{
+			single_expression,
+		};
+
+		Type type;
+		std::size_t count;
+
+		bool operator==(const Sequence& other) const noexcept
+		{
+			return type == other.type && count == other.count;
+		}
+		bool operator==(const Type& other) const noexcept
+		{
+			return type == other;
+		}
+	};
+
 	typedef util::Variant<Number, Array_dimension, Batch, Control, Keyword, String, Regex, Identifier, Operator,
-	                      Statement_type>
+	                      Statement_type, Sequence>
 	  Value;
 
 	Value value;
@@ -160,7 +180,7 @@ struct Token
 	Token(Token&& move) : value{ std::move(move.value) }, range{ std::move(move.range) }
 	{}
 	~Token() noexcept = default;
-	Token& operator=(const Token& copy)
+	Token& operator   =(const Token& copy)
 	{
 		value = copy.value;
 		range = copy.range;

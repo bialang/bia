@@ -118,18 +118,15 @@ try {
 	context.global_namespace().put_object(util::from_cstring("env"), std::move(obj));
 
 	member::function::Signature signature{ context.global_namespace().type_system().definition_of<int>() };
-	// signature.argument_definitions.push_back(
-	//   { context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>()
-	//   });
-	signature.vararg_definition = internal::type::Argument{
-		context.global_namespace().type_system().definition_of<util::Variant<std::int64_t, std::string>>()
-	};
+	signature.positionals.push_back({ context.global_namespace().type_system().definition_of<std::string>() });
+	signature.positionals.push_back({ context.global_namespace().type_system().definition_of<std::string>() });
+	signature.named_arguments.insert({ util::from_cstring("a"), 0 });
+	signature.named_arguments.insert({ util::from_cstring("b"), 1 });
 	context.global_namespace().put_invokable(
 	  util::from_cstring("dynamic"),
 	  [](member::function::Context& context) {
-		  std::cout << "Hello world! - "
-		            << context.get_argument<util::Variant<std::int64_t, std::string>>(0).get<0>()
-		            << context.get_argument<util::Variant<std::int64_t, std::string>>(1).get<0>() << std::endl;
+		  std::cout << "A=" << context.get_argument<std::string>(0)
+		            << " B=" << context.get_argument<std::string>(1) << "\n";
 		  context.set_return(61);
 	  },
 	  signature);
@@ -160,6 +157,10 @@ try {
 
 	bool failed = false;
 
+#if BIA_LOG_IS_ENABLED(INFO)
+	const auto start = std::chrono::high_resolution_clock::now();
+#endif
+
 	if (const auto err = lexer.lex(reader, compiler)) {
 		code.clear();
 		code.seekg(0, std::ios::end);
@@ -172,6 +173,8 @@ try {
 	}
 
 	compiler.finish();
+	BIA_LOG(INFO, "Compilation took {}", std::chrono::high_resolution_clock::now() - start);
+
 	if (compiler.errors().size() > 0) {
 		code.clear();
 		code.seekg(0, std::ios::end);

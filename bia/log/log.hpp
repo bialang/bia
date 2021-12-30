@@ -5,7 +5,7 @@
 
 #include <memory>
 
-#if BIA_LOG_IS_ENABLED(ANY)
+#if BIA_LOG_LEVEL != BIA_LOG_LEVEL_OFF
 #	include <spdlog/spdlog.h>
 #	include <spdlog/fmt/fmt.h>
 #	include <chrono>

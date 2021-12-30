@@ -1,9 +1,2 @@
-import io
-
-io.print("hi du kartoffel".length)
-
-let mut x = 0
-async function foo() {
-	x = 10
-	io.print(x)
-}
+dynamic("hey", "ho")
+dynamic(b="hey", a="ho")

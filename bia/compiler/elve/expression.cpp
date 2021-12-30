@@ -288,8 +288,14 @@ inline std::pair<Tokens, util::Optional<symbol::Local_variable>>
 
 std::pair<Tokens, util::Optional<symbol::Local_variable>> single_expression(Parameter& param, Tokens tokens)
 {
+	BIA_EXPECTS(tokens.front().value == Token::Sequence::Type::single_expression);
+
 	Jumper jumper{ param.instructor };
-	return single_expression_impl(param, tokens, jumper, -1);
+	auto result = single_expression_impl(
+	  param, tokens.subspan(1, tokens.front().value.get<Token::Sequence>().count), jumper, -1);
+	BIA_ASSERT(result.first.empty());
+	result.first = tokens.subspan(result.first.begin());
+	return result;
 }
 
 } // namespace elve

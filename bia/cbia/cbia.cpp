@@ -251,7 +251,7 @@ try {
 
 bia_err_t bia_signature_push_argument(bia_signature_t signature, bia_definition_t definition)
 try {
-	static_cast<member::function::Signature*>(signature)->argument_definitions.push_back(
+	static_cast<member::function::Signature*>(signature)->positionals.push_back(
 	  { static_cast<const internal::type::Definition_base*>(definition) });
 	return BIA_OK;
 } catch (...) {

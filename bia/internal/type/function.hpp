@@ -3,6 +3,7 @@
 
 #include "definition.hpp"
 
+#include <algorithm>
 #include <array>
 #include <bia/util/gsl.hpp>
 #include <bia/util/optional.hpp>
@@ -59,30 +60,40 @@ public:
 			const auto ptr = dynamic_cast<const Definition_invokable_base*>(other.get());
 			// compare arguments
 			if ((n = return_type()->compare(ptr->return_type())) == 0) {
-				if ((n = util::compare(argument_lower_count(), ptr->argument_lower_count())) == 0) {
-					n = util::compare(argument_upper_count(), ptr->argument_upper_count());
-					for (auto i = arguments_begin(), j = ptr->arguments_begin(); n == 0 && i != arguments_end(); ++i) {
-						n = i->definition->compare(j->definition);
+				if ((n = util::compare(positional_argument_count(), ptr->positional_argument_count())) == 0) {
+					if ((n = util::compare(
+					       std::max(positional_argument_count(),
+					                has_vararg() ? 0 : std::numeric_limits<std::size_t>::max()),
+					       std::max(ptr->positional_argument_count(),
+					                ptr->has_vararg() ? 0 : std::numeric_limits<std::size_t>::max()))) == 0) {
+						for (std::size_t i = 0; i < positional_argument_count(); ++i) {
+							if ((n = argument_at(i)->definition->compare(ptr->argument_at(i)->definition)) != 0) {
+								return n;
+							}
+						}
+						if (has_vararg()) {
+							n = argument_at(positional_argument_count())
+							      ->definition->compare(ptr->argument_at(positional_argument_count())->definition);
+						}
 					}
 				}
 			}
 		}
 		return n;
 	}
-	virtual const Definition_base* return_type() const noexcept           = 0;
-	virtual bool is_vararg_index(std::size_t index) const noexcept        = 0;
-	virtual std::size_t argument_lower_count() const noexcept             = 0;
-	virtual std::size_t argument_upper_count() const noexcept             = 0;
-	virtual const Argument* argument_at(std::size_t index) const noexcept = 0;
-	virtual const Argument* arguments_begin() const noexcept              = 0;
-	virtual const Argument* arguments_end() const noexcept                = 0;
+	virtual const Definition_base* return_type() const noexcept                = 0;
+	virtual const Argument* argument_at(std::size_t index) const noexcept      = 0;
+	virtual const Argument* argument_at(const String_key& name) const noexcept = 0;
+	virtual bool has_vararg() const noexcept                                   = 0;
+	virtual std::size_t positional_argument_count() const noexcept             = 0;
 };
 
 struct Dynamic_function_signature
 {
 	util::Not_null<const Definition_base*> return_definition;
-	std::vector<Argument> argument_definitions;
+	std::vector<Argument> positionals;
 	util::Optional<Argument> vararg_definition;
+	std::map<String_key, std::size_t, String_comparator> named_arguments;
 };
 
 struct Dynamic_function
@@ -93,11 +104,7 @@ class Definition<Dynamic_function> : public Definition_invokable_base
 {
 public:
 	Definition(Dynamic_function_signature signature) : _signature{ std::move(signature) }
-	{
-		if (_signature.vararg_definition.has_value()) {
-			_signature.argument_definitions.push_back(*_signature.vararg_definition);
-		}
-	}
+	{}
 	unsigned int ordinal() const noexcept override
 	{
 		return 59;
@@ -106,35 +113,27 @@ public:
 	{
 		return _signature.return_definition;
 	}
-	bool is_vararg_index(std::size_t index) const noexcept override
-	{
-		return _signature.vararg_definition.has_value() && index == _signature.argument_definitions.size() - 1;
-	}
-	std::size_t argument_lower_count() const noexcept override
-	{
-		return _signature.argument_definitions.size() - (_signature.vararg_definition.has_value() ? 1 : 0);
-	}
-	std::size_t argument_upper_count() const noexcept override
-	{
-		return _signature.vararg_definition.has_value() ? std::numeric_limits<std::size_t>::max()
-		                                                : _signature.argument_definitions.size();
-	}
 	const Argument* argument_at(std::size_t index) const noexcept override
 	{
-		if (index < _signature.argument_definitions.size()) {
-			return &_signature.argument_definitions[index];
+		if (index < _signature.positionals.size()) {
+			return &_signature.positionals[index];
 		} else if (_signature.vararg_definition.has_value()) {
-			return &_signature.argument_definitions.back();
+			return &*_signature.vararg_definition;
 		}
 		return nullptr;
 	}
-	const Argument* arguments_begin() const noexcept final
+	const Argument* argument_at(const String_key& name) const noexcept override
 	{
-		return _signature.argument_definitions.empty() ? nullptr : &_signature.argument_definitions.front();
+		const auto it = _signature.named_arguments.find(name);
+		return it == _signature.named_arguments.end() ? nullptr : argument_at(it->second);
 	}
-	const Argument* arguments_end() const noexcept final
+	bool has_vararg() const noexcept final
 	{
-		return _signature.argument_definitions.empty() ? nullptr : &_signature.argument_definitions.back() + 1;
+		return _signature.vararg_definition.has_value();
+	}
+	std::size_t positional_argument_count() const noexcept final
+	{
+		return _signature.positionals.size();
 	}
 
 private:
@@ -146,7 +145,7 @@ class Definition_invokable_helper : public Definition_invokable_base, public Def
 {
 public:
 	constexpr static bool is_varargs = util::type_traits::Is_varargs_compatible_container<
-	  util::type_traits::type_container<Arguments...>>::value;
+	  util::type_traits::Type_container<Arguments...>>::value;
 
 	Definition_invokable_helper(const std::type_info& info) noexcept : _index{ info }
 	{
@@ -161,18 +160,6 @@ public:
 	{
 		return &_return_type;
 	}
-	bool is_vararg_index(std::size_t index) const noexcept override
-	{
-		return is_varargs && index == sizeof...(Arguments) - 1;
-	}
-	std::size_t argument_lower_count() const noexcept override
-	{
-		return is_varargs ? sizeof...(Arguments) - 1 : sizeof...(Arguments);
-	}
-	std::size_t argument_upper_count() const noexcept override
-	{
-		return is_varargs ? std::numeric_limits<std::size_t>::max() : sizeof...(Arguments);
-	}
 	const Argument* argument_at(std::size_t index) const noexcept override
 	{
 		if (index < _arguments.size()) {
@@ -182,13 +169,18 @@ public:
 		}
 		return nullptr;
 	}
-	const Argument* arguments_begin() const noexcept final
+	const Argument* argument_at(const String_key& name) const noexcept final
 	{
-		return _arguments.begin();
+		// C++ types cannot have named arguments :(
+		return nullptr;
 	}
-	const Argument* arguments_end() const noexcept final
+	bool has_vararg() const noexcept final
 	{
-		return _arguments.end();
+		return is_varargs;
+	}
+	std::size_t positional_argument_count() const noexcept final
+	{
+		return is_varargs ? sizeof...(Arguments) - 1 : sizeof...(Arguments);
 	}
 	const std::type_index& type_index() const noexcept override
 	{

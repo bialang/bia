@@ -7,8 +7,10 @@
 #include <bia/util/type_traits/invokable_info.hpp>
 #include <bia/util/type_traits/is_invokable.hpp>
 #include <bia/util/type_traits/is_varargs_invokable.hpp>
+#include <bia/util/type_traits/multi_comparable.hpp>
 #include <bia/util/type_traits/size_of.hpp>
 #include <bia/util/type_traits/type_index.hpp>
+#include <bia/util/type_traits/type_select.hpp>
 #include <catch2/catch.hpp>
 
 using namespace bia::util;
@@ -76,6 +78,13 @@ TEST_CASE("type_index", "[type_traits][util]")
 	REQUIRE((type_index<int, float, double, short, char>::value == npos));
 }
 
+TEST_CASE("Type_select", "[type_traits][util]")
+{
+	REQUIRE(std::is_same<decltype(Type_select<0, 1, int, double>::selected), const Type_container<int>>::value);
+	REQUIRE(std::is_same<decltype(Type_select<1, 2, int, double, float, void>::selected), const Type_container<double, float>>::value);
+	REQUIRE(std::is_same<decltype(Type_select<2, 2, int, double, float, void>::selected), const Type_container<float, void>>::value);
+}
+
 TEST_CASE("is_invokable", "[type_traits][util]")
 {
 	REQUIRE(Is_invokable<void (*)()>::value);
@@ -88,11 +97,17 @@ TEST_CASE("is_invokable", "[type_traits][util]")
 TEST_CASE("Is_vararg_invokable", "[type_traits][util]")
 {
 	using namespace bia::member::function;
-	REQUIRE(!Is_varargs_invokable<void(*)()>::value);
-	REQUIRE(!Is_varargs_invokable<void(*)(int)>::value);
-	REQUIRE(!Is_varargs_invokable<void(*)(Varargs<int>, int)>::value);
-	REQUIRE(!Is_varargs_invokable<void(*)(Varargs<int>, int, Varargs<int>)>::value);
-	REQUIRE(Is_varargs_invokable<void(*)(float, int, Varargs<int>)>::value);
+	REQUIRE(!Is_varargs_invokable<void (*)()>::value);
+	REQUIRE(!Is_varargs_invokable<void (*)(int)>::value);
+	REQUIRE(!Is_varargs_invokable<void (*)(Varargs<int>, int)>::value);
+	REQUIRE(!Is_varargs_invokable<void (*)(Varargs<int>, int, Varargs<int>)>::value);
+	REQUIRE(Is_varargs_invokable<void (*)(float, int, Varargs<int>)>::value);
+}
+
+TEST_CASE("Multi_comparable", "[type_traits][util]")
+{
+	REQUIRE(std::is_same<decltype(Multi_equal_comparable<int, double>::indices),
+	                     const Int_container<std::size_t, 0>>::value);
 }
 
 TEST_CASE("int maker", "[type_traits][util]")

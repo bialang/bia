@@ -9,7 +9,18 @@ namespace type_traits {
 
 template<typename Type, Type... Ints>
 struct Int_container
-{};
+{
+	constexpr static std::size_t size = sizeof...(Ints);
+
+	static_assert(size == 0, "Implementation error");
+};
+
+template<typename Type, Type First, Type... Ints>
+struct Int_container<Type, First, Ints...>
+{
+	constexpr static std::size_t size = sizeof...(Ints) + 1;
+	constexpr static Type first       = First;
+};
 
 template<typename Type, std::size_t Count, Type Value, Type... Ints>
 struct Int_filler : Int_filler<Type, Count - 1, Value, Ints..., Value>

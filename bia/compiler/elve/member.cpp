@@ -1,5 +1,6 @@
 #include "helpers.hpp"
 
+#include <algorithm>
 #include <bia/internal/type/object.hpp>
 
 using namespace bia::tokenizer::token;
@@ -10,96 +11,156 @@ namespace bia {
 namespace compiler {
 namespace elve {
 
-inline Tokens push_arguments(Parameter& param, Tokens tokens,
-                             const type::Definition_invokable_base* function_definition,
-                             const Tokens& function_tokens)
+struct Arranged_argument
 {
-	BIA_EXPECTS(tokens.front().value == Operator::function_call_open);
-	std::vector<symbol::Local_variable> pushed;
-	std::streampos vararg_size_pos{};
-	std::size_t arguments_at_vararg = 0;
-	util::Optional<symbol::Local_variable> vararg_size;
-	std::size_t argument_count = 0;
-	tokens                     = tokens.subspan(1);
-	for (; tokens.front().value != Operator::function_call_close; ++argument_count) {
-		const auto required = function_definition ? function_definition->argument_at(argument_count) : nullptr;
-		const auto union_definition =
-		  dynamic_cast<const type::Definition_union_base*>(required ? required->definition : nullptr);
-		std::streampos union_index_pos{};
+	const type::Argument* definition;
+	Tokens tokens;
+};
 
-		// varargs requires a size
-		if (function_definition && function_definition->is_vararg_index(argument_count)) {
-			arguments_at_vararg = argument_count;
-			pushed.push_back(param.symbols.create_temporary(
-			  param.context.global_namespace().type_system().definition_of<std::ptrdiff_t>()));
-			vararg_size     = pushed.back();
-			vararg_size_pos = param.instructor.output().tellp();
-			param.instructor.write<bytecode::Op_code::store>(pushed.back().offset, std::ptrdiff_t{ 0 });
+struct Pusher
+{
+	Parameter& param;
+	const type::Definition_invokable_base* function_definition;
+	std::vector<Arranged_argument> arguments;
+	std::vector<symbol::Local_variable> pushed;
+
+	void load_arguments(Tokens& tokens)
+	{
+		tokens = tokens.subspan(1);
+		while (tokens.front().value != Operator::function_call_close) {
+			// named parameter
+			const type::Argument* required = nullptr;
+			if (tokens[0].value.is_type<Token::Identifier>()) {
+				required = function_definition == nullptr
+				             ? nullptr
+				             : function_definition->argument_at(tokens[0].value.get<Token::Identifier>().memory);
+				if (function_definition != nullptr && required == nullptr) {
+					param.errors.add_error(error::Code::unknown_argument, tokens.subspan(+0, 1));
+				} else if (std::find_if(arguments.begin(), arguments.end(), [&](const Arranged_argument& arg) {
+					           return arg.definition == required;
+				           }) != arguments.end()) {
+					param.errors.add_error(error::Code::multiple_argument, tokens.subspan(+0, 1));
+				}
+				tokens = tokens.subspan(1);
+			} else {
+				required =
+				  function_definition == nullptr ? nullptr : function_definition->argument_at(arguments.size());
+			}
+
+			BIA_ASSERT(tokens.front().value == Token::Sequence::Type::single_expression);
+			const std::size_t size = tokens[0].value.get<Token::Sequence>().count + 1;
+			arguments.push_back({ required, tokens.subspan(+0, size) });
+
+			// skip + comma
+			tokens = tokens.subspan(size + static_cast<int>(tokens.at(size).value == Token::Control::comma));
+		}
+		tokens = tokens.subspan(1);
+	}
+	void rearrange_arguments()
+	{
+		// don't do it if there are arguments missing
+		if (arguments.size() < function_definition->positional_argument_count()) {
+			return;
 		}
 
+		for (std::size_t i = 0; i < function_definition->positional_argument_count(); ++i) {
+			const auto real = function_definition->argument_at(i);
+			const auto it   = std::find_if(arguments.begin() + i, arguments.end(),
+                                   [&](const Arranged_argument& arg) { return arg.definition == real; });
+			if (it != arguments.end()) {
+				std::swap(*it, arguments[i]);
+			}
+		}
+
+		// TODO set vararg definitions
+	}
+	void push_argument(const Arranged_argument& argument)
+	{
+		const auto union_definition = dynamic_cast<const type::Definition_union_base*>(
+		  argument.definition == nullptr ? nullptr : argument.definition->definition);
+		std::streampos union_index_pos{};
+
 		// type union requires an index
-		if (union_definition) {
+		if (union_definition != nullptr) {
 			pushed.push_back(param.symbols.create_temporary(
 			  param.context.global_namespace().type_system().definition_of<std::size_t>()));
 			union_index_pos = param.instructor.output().tellp();
 			param.instructor.write<bytecode::Op_code::store>(pushed.back().offset, util::npos);
 		}
 
-		// evaluate argument
-		util::Optional<symbol::Local_variable> argument;
-		Tokens argument_tokens     = tokens;
-		std::tie(tokens, argument) = single_expression(param, argument_tokens);
-		argument_tokens            = argument_tokens.left(tokens.begin());
-
-		if (argument.has_value()) {
-			BIA_ASSERT(param.symbols.is_tos(*argument));
+		// evaluate argument even if it has a faulty type
+		auto value = single_expression(param, argument.tokens).second;
+		if (value.has_value()) {
+			BIA_ASSERT(param.symbols.is_tos(*value));
 
 			// update index of type union
 			if (union_definition) {
 				const auto pos = param.instructor.output().tellp();
 				param.instructor.output().seekp(union_index_pos);
 				param.instructor.write<bytecode::Op_code::store>(
-				  pushed.back().offset, union_definition->definition_index(argument->definition));
+				  pushed.back().offset, union_definition->definition_index(value->definition));
 				param.instructor.output().seekp(pos);
 			}
-
-			pushed.push_back(*argument);
+			pushed.push_back(*value);
 
 			// check type
-			if (required && !required->definition->is_assignable(argument->definition)) {
-				param.errors.add_error(error::Code::type_mismatch, argument_tokens);
+			if (argument.definition != nullptr &&
+			    !argument.definition->definition->is_assignable(value->definition)) {
+				param.errors.add_error(error::Code::type_mismatch, argument.tokens);
+			}
+		}
+	}
+	void push_all()
+	{
+		const std::size_t argument_pivot = std::min(
+		  arguments.size(),
+		  function_definition == nullptr ? arguments.size() : function_definition->positional_argument_count());
+
+		// push positionals
+		for (std::size_t i = 0; i < argument_pivot; ++i) {
+			push_argument(arguments[i]);
+		}
+
+		// varargs requires a size
+		if (function_definition != nullptr && function_definition->has_vararg()) {
+			pushed.push_back(param.symbols.create_temporary(
+			  param.context.global_namespace().type_system().definition_of<std::ptrdiff_t>()));
+			const auto count_value     = pushed.back();
+			const auto stream_position = param.instructor.output().tellp();
+			param.instructor.write<bytecode::Op_code::store>(pushed.back().offset, std::ptrdiff_t{ 0 });
+
+			for (std::size_t i = argument_pivot; i < arguments.size(); ++i) {
+				push_argument(arguments[i]);
+			}
+
+			// update size of varargs
+			if (argument_pivot < arguments.size()) {
+				const auto pos = param.instructor.output().tellp();
+				param.instructor.output().seekp(stream_position);
+				param.instructor.write<bytecode::Op_code::store>(
+				  count_value.offset, static_cast<std::ptrdiff_t>(arguments.size() - argument_pivot));
+				param.instructor.output().seekp(pos);
 			}
 		}
 
-		// consume comma
-		if (tokens.front().value == Token::Control::comma) {
-			tokens = tokens.subspan(1);
+		// pop all pushed arguments
+		for (auto it = pushed.rbegin(); it != pushed.rend(); ++it) {
+			param.symbols.free_temporary(*it);
 		}
 	}
-
-	// update size of varargs
-	if (vararg_size.has_value()) {
-		const auto pos = param.instructor.output().tellp();
-		param.instructor.output().seekp(vararg_size_pos);
-		param.instructor.write<bytecode::Op_code::store>(
-		  vararg_size->offset, static_cast<std::ptrdiff_t>(argument_count - arguments_at_vararg));
-		param.instructor.output().seekp(pos);
+	error::Code check_errors()
+	{
+		if (function_definition != nullptr &&
+		    arguments.size() < function_definition->positional_argument_count()) {
+			return error::Code::too_few_arguments;
+		} else if (function_definition != nullptr &&
+		           arguments.size() > function_definition->positional_argument_count() &&
+		           !function_definition->has_vararg()) {
+			return error::Code::too_many_arguments;
+		}
+		return error::Code::success;
 	}
-
-	// check argument boundaries
-	if (function_definition && argument_count < function_definition->argument_lower_count()) {
-		param.errors.add_error(error::Code::too_few_arguments, function_tokens);
-	} else if (function_definition && argument_count > function_definition->argument_upper_count()) {
-		param.errors.add_error(error::Code::too_many_arguments, function_tokens);
-	}
-
-	// pop all pushed arguments
-	for (auto it = pushed.rbegin(); it != pushed.rend(); ++it) {
-		param.symbols.free_temporary(*it);
-	}
-
-	return tokens.subspan(1);
-}
+};
 
 /// Handles the compilation part for a function call.
 std::pair<Tokens, util::Optional<symbol::Local_variable>>
@@ -115,7 +176,14 @@ std::pair<Tokens, util::Optional<symbol::Local_variable>>
 		param.errors.add_error(error::Code::not_a_function, function_tokens);
 	}
 
-	tokens = push_arguments(param, tokens, function_definition, function_tokens);
+	Pusher pusher{ param, function_definition };
+	pusher.load_arguments(tokens);
+	pusher.rearrange_arguments();
+	pusher.push_all();
+	const auto code = pusher.check_errors();
+	if (code != error::Code::success) {
+		param.errors.add_error(code, function_tokens);
+	}
 
 	// invoke
 	if (function_definition) {

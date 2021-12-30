@@ -6,8 +6,10 @@
 #include "type_traits/are_all_copyable.hpp"
 #include "type_traits/are_all_moveable.hpp"
 #include "type_traits/equals_any.hpp"
+#include "type_traits/multi_comparable.hpp"
 #include "type_traits/type_at.hpp"
 #include "type_traits/type_index.hpp"
+#include "type_traits/type_select.hpp"
 
 #include <bia/error/exception.hpp>
 #include <limits>
@@ -22,6 +24,7 @@ class Variant
 {
 public:
 	constexpr static std::size_t type_count = sizeof...(Types);
+	static_assert(type_count > 0, "Variant must have at least one type");
 
 	template<typename Type>
 	using index_of = type_traits::type_index<Type, Types...>;
@@ -136,19 +139,25 @@ public:
 	{
 		return _index == npos;
 	}
-	bool operator==(std::nullptr_t) const noexcept
+	template<typename Type>
+	bool operator==(Type&& value) const noexcept
 	{
-		return empty();
+		using Info = type_traits::Multi_equal_comparable<Type, Types...>;
+		static_assert(Info::indices.size != 0, "No equal comparable operator in type set");
+		static_assert(Info::indices.size < 2, "Type set has two compatible operators");
+		using Selected =
+		  typename decltype(type_traits::Type_select<Info::indices.first, 1, Types...>::selected)::First;
+		return is_type<Selected>() && get<Selected>() == std::forward<Type>(value);
 	}
 	template<typename Type>
-	bool operator==(const Type& value) const noexcept
+	bool operator!=(Type&& value) const noexcept
 	{
-		return has_value(value);
-	}
-	template<typename Type>
-	bool operator!=(const Type& value) const noexcept
-	{
-		return !has_value(value);
+		using Info = type_traits::Multi_unequal_comparable<Type, Types...>;
+		static_assert(Info::indices.size != 0, "No equal comparable operator in type set");
+		static_assert(Info::indices.size < 2, "Type set has two compatible operators");
+		using Selected =
+		  typename decltype(type_traits::Type_select<Info::indices.first, 1, Types...>::selected)::First;
+		return !is_type<Selected>() || get<Selected>() != std::forward<Type>(value);
 	}
 	Variant& operator=(const Variant& copy)
 	{

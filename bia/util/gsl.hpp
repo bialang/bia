@@ -2,7 +2,7 @@
 #define BIA_UTIL_GSL_HPP_
 
 #include "contract.hpp"
-#include "type_traits/is_null_comparable.hpp"
+#include "type_traits/is_comparable.hpp"
 
 #include <bia/error/exception.hpp>
 #include <cstddef>
@@ -20,7 +20,8 @@ template<typename Type>
 class Not_null
 {
 public:
-	static_assert(type_traits::is_equal_null_comparable<Type>::value, "Type must be null comparable");
+	static_assert(type_traits::Is_equal_comparable<Type, std::nullptr_t>::value,
+	              "Type must be null comparable");
 
 	template<typename Other>
 	Not_null(Other&& value) : _value(std::forward<Other>(value))

@@ -5,6 +5,7 @@
 
 #include <bia/memory/iterator.hpp>
 #include <bia/util/algorithm.hpp>
+#include <string>
 
 namespace bia {
 namespace resource {
@@ -15,6 +16,15 @@ struct View
 	memory::iterator first;
 	memory::iterator last;
 
+	std::string str() const noexcept
+	{
+		std::string s;
+		s.reserve(size() + 1);
+		for (util::Byte c : *this) {
+			s.push_back(static_cast<char>(c));
+		}
+		return s;
+	}
 	memory::iterator begin() const noexcept
 	{
 		return first;

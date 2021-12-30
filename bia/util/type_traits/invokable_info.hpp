@@ -27,7 +27,7 @@ struct Invokable_info<Return_ (*)(Arguments...), void>
 	constexpr static bool is_method    = false;
 	constexpr static bool is_const     = false;
 	constexpr static bool is_functor   = false;
-	constexpr static type_container<Arguments...> arguments{};
+	constexpr static Type_container<Arguments...> arguments{};
 	constexpr static std::size_t argument_count = sizeof...(Arguments);
 	typedef Return_ Return;
 	typedef Return (*Signature)(Arguments...);
@@ -41,7 +41,7 @@ struct Invokable_info<Return_(Arguments...), void>
 	constexpr static bool is_method    = false;
 	constexpr static bool is_const     = false;
 	constexpr static bool is_functor   = false;
-	constexpr static type_container<Arguments...> arguments{};
+	constexpr static Type_container<Arguments...> arguments{};
 	constexpr static std::size_t argument_count = sizeof...(Arguments);
 	typedef Return_ Return;
 	typedef Return(Signature)(Arguments...);
@@ -55,7 +55,7 @@ struct Invokable_info<Return_ (Class_::*)(Arguments...), void>
 	constexpr static bool is_method    = true;
 	constexpr static bool is_const     = false;
 	constexpr static bool is_functor   = false;
-	constexpr static type_container<Arguments...> arguments{};
+	constexpr static Type_container<Arguments...> arguments{};
 	constexpr static std::size_t argument_count = sizeof...(Arguments);
 	typedef Return_ Return;
 	typedef Class_ Class;
@@ -70,7 +70,7 @@ struct Invokable_info<Return_ (Class_::*)(Arguments...) const, void>
 	constexpr static bool is_method    = true;
 	constexpr static bool is_const     = true;
 	constexpr static bool is_functor   = false;
-	constexpr static type_container<Arguments...> arguments{};
+	constexpr static Type_container<Arguments...> arguments{};
 	constexpr static std::size_t argument_count = sizeof...(Arguments);
 	typedef Return_ Return;
 	typedef Class_ Class;

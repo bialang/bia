@@ -81,6 +81,8 @@ enum class Code
 	symbol_not_a_value,
 	symbol_immutable,
 	undefined_symbol,
+	unknown_argument,
+	multiple_argument,
 	type_not_truthable,
 	not_an_integral,
 	not_a_function,
@@ -198,6 +200,8 @@ inline const std::error_category& code_category() noexcept
 			case Code::symbol_not_a_value: return "symbol not a value";
 			case Code::symbol_immutable: return "symbol is not mutable";
 			case Code::undefined_symbol: return "undefined symbol";
+			case Code::unknown_argument: return "unknown named argument";
+			case Code::multiple_argument: return "got multiple values for the same argument";
 			case Code::type_not_truthable: return "type is not truthable";
 			case Code::not_an_integral: return "type is not an integral";
 			case Code::not_a_function: return "not a function";

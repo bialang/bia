@@ -1,6 +1,7 @@
 #include "any_of.hpp"
 #include "tokens.hpp"
 
+#include <bia/util/finally.hpp>
 #include <limits>
 
 using namespace bia;
@@ -31,7 +32,7 @@ inline error::Bia operators(Parameter& param)
 		                           Operator::bitwise_xor };
 	const auto ranger        = param.begin_range();
 	const auto x             = parse::any_of(param, "and", "or", "in", ".", "**", "*", "/", "%", "+", "-",
-                               "==", "!=", "<=>", "<=", ">=", "<", ">", "=", "&", "|", "^");
+	                                         "==", "!=", "<=>", "<=", ">=", "<", ">", "=", "&", "|", "^");
 
 	if (!x.second || (x.first < 3 && parse::spacer(param))) {
 		return param.make_error(bia::error::Code::bad_operator, ranger.range());
@@ -84,6 +85,8 @@ inline error::Bia constant_keyword(Parameter& param)
 	return param.make_error(bia::error::Code::bad_constant_keyword, ranger.range());
 }
 
+error::Bia single_expression_impl(Parameter& param);
+
 inline error::Bia single_expression_in_brackets(Parameter& param)
 {
 	auto ranger = param.begin_range();
@@ -92,7 +95,7 @@ inline error::Bia single_expression_in_brackets(Parameter& param)
 	}
 	param.bundle.emplace_back(Token::Control::bracket_open, ranger.range());
 	parse::spacer(param);
-	if (const auto err = parse::single_expression(param)) {
+	if (const auto err = single_expression_impl(param)) {
 		return err;
 	}
 	parse::spacer(param);
@@ -142,8 +145,10 @@ error::Bia parse::multi_expression(Parameter& param)
 	return single_expression(param);
 }
 
-error::Bia parse::single_expression(Parameter& param)
+inline error::Bia single_expression_impl(Parameter& param)
 {
+	using namespace parse;
+
 	auto old = param.backup();
 	if (self_operator(param)) {
 		param.restore(old);
@@ -173,10 +178,25 @@ error::Bia parse::single_expression(Parameter& param)
 			break;
 		}
 		spacer(param);
-		if (const auto err = single_expression(param)) {
+		if (const auto err = single_expression_impl(param)) {
 			return err;
 		}
 	}
 
 	return {};
+}
+
+error::Bia parse::single_expression(Parameter& param)
+{
+	const std::size_t sequence_index = param.bundle.size();
+	const auto ranger                = param.begin_range();
+	param.bundle.emplace_back();
+	const auto _ = util::finallay([&] {
+		param.bundle[sequence_index] = { Token::Sequence{
+			                                 Token::Sequence::Type::single_expression,
+			                                 param.bundle.size() - sequence_index - 1,
+			                               },
+			                               ranger.range() };
+	});
+	return single_expression_impl(param);
 }

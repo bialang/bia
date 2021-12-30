@@ -14,47 +14,57 @@ class Final_action
 public:
 	static_assert(type_traits::Is_invokable<Lambda>::value, "Lambda must be a Callable and take no arguments");
 
-	Final_action(const Lambda& lambda) : lambda{ lambda }
+	Final_action() noexcept = default;
+	Final_action(const Lambda& lambda) : _lambda{ lambda }
 	{
-		run = true;
+		_run = true;
 	}
-	Final_action(Lambda&& lambda) : lambda{ std::move(lambda) }
+	Final_action(Lambda&& lambda) : _lambda{ std::move(lambda) }
 	{
-		run = true;
+		_run = true;
 	}
 	Final_action(const Final_action& copy) = delete;
-	Final_action(Final_action&& move) : lambda{ std::move(move.lambda) }
+	Final_action(Final_action&& move) : _lambda{ std::move(move._lambda) }
 	{
-		run      = move.run;
-		move.run = false;
+		std::swap(_run, move._run);
 	}
 	~Final_action() noexcept
 	{
-		if (run) {
-			lambda();
+		if (_run) {
+			_lambda();
 		}
 	}
 	void cancel() noexcept
 	{
-		run = false;
+		_run = false;
 	}
 	bool cancelled() const noexcept
 	{
-		return !run;
+		return !_run;
+	}
+	template<typename Other>
+	typename std::enable_if<std::is_assignable<Lambda&, Other>::value, Final_action&>::type
+	  operator=(Other&& function)
+	{
+		if (_run) {
+			_lambda();
+		}
+		_lambda = std::forward<Other>(function);
+		_run    = true;
+		return *this;
 	}
 	Final_action& operator=(const Final_action& copy) = delete;
-	/// Move operator.
-	Final_action& operator=(Final_action&& move)
+	Final_action& operator                            =(Final_action&& move)
 	{
-		lambda   = std::move(move.lambda);
-		run      = move.run;
-		move.run = false;
+		_lambda   = std::move(move._lambda);
+		_run      = move._run;
+		move._run = false;
 		return *this;
 	}
 
 private:
-	Lambda lambda;
-	bool run;
+	Lambda _lambda;
+	bool _run = false;
 };
 
 template<typename Lambda>

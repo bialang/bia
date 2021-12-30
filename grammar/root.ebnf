@@ -33,7 +33,7 @@ array_value ::= "[" number? "]" type "{" (single_expression ("," single_expressi
 tuple_value ::= "(" single_expression ("," single_expression)+ ")" | "todo"
 
 member_access ::= "?"? "." identifier
-member_invocation ::= "?"? "(" ((identifier "=" exression | single_expression ("," single_expression)*) ("," identifier "=" single_expression)*)? ")"
+member_invocation ::= "?"? "(" (single_expression ("," single_expression)*)? (identifier "=" single_expression ("," identifier "=" single_expression)*)? ")"
 member_subscript ::= "?"? "[" (subscript_slice | single_expression) "]"
 subscript_slice ::= single_expression? ":" single_expression? (":" single_expression?)?
 

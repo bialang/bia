@@ -8,38 +8,48 @@ namespace bia {
 namespace util {
 namespace type_traits {
 
-template<typename... T>
-struct type_container
+template<typename... Types>
+struct Type_container
 {
-	constexpr static auto size = sizeof...(T);
+	constexpr static std::size_t size = sizeof...(Types);
+
+	static_assert(size == 0, "Implementation error");
 };
 
-template<typename... T>
-struct type_wrapper
+template<typename Type, typename... Types>
+struct Type_container<Type, Types...>
 {
-	constexpr static type_container<T...> value{};
+	typedef Type First;
+	constexpr static std::size_t size = sizeof...(Types) + 1;
+};
+
+template<std::size_t Offset, std::size_t Count, typename Selected_container, typename... Types>
+struct Type_select_impl;
+
+template<std::size_t Offset, std::size_t Count, typename Type, typename... Types, typename... Selected>
+struct Type_select_impl<Offset, Count, Type_container<Selected...>, Type, Types...>
+    : std::conditional<Offset == 0,
+                       Type_select_impl<0, Count - 1, Type_container<Selected..., Type>, Types...>,
+                       Type_select_impl<Offset - 1, Count, Type_container<Selected...>, Types...>>::type
+{
+	static_assert(Offset + Count <= sizeof...(Types) + 1, "Cannot select more types than given");
+};
+
+template<std::size_t Offset, typename Type, typename... Types, typename... Selected>
+struct Type_select_impl<Offset, 0, Type_container<Selected...>, Type, Types...>
+    : Type_select_impl<0, 0, Type_container<Selected...>>
+{
+	static_assert(Offset <= sizeof...(Types) + 1, "Offset cannot be beyond type set size");
+};
+
+template<typename... Selected>
+struct Type_select_impl<0, 0, Type_container<Selected...>>
+{
+	constexpr static Type_container<Selected...> selected{};
 };
 
 template<std::size_t Offset, std::size_t Count, typename... Types>
-struct type_select : type_select<Offset, Count, type_container<>, type_container<Types...>>
-{};
-
-template<std::size_t Offset, std::size_t Count, typename... Selected, typename Next, typename... Others>
-struct type_select<Offset, Count, type_container<Selected...>, type_container<Next, Others...>>
-    : type_select<Offset - 1, Count, type_container<>, type_container<Others...>>
-{};
-
-template<std::size_t Count, typename... Selected, typename Next, typename... Others>
-struct type_select<0, Count, type_container<Selected...>, type_container<Next, Others...>>
-    : std::conditional<
-          Count == 0, type_wrapper<Selected...>,
-          type_select<0, Count - 1, type_container<Selected..., Next>, type_container<Others...>>>::type
-{};
-
-template<std::size_t Offset, std::size_t Count, typename... Selected>
-struct type_select<Offset, Count, type_container<Selected...>, type_container<>>
-    : std::conditional<Offset == 0 && Count == 0, type_wrapper<Selected...>, void>::type
-{};
+using Type_select = Type_select_impl<Offset, Count, Type_container<>, Types...>;
 
 } // namespace type_traits
 } // namespace util

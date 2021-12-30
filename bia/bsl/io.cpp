@@ -22,17 +22,21 @@ inline void do_print(const Variant& value)
 
 void bia::bsl::io(internal::Typed_object& object)
 {
+	using Vararg = util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
+	                             std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>;
+
+	member::function::Signature signature{ object.type_system().definition_of<void>() };
+	signature.vararg_definition = internal::type::Argument{ object.type_system().definition_of<Vararg>() };
+
 	object.put_invokable(
 	  util::from_cstring("print"),
-	  [](member::function::Varargs<
-	     util::Variant<bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t,
-	                   std::uint32_t, std::int64_t, std::uint64_t, float, double, std::string>>
-	       args) {
-		  for (std::size_t i = 0; i < args.size(); ++i) {
+	  [](member::function::Context& context) {
+		  for (std::size_t i = 0; i < context.size(); ++i) {
 			  do_print<0, bool, std::int8_t, std::uint8_t, std::int16_t, std::uint16_t, std::int32_t, std::uint32_t,
-			           std::int64_t, std::uint64_t, float, double, std::string>(args.at(i));
+			           std::int64_t, std::uint64_t, float, double, std::string>(context.get_argument<Vararg>(i));
 			  std::cout << " ";
 		  }
 		  std::cout << "\n";
-	  });
+	  },
+	  std::move(signature));
 }

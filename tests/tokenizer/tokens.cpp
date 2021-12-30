@@ -1,9 +1,10 @@
+#include "formats.hpp"
+
 #include <algorithm>
 #include <bia/memory/simple_allocator.hpp>
 #include <bia/tokenizer/token/parse/any_of.hpp>
 #include <bia/tokenizer/token/parse/tokens.hpp>
 #include <bia/util/finally.hpp>
-#include <catch2/catch.hpp>
 #include <iostream>
 #include <memory>
 #include <sstream>
@@ -13,6 +14,7 @@ using namespace bia::tokenizer::token;
 using namespace bia::tokenizer::token::parse;
 using namespace bia::error;
 using namespace bia::string::encoding;
+using Seq = Token::Sequence;
 
 template<typename... T>
 inline std::shared_ptr<Parameter> create_parameter(T&&... values)
@@ -39,12 +41,13 @@ TEST_CASE("declaration statement", "[tokenizer]")
 
 	auto param = create_parameter("let i = 0");
 	REQUIRE(!root(*param));
-	REQUIRE(param->bundle.size() == 5);
+	REQUIRE(param->bundle.size() == 6);
 	REQUIRE(param->bundle[0].value == Token::Keyword::let);
 	REQUIRE(param->bundle[1].value.is_type<Token::Identifier>());
 	REQUIRE(param->bundle[2].value == Operator::assign);
-	REQUIRE(param->bundle[3].value == zero);
-	REQUIRE(param->bundle[4].value == Token::Control::cmd_end);
+	REQUIRE(param->bundle[3].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[4].value == zero);
+	REQUIRE(param->bundle[5].value == Token::Control::cmd_end);
 
 	param = create_parameter("let i = ?");
 	REQUIRE(static_cast<bool>(root(*param)));
@@ -52,26 +55,28 @@ TEST_CASE("declaration statement", "[tokenizer]")
 
 	param = create_parameter("let i = 0 + 0");
 	REQUIRE(!root(*param));
-	REQUIRE(param->bundle.size() == 7);
+	REQUIRE(param->bundle.size() == 8);
 	REQUIRE(param->bundle[0].value == Token::Keyword::let);
 	REQUIRE(param->bundle[1].value.is_type<Token::Identifier>());
 	REQUIRE(param->bundle[2].value == Operator::assign);
-	REQUIRE(param->bundle[3].value == zero);
-	REQUIRE(param->bundle[4].value == Operator::plus);
-	REQUIRE(param->bundle[5].value == zero);
-	REQUIRE(param->bundle[6].value == Token::Control::cmd_end);
+	REQUIRE(param->bundle[3].value == Seq{ Seq::Type::single_expression, 3 });
+	REQUIRE(param->bundle[4].value == zero);
+	REQUIRE(param->bundle[5].value == Operator::plus);
+	REQUIRE(param->bundle[6].value == zero);
+	REQUIRE(param->bundle[7].value == Token::Control::cmd_end);
 
 	param = create_parameter("let i: int = 0");
 	REQUIRE(!root(*param));
-	REQUIRE(param->bundle.size() == 8);
+	REQUIRE(param->bundle.size() == 9);
 	REQUIRE(param->bundle[0].value == Token::Keyword::let);
 	REQUIRE(param->bundle[1].value.is_type<Token::Identifier>());
 	REQUIRE(param->bundle[2].value == Token::Control::type_definition);
 	REQUIRE(param->bundle[3].value == Token::Array_dimension{ 0 });
 	REQUIRE(param->bundle[4].value.is_type<Token::Identifier>());
 	REQUIRE(param->bundle[5].value == Operator::assign);
-	REQUIRE(param->bundle[6].value == zero);
-	REQUIRE(param->bundle[7].value == Token::Control::cmd_end);
+	REQUIRE(param->bundle[6].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[7].value == zero);
+	REQUIRE(param->bundle[8].value == Token::Control::cmd_end);
 }
 
 TEST_CASE("any of", "[tokenizer]")
@@ -235,108 +240,134 @@ TEST_CASE("single expression", "[tokenizer]")
 {
 	auto param = create_parameter("0");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 1);
-	REQUIRE(param->bundle[0].value.is_type<Token::Number>());
+	REQUIRE(param->bundle.size() == 2);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[1].value.is_type<Token::Number>());
 
 	param = create_parameter("false");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 1);
-	REQUIRE(param->bundle[0].value == Token::Keyword::false_);
+	REQUIRE(param->bundle.size() == 2);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[1].value == Token::Keyword::false_);
 
 	param = create_parameter("not false");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 2);
-	REQUIRE(param->bundle[0].value == Operator::logical_not);
-	REQUIRE(param->bundle[1].value == Token::Keyword::false_);
+	REQUIRE(param->bundle.size() == 3);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 2 });
+	REQUIRE(param->bundle[1].value == Operator::logical_not);
+	REQUIRE(param->bundle[2].value == Token::Keyword::false_);
 
 	param = create_parameter("1+2");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 3);
-	REQUIRE(param->bundle[0].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[1].value == Operator::plus);
-	REQUIRE(param->bundle[2].value.is_type<Token::Number>());
+	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 3 });
+	REQUIRE(param->bundle[1].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[2].value == Operator::plus);
+	REQUIRE(param->bundle[3].value.is_type<Token::Number>());
 
 	param = create_parameter("true+15");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 3);
-	REQUIRE(param->bundle[0].value == Token::Keyword::true_);
-	REQUIRE(param->bundle[1].value == Operator::plus);
-	REQUIRE(param->bundle[2].value.is_type<Token::Number>());
+	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 3 });
+	REQUIRE(param->bundle[1].value == Token::Keyword::true_);
+	REQUIRE(param->bundle[2].value == Operator::plus);
+	REQUIRE(param->bundle[3].value.is_type<Token::Number>());
 
 	param = create_parameter("3 * (4 - 11)");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 7);
-	REQUIRE(param->bundle[0].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[1].value == Operator::multiply);
-	REQUIRE(param->bundle[2].value == Token::Control::bracket_open);
-	REQUIRE(param->bundle[3].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[4].value == Operator::minus);
-	REQUIRE(param->bundle[5].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[6].value == Token::Control::bracket_close);
+	REQUIRE(param->bundle.size() == 8);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 7 });
+	REQUIRE(param->bundle[1].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[2].value == Operator::multiply);
+	REQUIRE(param->bundle[3].value == Token::Control::bracket_open);
+	REQUIRE(param->bundle[4].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[5].value == Operator::minus);
+	REQUIRE(param->bundle[6].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[7].value == Token::Control::bracket_close);
 
 	param = create_parameter("foo.asd");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 3);
-	REQUIRE(param->bundle[0].value.is_type<Token::Identifier>());
-	REQUIRE(param->bundle[1].value == Operator::member_access);
-	REQUIRE(param->bundle[2].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 3 });
+	REQUIRE(param->bundle[1].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[2].value == Operator::member_access);
+	REQUIRE(param->bundle[3].value.is_type<Token::Identifier>());
 
 	param = create_parameter("\"kartoffel\".q");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 3);
-	REQUIRE(param->bundle[0].value.is_type<Token::String>());
-	REQUIRE(param->bundle[1].value == Operator::member_access);
-	REQUIRE(param->bundle[2].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 3 });
+	REQUIRE(param->bundle[1].value.is_type<Token::String>());
+	REQUIRE(param->bundle[2].value == Operator::member_access);
+	REQUIRE(param->bundle[3].value.is_type<Token::Identifier>());
 
 	param = create_parameter("foo()");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 3);
-	REQUIRE(param->bundle[0].value.is_type<Token::Identifier>());
-	REQUIRE(param->bundle[1].value == Operator::function_call_open);
-	REQUIRE(param->bundle[2].value == Operator::function_call_close);
+	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 3 });
+	REQUIRE(param->bundle[1].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[2].value == Operator::function_call_open);
+	REQUIRE(param->bundle[3].value == Operator::function_call_close);
 
 	param = create_parameter("foo(x, 45)");
 	REQUIRE(!single_expression(*param));
-	REQUIRE(param->bundle.size() == 6);
-	REQUIRE(param->bundle[0].value.is_type<Token::Identifier>());
-	REQUIRE(param->bundle[1].value == Operator::function_call_open);
+	REQUIRE(param->bundle.size() == 9);
+	REQUIRE(param->bundle[0].value == Seq{ Seq::Type::single_expression, 8 });
+	REQUIRE(param->bundle[1].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[2].value == Operator::function_call_open);
+	REQUIRE(param->bundle[3].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[4].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[5].value == Token::Control::comma);
+	REQUIRE(param->bundle[6].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[7].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[8].value == Operator::function_call_close);
+}
+
+TEST_CASE("member invocation", "[tokenizer]")
+{
+	auto param = create_parameter("(pos1, named=1)");
+	REQUIRE(!member_invocation(*param));
+	REQUIRE(param->bundle.size() == 8);
+	REQUIRE(param->bundle[0].value == Operator::function_call_open);
 	REQUIRE(param->bundle[2].value.is_type<Token::Identifier>());
 	REQUIRE(param->bundle[3].value == Token::Control::comma);
-	REQUIRE(param->bundle[4].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[5].value == Operator::function_call_close);
+	REQUIRE(param->bundle[4].value.is_type<Token::Identifier>());
+	REQUIRE(param->bundle[6].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[7].value == Operator::function_call_close);
 }
 
 TEST_CASE("if statement", "[tokenizer]")
 {
 	auto param = create_parameter("if true { }");
 	REQUIRE(!if_stmt(*param));
-	REQUIRE(param->bundle.size() == 3);
+	REQUIRE(param->bundle.size() == 4);
 	REQUIRE(param->bundle[0].value == Token::Keyword::if_);
-	REQUIRE(param->bundle[1].value == Token::Keyword::true_);
-	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[1].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[2].value == Token::Keyword::true_);
+	REQUIRE(param->bundle[3].value.is_type<Token::Batch>());
 
 	param = create_parameter("if true { } else if 0 {}");
 	REQUIRE(!if_stmt(*param));
-	REQUIRE(param->bundle.size() == 6);
+	REQUIRE(param->bundle.size() == 8);
 	REQUIRE(param->bundle[0].value == Token::Keyword::if_);
-	REQUIRE(param->bundle[1].value == Token::Keyword::true_);
-	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
-	REQUIRE(param->bundle[3].value == Token::Keyword::else_if);
-	REQUIRE(param->bundle[4].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[5].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[2].value == Token::Keyword::true_);
+	REQUIRE(param->bundle[3].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[4].value == Token::Keyword::else_if);
+	REQUIRE(param->bundle[6].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[7].value.is_type<Token::Batch>());
 
 	param = create_parameter("if 1 { } else if false {} else { let x = 0 }");
 	REQUIRE(!if_stmt(*param));
-	REQUIRE(param->bundle.size() > 9);
+	REQUIRE(param->bundle.size() > 12);
 	REQUIRE(param->bundle[0].value == Token::Keyword::if_);
-	REQUIRE(param->bundle[1].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
-	REQUIRE(param->bundle[3].value == Token::Keyword::else_if);
-	REQUIRE(param->bundle[4].value == Token::Keyword::false_);
-	REQUIRE(param->bundle[5].value.is_type<Token::Batch>());
-	REQUIRE(param->bundle[6].value == Token::Keyword::else_);
+	REQUIRE(param->bundle[2].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[3].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[4].value == Token::Keyword::else_if);
+	REQUIRE(param->bundle[6].value == Token::Keyword::false_);
 	REQUIRE(param->bundle[7].value.is_type<Token::Batch>());
-	REQUIRE(param->bundle[8].value == Token::Keyword::let);
+	REQUIRE(param->bundle[8].value == Token::Keyword::else_);
+	REQUIRE(param->bundle[9].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[10].value == Token::Keyword::let);
 	// other tokens
 }
 
@@ -344,19 +375,21 @@ TEST_CASE("while statement", "[tokenizer]")
 {
 	auto param = create_parameter("while true { }");
 	REQUIRE(!root(*param));
-	REQUIRE(param->bundle.size() == 4);
+	REQUIRE(param->bundle.size() == 5);
 	REQUIRE(param->bundle[0].value == Token::Keyword::while_);
-	REQUIRE(param->bundle[1].value == Token::Keyword::true_);
-	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
-	REQUIRE(param->bundle[3].value == Token::Control::cmd_end);
+	REQUIRE(param->bundle[1].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[2].value == Token::Keyword::true_);
+	REQUIRE(param->bundle[3].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[4].value == Token::Control::cmd_end);
 
 	param = create_parameter("while 1 {\nlet x = 0\n}");
 	REQUIRE(!root(*param));
-	REQUIRE(param->bundle.size() > 4);
+	REQUIRE(param->bundle.size() > 6);
 	REQUIRE(param->bundle[0].value == Token::Keyword::while_);
-	REQUIRE(param->bundle[1].value.is_type<Token::Number>());
-	REQUIRE(param->bundle[2].value.is_type<Token::Batch>());
-	REQUIRE(param->bundle[3].value == Token::Keyword::let);
+	REQUIRE(param->bundle[1].value == Seq{ Seq::Type::single_expression, 1 });
+	REQUIRE(param->bundle[2].value.is_type<Token::Number>());
+	REQUIRE(param->bundle[3].value.is_type<Token::Batch>());
+	REQUIRE(param->bundle[4].value == Token::Keyword::let);
 	// other tokens
 	REQUIRE(param->bundle.back().value == Token::Control::cmd_end);
 }
