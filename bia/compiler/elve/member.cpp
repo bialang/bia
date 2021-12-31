@@ -66,13 +66,13 @@ struct Pusher
 		for (std::size_t i = 0; i < function_definition->positional_argument_count(); ++i) {
 			const auto real = function_definition->argument_at(i);
 			const auto it   = std::find_if(arguments.begin() + i, arguments.end(),
-                                   [&](const Arranged_argument& arg) { return arg.definition == real; });
+			                               [&](const Arranged_argument& arg) { return arg.definition == real; });
 			if (it != arguments.end()) {
-				std::swap(*it, arguments[i]);
+				auto value = *it;
+				arguments.erase(it);
+				arguments.insert(arguments.begin() + i, std::move(value));
 			}
 		}
-
-		// TODO set vararg definitions
 	}
 	void push_argument(const Arranged_argument& argument)
 	{
