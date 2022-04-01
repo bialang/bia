@@ -1,6 +1,6 @@
 #include "log.hpp"
 
-#if BIA_LOG_LEVEL != BIA_LOG_LEVEL_OFF
+#if !BIA_LOG_IS(OFF)
 #	include <spdlog/sinks/stdout_color_sinks.h>
 
 std::shared_ptr<spdlog::logger> bia::log::get_default_logger() noexcept

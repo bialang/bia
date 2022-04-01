@@ -39,7 +39,7 @@ void GC::run()
 	BIA_LOG(DEBUG, "Starting GC cycle");
 	std::lock_guard<std::mutex> _{ _mutex };
 	std::set<void*> reachable;
-#if BIA_LOG_IS_ENABLED(DEBUG)
+#if BIA_LOG_IS(DEBUG)
 	const auto start = std::chrono::high_resolution_clock::now();
 #endif
 

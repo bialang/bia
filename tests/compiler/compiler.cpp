@@ -157,7 +157,7 @@ try {
 
 	bool failed = false;
 
-#if BIA_LOG_IS_ENABLED(INFO)
+#if BIA_LOG_IS(INFO)
 	const auto start = std::chrono::high_resolution_clock::now();
 #endif
 
@@ -223,7 +223,7 @@ try {
 	  resource::deserialize({ reinterpret_cast<const util::Byte*>(res.data()), res.size() }, gc);
 	gc.register_stack(stack);
 	{
-#if BIA_LOG_IS_ENABLED(INFO)
+#if BIA_LOG_IS(INFO)
 		const auto start = std::chrono::high_resolution_clock::now();
 #endif
 		bvm::execute({ reinterpret_cast<const util::Byte*>(ins.data()), ins.size() }, base_frame, resources,
