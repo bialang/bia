@@ -1,11 +1,11 @@
 find_package(Catch2 2 QUIET)
 if(NOT Catch2_FOUND)
-  message(STATUS "Fetching Catch2")
+  message(STATUS "Fetching Catch2 from github.com")
   include(FetchContent)
   FetchContent_Declare(
     Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG v2.13.7
+    URL https://github.com/catchorg/Catch2/archive/refs/tags/v2.13.8.zip
+    URL_HASH SHA256=de0fd1f4c51a1021ffcb33a4d42028545bf1a0665a4ab59ddb839a0cc93f03a5
   )
   FetchContent_GetProperties(Catch2)
   if(NOT catch2_POPULATED)
